@@ -92,4 +92,16 @@ defineProps({
   transition: background 0.3s ease;
   opacity: 0.1;
 }
+
+@media screen and (max-width: 550px) {
+  .max {
+    padding: 15px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .max {
+    padding: 8px;
+  }
+}
 </style>

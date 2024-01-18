@@ -2,12 +2,23 @@
 defineOptions({
   name: 'LogoComponent'
 })
+
+defineProps({
+  showLogo: {
+    type: Boolean,
+    default: true
+  },
+  showTitle: {
+    type: Boolean,
+    default: true
+  }
+})
 </script>
 
 <template>
   <router-link to="/" class="logo">
-    <img src="@/assets/logo/48x.png" alt="" />
-    <p>Nya Account</p>
+    <img v-if="showLogo" src="@/assets/logo/48x.png" alt="" />
+    <p v-if="showTitle">Nya Account</p>
   </router-link>
 </template>
 

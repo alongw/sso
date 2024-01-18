@@ -7,5 +7,5 @@ defineOptions({
 </script>
 
 <template>
-  <modal-box-components title="通过 Lolinya Account 登录" avatar="logo"> 2 </modal-box-components>
+  <modal-box-components title="通过 Lolinya Account 登录" avatar="logo"> </modal-box-components>
 </template>
