@@ -31,6 +31,7 @@ defineOptions({
 <style scoped lang="less">
 .solution {
   padding-top: 50px;
+  margin-bottom: 50px;
   font-size: 36px;
   font-weight: 400;
   text-align: center;
@@ -50,7 +51,8 @@ defineOptions({
 
     li {
       list-style: none;
-      width: 500px;
+      width: 100%;
+      max-width: 500px;
       height: 300px;
       border-radius: 14px;
       padding: 20px;
@@ -101,6 +103,7 @@ defineOptions({
 
 @media screen and (max-width: 1050px) {
   .solution {
+    padding: 15px;
     ul {
       flex-direction: column;
       li {

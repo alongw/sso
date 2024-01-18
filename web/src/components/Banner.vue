@@ -31,7 +31,7 @@ defineOptions({
   background: url('@/assets/banner.jpg') no-repeat center;
   background-size: cover;
   .banner-item {
-    margin: -60px 0 0 10vw;
+    margin: 0 0 0 10vw;
     h1 {
       font-size: 48px;
       font-weight: 400;
@@ -61,7 +61,7 @@ defineOptions({
 @media screen and (max-width: 900px) {
   .banner {
     .banner-item {
-      margin: -60px 0 0 5vw;
+      margin: 0 0 0 5vw;
     }
   }
 }
@@ -69,7 +69,7 @@ defineOptions({
 @media screen and (max-width: 790px) {
   .banner {
     .banner-item {
-      margin: -60px 0 0 3vw;
+      margin: 0 0 0 3vw;
     }
   }
 }
@@ -77,7 +77,7 @@ defineOptions({
 @media screen and (max-width: 750px) {
   .banner {
     .banner-item {
-      margin: -60px 5vw 0 5vw;
+      margin: 0 5vw 0 5vw;
     }
   }
 }

@@ -2,6 +2,7 @@
 import BannerComponents from '@/components/Banner.vue'
 import DescComponents from '@/components/Desc.vue'
 import SolutionComponents from '@/components/Solution.vue'
+import UnderComponents from '@/components/Under.vue'
 
 import { DatabaseNetwork } from '@icon-park/vue-next'
 
@@ -37,5 +38,6 @@ const apiDesc = [
   <banner-components />
   <desc-components :list="apiDesc" title="可自由接入第三方登录工具" />
   <desc-components :list="apiDesc" title="可自由接入第三方登录工具" />
-  <SolutionComponents />
+  <solution-components />
+  <under-components />
 </template>
