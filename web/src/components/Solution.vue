@@ -36,6 +36,10 @@ defineOptions({
   text-align: center;
   background-color: #fcfcfc;
 
+  h3 {
+    margin-bottom: 50px;
+  }
+
   ul {
     display: flex;
     justify-content: space-around;
