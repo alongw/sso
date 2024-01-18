@@ -82,6 +82,8 @@ button {
   font-size: 16px;
   padding: 10px 60px;
   background-color: #1e6fff;
+  border: 1px solid #1e6fff;
+
   &:hover {
     background-color: #175ceb;
   }
@@ -92,6 +94,7 @@ button {
   font-size: 16px;
   padding: 10px 60px;
   background-color: rgba(0, 0, 0, 0);
+  border: 1px solid #1e6fff;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
