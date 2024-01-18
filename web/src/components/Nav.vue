@@ -53,9 +53,9 @@ const phoneMenu = ref(false)
       <button-component to="/login">立即登录</button-component>
     </div>
     <div class="phone">
-      <a-button type="link" size="large" @click="phoneMenu = !phoneMenu"
-        ><hamburger-button
-      /></a-button>
+      <a-button type="link" size="large" @click="phoneMenu = !phoneMenu">
+        <hamburger-button />
+      </a-button>
     </div>
   </nav>
   <div class="phone-menu">
