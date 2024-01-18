@@ -56,12 +56,14 @@ nav {
       align-items: center;
       justify-content: space-between;
       list-style: none;
+      margin-bottom: none !important;
 
       li {
         margin: 0 3px;
         font-size: 18px;
         font-weight: 400;
         color: #1e1e1e;
+        transition: all 0.1s ease-in-out;
         cursor: pointer;
 
         a {
@@ -71,6 +73,10 @@ nav {
 
         &:visited {
           color: inherit;
+        }
+
+        &:hover {
+          color: #1e6fff;
         }
       }
     }
