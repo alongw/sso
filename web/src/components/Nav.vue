@@ -92,6 +92,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: 2500px;
   height: 70px;
   padding: 0 30px;
 
