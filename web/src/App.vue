@@ -9,7 +9,8 @@ defineOptions({
 <template>
   <div class="base">
     <nav-component />
-    <router-view />
+
+    <div style="padding-top: 70px"><router-view /></div>
   </div>
 </template>
 

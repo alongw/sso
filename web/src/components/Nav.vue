@@ -84,6 +84,8 @@ const phoneMenu = ref(false)
 
 <style scoped lang="less">
 nav {
+  z-index: 10;
+  position: fixed;
   background-color: #fff;
   display: flex;
   align-items: center;

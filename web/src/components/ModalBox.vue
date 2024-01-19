@@ -96,6 +96,9 @@ defineProps({
 @media screen and (max-width: 550px) {
   .max {
     padding: 15px;
+    .box {
+      margin: 5px auto 0 auto;
+    }
   }
 }
 
