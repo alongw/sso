@@ -142,7 +142,7 @@ nav {
   }
 }
 
-@media (max-width: 1122px) {
+@media (max-width: 1140px) {
   nav {
     menu {
       display: none;
