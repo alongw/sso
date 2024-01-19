@@ -74,9 +74,10 @@ const phoneMenu = ref(false)
           padding: 10px 0;
           border-bottom: 1px solid rgba(0, 0, 0, 0.1);
           margin: 10px 0;
+          width: 100%;
         "
       >
-        <router-link :to="i.to">{{ i.name }}</router-link>
+        <router-link :to="i.to" style="width: 100%; display: block">{{ i.name }}</router-link>
       </li>
     </a-drawer>
   </div>
