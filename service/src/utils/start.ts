@@ -2,6 +2,8 @@ import figlet from 'figlet'
 
 import logger from './log'
 
+import { getSystemVersion } from './system'
+
 export const showStartInfo = () => {
     logger.info('------------------------------------------------------')
 
@@ -16,6 +18,8 @@ export const showStartInfo = () => {
     logger.info(
         'Powered by ALONGW | https://www.alongw.cn | https://github.com/alongw/sso'
     )
+
+    logger.info(`Nya Account - v${getSystemVersion()}`)
 
     logger.info('')
 
