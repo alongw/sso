@@ -25,3 +25,5 @@ export const showStartInfo = () => {
 
     logger.info('-----------------------------------------------------')
 }
+
+export const initialExpress = () => {}

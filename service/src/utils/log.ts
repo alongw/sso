@@ -37,6 +37,14 @@ log4js.configure({
                 type: 'pattern',
                 pattern: '%d %p %m'
             }
+        },
+        routerFile: {
+            type: 'file',
+            filename: 'logs/router.log',
+            layout: {
+                type: 'pattern',
+                pattern: '%d %p %m'
+            }
         }
     },
     categories: {
@@ -50,6 +58,10 @@ log4js.configure({
         },
         auth: {
             appenders: ['authFile', 'currentConsole', 'currentFile'],
+            level: 'all'
+        },
+        router: {
+            appenders: ['routerFile', 'currentConsole'],
             level: 'all'
         }
     }
