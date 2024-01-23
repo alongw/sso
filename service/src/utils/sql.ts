@@ -1,9 +1,15 @@
 import { Sequelize, DataTypes } from 'sequelize'
 import { dbLogger } from './log'
+import config from './config'
+
+const { db } = config
 
 const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: 'db/db.sqlite',
+    dialect: 'mysql',
+    host: db.host,
+    port: db.port,
+    username: db.user,
+    password: db.password,
     logging: (msg) => dbLogger.debug.bind(msg)
 })
 
