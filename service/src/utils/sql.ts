@@ -22,7 +22,23 @@ export const System = sequelize.define('System', {
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    key: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    value: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+})
+
+export const Config = sequelize.define('Config', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    key: {
         type: DataTypes.STRING,
         allowNull: false
     },

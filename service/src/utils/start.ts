@@ -1,8 +1,8 @@
 import figlet from 'figlet'
 import sql from './sql'
 import logger from './log'
-
-import { getSystemVersion, getDatabaseVersion } from './system'
+import app from './express'
+import { getSystemVersion, getListenPort, getBaseUrl } from './system'
 
 export const showStartInfo = () => {
     logger.info('------------------------------------------------------')
@@ -38,17 +38,13 @@ export const checkDatabase = async () => {
     }
 }
 
-export const syncDatabase = async () => {
-    logger.info('开始同步数据库...')
-    try {
-        await sql.sync({ alter: true })
-        logger.info('数据库同步成功')
-    } catch (error) {
-        logger.error('数据库同步失败')
-        logger.error(error)
-        process.exit(0)
-    }
-    logger.info(`当前数据库版本：${await getDatabaseVersion()}`)
+export const initialExpress = async () => {
+    app.use(await getBaseUrl(), async (req, res, next) =>
+        (await import('./../router/index')).default(req, res, next)
+    )
+    logger.info('初始化服务器...')
+    const port = await getListenPort()
+    app.listen(port, () => {
+        logger.info(`Nya Account 服务器正在端口 ${port} 上运行`)
+    })
 }
-
-export const initialExpress = () => {}
