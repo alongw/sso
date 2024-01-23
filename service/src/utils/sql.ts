@@ -10,6 +10,7 @@ const sequelize = new Sequelize({
     port: db.port,
     username: db.user,
     password: db.password,
+    database: db.database,
     logging: (msg) => dbLogger.debug.bind(msg)
 })
 

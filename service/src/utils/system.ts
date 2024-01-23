@@ -1,4 +1,5 @@
 import fse from 'fs-extra'
+import { System } from './sql'
 
 interface PackageFile {
     name: string
@@ -27,4 +28,16 @@ const packageFile: PackageFile = fse.readJsonSync('./package.json')
 
 export const getSystemVersion = () => {
     return packageFile.version
+}
+
+export const getDatabaseVersion = async () => {
+    const [version] = await System.findOrCreate({
+        where: {
+            name: 'version'
+        },
+        defaults: {
+            value: packageFile.version
+        }
+    })
+    return version.toJSON().value
 }

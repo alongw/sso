@@ -1,5 +1,6 @@
-import { showStartInfo, checkDatabase } from './utils/start'
+import { showStartInfo, checkDatabase, syncDatabase } from './utils/start'
 
 showStartInfo()
 
 await checkDatabase()
+await syncDatabase()

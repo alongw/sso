@@ -2,7 +2,7 @@ export interface Config {
     db: {
         host: string
         port: number
-        name: string
+        database: string
         user: string
         password: string
     }
