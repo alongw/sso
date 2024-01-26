@@ -17,17 +17,12 @@ export interface UserTable {
     email: string
     status: number
     nickname: string
+    group: number
 }
 
 export interface GroupTable {
     gid: number
     name: string
-}
-
-export interface GroupUserTable {
-    ugid: number
-    uid: string
-    gid: number
 }
 
 export interface PermissionTable {

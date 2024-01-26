@@ -6,7 +6,6 @@ import type {
     ApplicationTable,
     ConfigTable,
     GroupTable,
-    GroupUserTable,
     GroupPermissionTable,
     PermissionTable,
     SystemTable,
@@ -72,6 +71,10 @@ export const User = sequelize.define<Model<UserTable>>('User', {
     nickname: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    group: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 })
 
@@ -83,22 +86,6 @@ export const Group = sequelize.define<Model<GroupTable>>('Group', {
     },
     name: {
         type: DataTypes.STRING,
-        allowNull: false
-    }
-})
-
-export const UserGroup = sequelize.define<Model<GroupUserTable>>('GroupUser', {
-    ugid: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    uid: {
-        type: DataTypes.UUID,
-        allowNull: false
-    },
-    gid: {
-        type: DataTypes.INTEGER,
         allowNull: false
     }
 })
@@ -181,20 +168,6 @@ export const Application = sequelize.define<Model<ApplicationTable>>('Applicatio
     }
 })
 
-User.belongsToMany(Group, {
-    through: {
-        model: UserGroup,
-        unique: false
-    }
-})
-
-Group.belongsToMany(User, {
-    through: {
-        model: UserGroup,
-        unique: false
-    }
-})
-
 Group.belongsToMany(Permission, {
     through: {
         model: GroupPermission,
@@ -218,4 +191,15 @@ User.hasMany(Application, {
 Application.belongsTo(User, {
     foreignKey: 'owner',
     as: 'ownerInfo'
+})
+
+Group.hasMany(User, {
+    sourceKey: 'gid',
+    foreignKey: 'group',
+    as: 'user'
+})
+
+User.belongsTo(Group, {
+    foreignKey: 'group',
+    as: 'group'
 })
