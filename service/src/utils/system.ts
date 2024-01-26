@@ -1,5 +1,5 @@
 import fse from 'fs-extra'
-import { System, Config } from './db'
+import { System, Config } from './../database/table'
 
 interface PackageFile {
     key: string
@@ -48,10 +48,10 @@ export const getListenPort = async () => {
             key: 'listenPort'
         },
         defaults: {
-            value: 10086
+            value: '10086'
         }
     })
-    return listenPort.toJSON().value as number
+    return Number(listenPort.toJSON().value)
 }
 
 export const getBaseUrl = async () => {

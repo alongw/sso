@@ -48,7 +48,6 @@ export const User = sequelize.define<Model<UserTable>>('User', {
     uid: {
         type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true,
         defaultValue: DataTypes.UUIDV4
     },
     username: {
@@ -125,15 +124,22 @@ export const GroupPermission = sequelize.define<Model<GroupPermissionTable>>(
         pid: {
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+        specialValue: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        allow: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
     }
 )
 
 export const Application = sequelize.define<Model<ApplicationTable>>('Application', {
     appid: {
-        type: DataTypes.UUIDV4,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true,
         defaultValue: DataTypes.UUIDV4,
         allowNull: false
     },
@@ -201,5 +207,5 @@ Group.hasMany(User, {
 
 User.belongsTo(Group, {
     foreignKey: 'group',
-    as: 'group'
+    as: 'userGroup'
 })

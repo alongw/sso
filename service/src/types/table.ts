@@ -36,6 +36,8 @@ export interface GroupPermissionTable {
     gpid: number
     gid: number
     pid: number
+    specialValue: number
+    allow: boolean
 }
 
 export interface ApplicationTable {
