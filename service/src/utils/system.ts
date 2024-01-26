@@ -1,5 +1,5 @@
 import fse from 'fs-extra'
-import { System, Config } from './sql'
+import { System, Config } from './db'
 
 interface PackageFile {
     key: string

@@ -1,5 +1,5 @@
 import figlet from 'figlet'
-import sql from './sql'
+import sql from './db'
 import logger from './log'
 import app from './express'
 import { getSystemVersion, getListenPort, getBaseUrl } from './system'

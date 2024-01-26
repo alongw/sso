@@ -1,5 +1,5 @@
 import logger from './utils/log'
-import sql from './utils/sql'
+import sql from './utils/db'
 
 import { showStartInfo, checkDatabase, initialExpress } from './utils/start'
 import { getDatabaseVersion } from './utils/system'

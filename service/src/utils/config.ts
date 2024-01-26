@@ -2,7 +2,7 @@ import fse from 'fs-extra'
 import yaml from 'yaml'
 import logger from './log'
 
-import type { Config } from './../data/config'
+import type { Config } from '../types/config'
 
 try {
     fse.accessSync('./config.yaml')
