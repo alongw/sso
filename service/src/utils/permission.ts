@@ -2,10 +2,7 @@
 import { GroupPermission, Permission, User } from './../database/table'
 import { authLogger, authLoggerOnlyFile } from './log'
 
-import {
-    defaultPermissions,
-    type Permission as DataPermission
-} from './../data/permission'
+import { defaultPermissions } from './../data/permission'
 
 enum StatusCode {
     Forbidden = 403,
@@ -236,9 +233,9 @@ export const auth = async (permissionNode: string, uuid: string): Promise<boolea
     return result.result
 }
 
-console.log(
-    await auth(
-        'admin:useradmin:editUserInfo:avatar',
-        'fe7e445e-b762-4b93-8ed3-6cb5c451cc1a'
-    )
-)
+// console.log(
+//     await auth(
+//         'admin:useradmin:editUserInfo:avatar',
+//         'fe7e445e-b762-4b93-8ed3-6cb5c451cc1a'
+//     )
+// )
