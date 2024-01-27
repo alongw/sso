@@ -1,4 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { GroupPermission, Permission, User } from './../database/table'
+
+import {
+    defaultPermissions,
+    type Permission as DataPermission
+} from './../data/permission'
+
+enum StatusCode {
+    Forbidden = 403,
+    OK = 200,
+    InternalServerError = 500
+}
+
+const DEFAULT_PERMISSION_SEPARATOR = ':'
 
 interface PermissionTable {
     pid: number
@@ -9,7 +23,7 @@ interface PermissionTable {
 
 interface Resolve {
     result: boolean
-    code: 403 | 200 | 500
+    code: StatusCode
     title: string
     msg?: string
     plance?: string
@@ -18,7 +32,7 @@ interface Resolve {
 }
 
 // 权限分隔符
-let permissionSeparator = ':'
+let permissionSeparator = DEFAULT_PERMISSION_SEPARATOR
 
 export const setDefaultSeparator = (separator: string) => {
     permissionSeparator = separator
@@ -70,7 +84,13 @@ const hasPermission = async (pidList: number[], groupID: string): Promise<boolea
         if (resolve?.toJSON().allow === true) return true
         if (resolve?.toJSON().allow === false) return false
     }
-    // 如果没有查到权限，返回拒绝
+    // 如果没有查到权限，匹配默认权限
+
+    // TODO: 匹配默认权限
+    // for (const element of defaultPermissions) {
+    // }
+
+    // 如果没有匹配到默认权限，返回 false
     return false
 }
 
@@ -84,7 +104,7 @@ const checkPermission = async (
         return {
             result: false,
             title: '源代码错误',
-            code: 500,
+            code: StatusCode.InternalServerError,
             msg: '权限节点为空',
             solution: '请联系笨蛋技术人员修改后端源代码'
         }
@@ -99,13 +119,13 @@ const checkPermission = async (
             return {
                 result: true,
                 title: '鉴权通过',
-                code: 200
+                code: StatusCode.OK
             }
         }
         return {
             result: false,
             title: '鉴权失败',
-            code: 403,
+            code: StatusCode.Forbidden,
             solution: '如有疑问，请联系支持人员'
         }
     }
@@ -135,7 +155,7 @@ const checkPermission = async (
                 return {
                     result: false,
                     title: '鉴权失败',
-                    code: 500,
+                    code: StatusCode.InternalServerError,
                     msg: '鉴权失败，节点不存在',
                     plance: '子级权限鉴权',
                     solution: '请联系笨蛋技术人员修改后端源代码'
@@ -149,14 +169,14 @@ const checkPermission = async (
         return {
             result: true,
             title: '鉴权通过',
-            code: 200,
+            code: StatusCode.OK,
             queue: pidList
         }
 
     return {
         result: false,
         title: '鉴权失败',
-        code: 403,
+        code: StatusCode.Forbidden,
         solution: '如有疑问，请联系支持人员',
         queue: pidList
     }
@@ -173,7 +193,14 @@ export const usePermission = async (uuid: string) => {
     }
 }
 
-export const auth = async (permissionNode: string, uuid?: string): Promise<Resolve> => {
+export const auth = async (permissionNode: string, uuid: string): Promise<Resolve> => {
     const group = await getUserGroupByUid(uuid)
     return await checkPermission(permissionNode, group)
 }
+
+console.log(
+    await auth(
+        'admin:useradmin:editUserInfo:avatar',
+        'fe7e445e-b762-4b93-8ed3-6cb5c451cc1a'
+    )
+)

@@ -19,3 +19,5 @@ await checkDatabase().then(() => {
     showStartInfo()
 })
 await initialExpress()
+
+import('./utils/permission')
