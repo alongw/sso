@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { GroupPermission, Permission, User } from './../database/table'
+import { authLogger, authLoggerOnlyFile } from './log'
 
 import {
     defaultPermissions,
@@ -29,6 +30,11 @@ interface Resolve {
     plance?: string
     solution?: string
     queue?: number[]
+    info?: {
+        result: boolean
+        msg: string
+        id: number
+    }
 }
 
 // 权限分隔符
@@ -72,7 +78,14 @@ const getPermissionByPermissionName = async (
     return null
 }
 
-const hasPermission = async (pidList: number[], groupID: string): Promise<boolean> => {
+const hasPermission = async (
+    pidList: number[],
+    groupID: string
+): Promise<{
+    result: boolean
+    msg: string
+    id: number
+}> => {
     for (const e of pidList) {
         // 查找权限 如果查到 ture 直接返回，如果查到了 false 也直接返回，找不到不管
         const resolve = await GroupPermission.findOne({
@@ -81,17 +94,21 @@ const hasPermission = async (pidList: number[], groupID: string): Promise<boolea
                 pid: e
             }
         })
-        if (resolve?.toJSON().allow === true) return true
-        if (resolve?.toJSON().allow === false) return false
+        if (resolve?.toJSON().allow === true)
+            return { result: true, msg: '数据库放行', id: e }
+        if (resolve?.toJSON().allow === false)
+            return { result: false, msg: '数据库拦截', id: e }
     }
     // 如果没有查到权限，匹配默认权限
 
-    // TODO: 匹配默认权限
-    // for (const element of defaultPermissions) {
-    // }
+    for (const e of pidList) {
+        const resolve = defaultPermissions.find((element) => element.pid === e)
+        if (resolve.allow === true) return { result: true, msg: '默认放行', id: e }
+        if (resolve.allow === false) return { result: false, msg: '默认拦截', id: e }
+    }
 
     // 如果没有匹配到默认权限，返回 false
-    return false
+    return { result: false, msg: '权限未被任何场景定义', id: -1 }
 }
 
 const checkPermission = async (
@@ -106,7 +123,7 @@ const checkPermission = async (
             title: '源代码错误',
             code: StatusCode.InternalServerError,
             msg: '权限节点为空',
-            solution: '请联系笨蛋技术人员修改后端源代码'
+            solution: '请联系笨蛋技术人员'
         }
     // 分隔权限列表
     const permissionNodeList = permissionNode.split(permissionSeparator)
@@ -144,7 +161,7 @@ const checkPermission = async (
             code: 500,
             msg: '鉴权失败，节点不存在',
             plance: '顶级权限鉴权',
-            solution: '请联系笨蛋技术人员修改后端源代码'
+            solution: '请联系笨蛋技术人员'
         }
     pidList.unshift(topPermission)
     // 查找剩余权限 pid
@@ -158,19 +175,20 @@ const checkPermission = async (
                     code: StatusCode.InternalServerError,
                     msg: '鉴权失败，节点不存在',
                     plance: '子级权限鉴权',
-                    solution: '请联系笨蛋技术人员修改后端源代码'
+                    solution: '请联系笨蛋技术人员'
                 }
             pidList.unshift(pid as number)
         }
     }
     // 鉴权
     const resolve = await hasPermission(pidList, groupID.toString())
-    if (resolve)
+    if (resolve.result === true)
         return {
             result: true,
             title: '鉴权通过',
             code: StatusCode.OK,
-            queue: pidList
+            queue: pidList,
+            info: resolve
         }
 
     return {
@@ -178,14 +196,32 @@ const checkPermission = async (
         title: '鉴权失败',
         code: StatusCode.Forbidden,
         solution: '如有疑问，请联系支持人员',
-        queue: pidList
+        queue: pidList,
+        info: resolve
     }
+}
+
+const log = (uuid: string, result: Resolve, group: number) => {
+    authLogger.info(
+        `[NYA-PERMISSION] 鉴权 - 用户 uuid ${uuid} (${group}用户组) 鉴权 ${JSON.stringify(
+            result.queue
+        )} 队列 ${result.info?.result ? '通过' : '被拒绝'},原因:${
+            result.info?.msg
+        },具体出现在 ${result.info?.id}(${result.plance})`
+    )
+    authLoggerOnlyFile.info({
+        ...result,
+        uuid,
+        group
+    })
 }
 
 export const usePermission = async (uuid: string) => {
     const group = await getUserGroupByUid(uuid)
-    const auth = async (permissionNode: string): Promise<Resolve> => {
-        return await checkPermission(permissionNode, group)
+    const auth = async (permissionNode: string): Promise<boolean> => {
+        const result = await checkPermission(permissionNode, group)
+        log(uuid, result, group)
+        return result.result
     }
 
     return {
@@ -193,9 +229,11 @@ export const usePermission = async (uuid: string) => {
     }
 }
 
-export const auth = async (permissionNode: string, uuid: string): Promise<Resolve> => {
+export const auth = async (permissionNode: string, uuid: string): Promise<boolean> => {
     const group = await getUserGroupByUid(uuid)
-    return await checkPermission(permissionNode, group)
+    const result = await checkPermission(permissionNode, group)
+    log(uuid, result, group)
+    return result.result
 }
 
 console.log(

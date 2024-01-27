@@ -20,4 +20,4 @@ await checkDatabase().then(() => {
 })
 await initialExpress()
 
-import('./utils/permission')
+// import('./utils/permission')

@@ -60,6 +60,10 @@ log4js.configure({
             appenders: ['authFile', 'currentConsole', 'currentFile'],
             level: 'all'
         },
+        authOnlyFile: {
+            appenders: ['authFile'],
+            level: 'all'
+        },
         router: {
             appenders: ['routerFile', 'currentConsole'],
             level: 'all'
@@ -74,3 +78,5 @@ export default logger
 export const dbLogger = log4js.getLogger('db')
 
 export const authLogger = log4js.getLogger('auth')
+
+export const authLoggerOnlyFile = log4js.getLogger('authOnlyFile')
