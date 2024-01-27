@@ -17,6 +17,13 @@ interface Resolve {
     queue?: number[]
 }
 
+// 权限分隔符
+let permissionSeparator = ':'
+
+export const setDefaultSeparator = (separator: string) => {
+    permissionSeparator = separator
+}
+
 const getUserGroupByUid = async (uuid: string): Promise<number> => {
     const resolve = await User.findOne({
         where: {
@@ -82,7 +89,7 @@ const checkPermission = async (
             solution: '请联系笨蛋技术人员修改后端源代码'
         }
     // 分隔权限列表
-    const permissionNodeList = permissionNode.split(':')
+    const permissionNodeList = permissionNode.split(permissionSeparator)
     // 如果只有一个权限，则为顶级权限
     if (permissionNodeList.length === 1) {
         const topResolve = (await getPermissionByPermissionName(
