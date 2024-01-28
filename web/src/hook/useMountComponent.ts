@@ -1,5 +1,5 @@
 import { createApp, type Component } from 'vue'
-import { sleep } from '@/tool/common'
+import { sleep } from '@/utils/common'
 
 export function useMountComponent(data: Record<string, any> = {}) {
   let isOpen = false

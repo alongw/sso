@@ -2,6 +2,10 @@
 import { computed, reactive } from 'vue'
 import ModalBoxComponents from '@/components/ModalBox.vue'
 import { ArrowCircleRight, LoadingOne } from '@icon-park/vue-next'
+import getCaptcha from 'nia-captcha'
+import { message } from 'ant-design-vue'
+import _ from 'lodash'
+import { getAccountStatus } from '@/api/login'
 defineOptions({
   name: 'LoginPage'
 })
@@ -17,7 +21,7 @@ const userInfo = reactive({
   authenticationType: AuthenticationType.Null,
   captcha: false,
   isRegister: false,
-  tips: '我们已经向 **0@***.cn 发送了一条含有验证码的邮件'
+  tips: ''
 })
 
 const title = computed(() => {
@@ -50,11 +54,51 @@ const captcha = reactive({
   randstr: '',
   ticket: ''
 })
+
+const submit = async () => {
+  if (!form.user || form.user === '') return message.error('请正确填写表单')
+
+  loading.user = true
+  const res = await getAccountStatus({
+    email: _.trim(form.user),
+    captcha: captcha
+  })
+
+  if (res.data.status === 418) {
+    return (loading.user = false)
+  }
+
+  // 需要验证码
+  if (res.data.status === 422) {
+    loading.user = false
+    const captchaCallback = await getCaptcha('2046626881')
+    captcha.randstr = captchaCallback.randstr
+    captcha.ticket = captchaCallback.ticket
+    submit()
+  }
+
+  captcha.randstr = ''
+  captcha.ticket = ''
+
+  if (res.data.status !== 200) {
+    if (res.data.status === 422) return
+    loading.user = false
+    return message.error(res.data.msg)
+  }
+
+  showPasswordInput()
+
+  userInfo.username = res.data.data.username || ''
+  userInfo.authenticationType = res.data.data.authenticationType || AuthenticationType.Null
+  userInfo.captcha = res.data.data.captcha || false
+  userInfo.isRegister = res.data.data.isRegister || false
+  userInfo.tips = res.data.data.tips || ''
+}
 </script>
 
 <template>
   <modal-box-components :title="title" avatar="logo">
-    <form action="javascript:;">
+    <form action="javascript:;" @submit.prevent="submit()">
       <div class="user">
         <input
           v-model="form.user"
@@ -71,6 +115,7 @@ const captcha = reactive({
             theme="filled"
             size="24"
             :strokeWidth="2"
+            @click="submit()"
           />
           <loading-one
             v-else
@@ -136,8 +181,9 @@ const captcha = reactive({
 form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  // justify-content: center;
   align-items: center;
+  height: 100px;
 
   input {
     padding: 0 50px 0 22px;
@@ -148,6 +194,7 @@ form {
   }
 
   .user-icon {
+    user-select: none;
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -166,11 +213,13 @@ form {
     }
   }
   .loading-icon {
+    user-select: none;
     cursor: not-allowed;
     animation: rotate 3s linear infinite;
   }
 
   .icon-button {
+    user-select: none;
     cursor: pointer;
     color: #333;
     transition: all 0.2s ease;
@@ -198,7 +247,7 @@ form {
   .user {
     z-index: 3;
     input {
-      animation: user 1s forwards;
+      animation: user 2s forwards;
       animation-play-state: paused;
       border-radius: 12px;
     }

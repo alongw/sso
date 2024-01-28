@@ -9,7 +9,8 @@ import type {
     GroupPermissionTable,
     PermissionTable,
     SystemTable,
-    UserTable
+    UserTable,
+    EmailCodeTable
 } from './../types/table'
 
 export const System = sequelize.define<Model<SystemTable>>('System', {
@@ -73,6 +74,30 @@ export const User = sequelize.define<Model<UserTable>>('User', {
     },
     group: {
         type: DataTypes.INTEGER,
+        allowNull: false
+    }
+})
+
+export const EmailCode = sequelize.define<Model<EmailCodeTable>>('EmailCode', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    code: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    sendTime: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    expire: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING,
         allowNull: false
     }
 })

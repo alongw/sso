@@ -27,7 +27,7 @@ export const showStartInfo = () => {
 }
 
 export const checkDatabase = async () => {
-    logger.info('开始连接数据库...')
+    logger.info('重新测试数据库连接...')
     try {
         await sql.authenticate()
         logger.info('数据库连接成功')

@@ -84,8 +84,45 @@ export const getJwtUnless = async () => {
             key: 'jwtUnless'
         },
         defaults: {
-            value: JSON.stringify(['/public', '/user/login', '/user/register'])
+            value: JSON.stringify([
+                '/public',
+                '/user/login',
+                '/user/register',
+                '/user/getAccountStatus'
+            ])
         }
     })
     return JSON.parse(jwtUnless.toJSON().value) as string[]
+}
+
+export const getMail = async () => {
+    const [mail] = await Config.findOrCreate({
+        where: {
+            key: 'mail'
+        },
+        defaults: {
+            value: JSON.stringify({
+                host: 'smtp.lolinya.net',
+                port: 114514,
+                secure: true,
+                from: 'support<support@lolinya.net>',
+                auth: {
+                    user: '911@wh.gov',
+                    pass: 'admin123'
+                },
+                adminMail: 'admin@lolinya.net'
+            })
+        }
+    })
+    return JSON.parse(mail.toJSON().value) as {
+        host: string
+        port: number
+        secure: boolean
+        from: string
+        auth: {
+            user: string
+            pass: string
+        }
+        adminMail: string
+    }
 }

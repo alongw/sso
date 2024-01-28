@@ -20,6 +20,14 @@ export interface UserTable {
     group: number
 }
 
+export interface EmailCodeTable {
+    id: number
+    code: string
+    expire: number
+    sendTime: number
+    email: string
+}
+
 export interface GroupTable {
     gid: number
     name: string
