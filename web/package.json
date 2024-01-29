@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^4.2.1",
     "@icon-park/vue-next": "^1.4.2",
     "ant-design-vue": "^4.1.1",
     "axios": "^1.6.7",

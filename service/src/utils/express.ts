@@ -49,6 +49,12 @@ app.use(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         next: express.NextFunction
     ) => {
+        if (!req.headers.fingerprint) {
+            return res.send({
+                status: 451,
+                msg: '参数错误'
+            })
+        }
         // 捕获身份认证失败的错误
         if (err.name === 'UnauthorizedError')
             return res.send({

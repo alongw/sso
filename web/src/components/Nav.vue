@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
 import LogoComponent from '@/components/Logo.vue'
 import ButtonComponent from '@/components/Button.vue'
 
 import { useScreen } from '@/hook/useScreen'
-
+import { isLogin } from '@/hook/useUser'
 import { HamburgerButton } from '@icon-park/vue-next'
 
 defineOptions({
   name: 'NavComponent'
 })
+
+const route = useRoute()
 
 const { screenWidth } = useScreen()
 
@@ -36,6 +40,14 @@ const menu = [
   }
 ]
 
+const isLoginStatus = ref(isLogin())
+watch(
+  () => route.path,
+  () => {
+    isLoginStatus.value = isLogin()
+  }
+)
+
 const phoneMenu = ref(false)
 </script>
 
@@ -50,7 +62,12 @@ const phoneMenu = ref(false)
       </ul>
     </menu>
     <div class="user-info">
-      <button-component to="/login">立即登录</button-component>
+      <div v-if="!isLoginStatus">
+        <button-component to="/login">立即登录</button-component>
+      </div>
+      <div v-else>
+        <button-component type="small-sub" to="/user">控制台</button-component>
+      </div>
     </div>
     <div class="phone">
       <a-button type="link" size="large" @click="phoneMenu = !phoneMenu">

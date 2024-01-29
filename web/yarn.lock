@@ -218,6 +218,13 @@
   resolved "https://registry.npmmirror.com/@eslint/js/-/js-8.55.0.tgz#b721d52060f369aa259cf97392403cb9ce892ec6"
   integrity sha512-qQfo2mxH5yVom1kacMtZZJFVdW+E70mqHMJvVg6WTLo+VBuQJ4TojZlfWBjK0ve5BdEeNAVxOsl/nvNMpJOaJA==
 
+"@fingerprintjs/fingerprintjs@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.npmmirror.com/@fingerprintjs/fingerprintjs/-/fingerprintjs-4.2.1.tgz#9566803c86cb17bd7b7aeb2ed3abfdd0c8e9ff43"
+  integrity sha512-uW+GVUNTgCXbVPEbgnbf5Aor22e1dyYR0JRwdUiZBaikfxr7KlhV9y0aahA1FB99fEeQVvhCEvTcPIFSYTy9Pw==
+  dependencies:
+    tslib "^2.4.1"
+
 "@humanwhocodes/config-array@^0.11.13":
   version "0.11.13"
   resolved "https://registry.npmmirror.com/@humanwhocodes/config-array/-/config-array-0.11.13.tgz#075dc9684f40a531d9b26b0822153c1e832ee297"
@@ -2207,7 +2214,7 @@ ts-api-utils@^1.0.1:
   resolved "https://registry.npmmirror.com/ts-api-utils/-/ts-api-utils-1.0.3.tgz#f12c1c781d04427313dbac808f453f050e54a331"
   integrity sha512-wNMeqtMz5NtwpT/UZGY5alT+VoKdSsOOP/kqHFcUW1P/VRhH2wJ48+DN2WwUliNbQ976ETwDL0Ifd2VVvgonvg==
 
-tslib@^2.3.0, tslib@^2.6.0, tslib@^2.6.2:
+tslib@^2.3.0, tslib@^2.4.1, tslib@^2.6.0, tslib@^2.6.2:
   version "2.6.2"
   resolved "https://registry.npmmirror.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==

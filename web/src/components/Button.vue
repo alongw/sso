@@ -9,7 +9,7 @@ defineOptions({
 
 const prop = withDefaults(
   defineProps<{
-    type?: 'primary' | 'cancel' | 'verify' | 'main' | 'sub'
+    type?: 'primary' | 'cancel' | 'verify' | 'main' | 'sub' | 'small-sub'
     to?: RouteLocationRaw | string
   }>(),
   {
@@ -54,6 +54,17 @@ button {
   background-color: #1e6fff;
   &:hover {
     background-color: #175ceb;
+  }
+}
+
+.small-sub {
+  color: #1e6fff;
+  font-size: 14px;
+  padding: 8px 20px;
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid #1e6fff;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 

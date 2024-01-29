@@ -23,9 +23,10 @@ export interface UserTable {
 export interface EmailCodeTable {
     id: number
     code: string
+    email: string
+    ip: string
     expire: number
     sendTime: number
-    email: string
 }
 
 export interface GroupTable {
@@ -57,4 +58,15 @@ export interface ApplicationTable {
     owner: string
     redirect: string
     approve: number
+}
+
+export interface LoginLogTable {
+    id: number
+    uid: string
+    ip: string
+    time: number
+    type: number
+    captcha: string
+    ua: string
+    fingerprint: string
 }

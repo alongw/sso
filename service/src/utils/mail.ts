@@ -48,3 +48,23 @@ export const sendMail = (
 export const getMailTemplate = (name: string) => {
     return fse.readFileSync(`./template/mail/${name}.html`).toString()
 }
+
+export const isMail = (mail: string) => {
+    return /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(mail)
+}
+
+export const hideMail = (mail: string) => {
+    const atIndex = mail.indexOf('@')
+    if (atIndex !== -1) {
+        const username = mail.substring(0, atIndex)
+        const hiddenUsername =
+            username.length >= 2
+                ? username.substring(0, 2) + '*'.repeat(username.length - 2)
+                : username
+        const domain = mail.substring(atIndex)
+
+        return hiddenUsername + domain
+    } else {
+        return mail
+    }
+}

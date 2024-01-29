@@ -2,18 +2,23 @@ import axios from 'axios'
 import { message } from 'ant-design-vue'
 // import type { AxiosResponse } from 'axios'
 import router from '@/router/index'
+import { getFingerprint } from '@/hook/useUser'
 
 axios.defaults.baseURL = import.meta.env.VITE_HTTP_BASE_URL
 
 // http request 拦截器
 axios.interceptors.request.use(
-  (config) => {
+  async (config) => {
     const token = localStorage.getItem('token')
     if (token && config.headers) {
       // 将token设置成请求头
       // 需要在客户端拼接 Bearer 的前缀
       config.headers.Authorization = 'Bearer ' + token
     }
+    if (config.headers) {
+      config.headers.fingerprint = await getFingerprint()
+    }
+
     return config
   },
   (err) => {

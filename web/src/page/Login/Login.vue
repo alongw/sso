@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import ModalBoxComponents from '@/components/ModalBox.vue'
 import { ArrowCircleRight, LoadingOne } from '@icon-park/vue-next'
 import getCaptcha from 'nia-captcha'
+import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import _ from 'lodash'
-import { getAccountStatus } from '@/api/login'
+import { getAccountStatus, register as registerApi, login as loginApi } from '@/api/login'
 defineOptions({
   name: 'LoginPage'
 })
+
+const router = useRouter()
 
 enum AuthenticationType {
   Email = 'email',
@@ -55,6 +58,8 @@ const captcha = reactive({
   ticket: ''
 })
 
+const avatarUrl = ref('logo')
+
 const submit = async () => {
   if (!form.user || form.user === '') return message.error('请正确填写表单')
 
@@ -88,16 +93,106 @@ const submit = async () => {
 
   showPasswordInput()
 
+  avatarUrl.value = res.data.data.avatar || 'logo'
   userInfo.username = res.data.data.username || ''
   userInfo.authenticationType = res.data.data.authenticationType || AuthenticationType.Null
   userInfo.captcha = res.data.data.captcha || false
   userInfo.isRegister = res.data.data.isRegister || false
   userInfo.tips = res.data.data.tips || ''
+  setTimeout(() => {
+    if (userInfo.authenticationType === AuthenticationType.Password) {
+      const passwordInput = document.querySelector('#password-input')
+      if (passwordInput instanceof HTMLElement) passwordInput.focus()
+    } else {
+      const emailCodeInput = document.querySelector('#emailCode-input')
+      if (emailCodeInput instanceof HTMLElement) emailCodeInput.focus()
+    }
+  }, 2000)
+}
+
+const handleKeyDown = (e: KeyboardEvent) => {
+  // 检查是否按下的是Enter键（keyCode为13）
+  if (e.key === 'Enter') {
+    sure()
+  }
+}
+
+const register = async () => {
+  if (!form.user || !form.password) return message.error('请正确填写表单')
+  const captchaCallback = await getCaptcha('2046626881')
+  captcha.randstr = captchaCallback.randstr
+  captcha.ticket = captchaCallback.ticket
+  loading.password = true
+  const res = await registerApi({
+    email: _.trim(form.user),
+    code: _.trim(form.password),
+    captcha: captcha
+  })
+  loading.password = false
+  if (res.data.status !== 200) return message.error(res.data.msg)
+  message.success('注册成功')
+  window.localStorage.setItem('token', res.data.data.token)
+  window.localStorage.setItem('expire', res.data.data.expire.toString())
+  setTimeout(() => {
+    router.push({
+      path: '/user/perfect',
+      query: {
+        form: 'login.page.register'
+      }
+    })
+  }, 1000)
+}
+
+const login = async () => {
+  if (!form.user || !form.password) return message.error('请正确填写表单')
+  loading.password = true
+  const res = await loginApi({
+    type: userInfo.authenticationType === AuthenticationType.Email ? 'mail' : 'password',
+    userinput: _.trim(form.user),
+    codeinput: _.trim(form.password),
+    keep: form.keepLogin,
+    captcha: captcha
+  })
+  loading.password = false
+  if (res.data.status === 400) {
+    const captchaCallback = await getCaptcha('2046626881')
+    loading.password = false
+    captcha.randstr = captchaCallback.randstr
+    captcha.ticket = captchaCallback.ticket
+    login()
+  }
+  captcha.randstr = ''
+  captcha.ticket = ''
+
+  if (res.data.status !== 200) {
+    if (res.data.status === 400) return
+    loading.password = false
+    return message.error(res.data.msg)
+  }
+  message.success(res.data.msg)
+  window.localStorage.setItem('token', res.data.data.token)
+  window.localStorage.setItem('expire', res.data.data.expire.toString())
+  setTimeout(() => {
+    router.push({
+      path: '/user',
+      query: {
+        form: 'login.page.login'
+      }
+    })
+  }, 1000)
+}
+
+const sure = () => {
+  if (userInfo.isRegister) {
+    register()
+  } else {
+    login()
+  }
 }
 </script>
 
 <template>
-  <modal-box-components :title="title" avatar="logo">
+  <modal-box-components :avatar="avatarUrl" :title="title">
     <form action="javascript:;" @submit.prevent="submit()">
       <div class="user">
         <input
@@ -134,6 +229,8 @@ const submit = async () => {
           type="password"
           maxlength="32"
           placeholder="密码"
+          id="password-input"
+          @keydown="handleKeyDown"
         />
         <input
           v-if="userInfo.authenticationType == AuthenticationType.Email"
@@ -141,8 +238,14 @@ const submit = async () => {
           type="text"
           maxlength="6"
           placeholder="邮件验证码"
+          id="emailCode-input"
+          @keydown="handleKeyDown"
         />
-        <div class="user-icon" v-if="userInfo.authenticationType !== AuthenticationType.Null">
+        <div
+          class="user-icon"
+          @click="sure()"
+          v-if="userInfo.authenticationType !== AuthenticationType.Null"
+        >
           <arrow-circle-right
             v-if="!loading.password"
             class="icon-button"

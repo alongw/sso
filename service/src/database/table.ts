@@ -78,6 +78,42 @@ export const User = sequelize.define<Model<UserTable>>('User', {
     }
 })
 
+export const LoginLog = sequelize.define('LoginLog', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    uid: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
+    ip: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    time: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    captcha: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
+    },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    ua: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    fingerprint: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+})
+
 export const EmailCode = sequelize.define<Model<EmailCodeTable>>('EmailCode', {
     id: {
         type: DataTypes.INTEGER,
@@ -88,16 +124,20 @@ export const EmailCode = sequelize.define<Model<EmailCodeTable>>('EmailCode', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    ip: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     sendTime: {
         type: DataTypes.DATE,
         allowNull: false
     },
     expire: {
         type: DataTypes.DATE,
-        allowNull: false
-    },
-    email: {
-        type: DataTypes.STRING,
         allowNull: false
     }
 })
