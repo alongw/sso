@@ -6,7 +6,7 @@ import { isMail } from './../../utils/mail'
 import { Request } from './../../types/request'
 import { checkTicket } from './../../utils/captcha'
 import token from './../../utils/token'
-import { User, EmailCode } from './../../database/table'
+import { User, EmailCode, LoginLog } from './../../database/table'
 import checkValue from './../../utils/checkValue'
 import dayjs from 'dayjs'
 import CryptoJS from 'crypto-js'
@@ -92,6 +92,18 @@ router.post(
                     msg: '登录失败，请重试'
                 })
             }
+
+            // 写入登录记录
+            await LoginLog.create({
+                uid: result.get('uid'),
+                ip: req.headers['x-real-ip'] || req.ip,
+                captcha: req.body.captcha?.randstr ? true : false,
+                ua: req.headers['user-agent'],
+                type: 'mail',
+                time: dayjs().valueOf(),
+                fingerprint: req.headers.fingerprint
+            })
+
             if (emailCode.get('code') === req.body.codeinput) {
                 return res.send({
                     status: 200,
@@ -139,6 +151,18 @@ router.post(
                     msg: '登录失败，请重试'
                 })
             }
+
+            // 写入登录记录
+            await LoginLog.create({
+                uid: result.get('uid'),
+                ip: req.headers['x-real-ip'] || req.ip,
+                captcha: req.body.captcha?.randstr ? true : false,
+                ua: req.headers['user-agent'],
+                type: 'password',
+                time: dayjs().valueOf(),
+                fingerprint: req.headers.fingerprint
+            })
+
             return res.send({
                 status: 200,
                 msg: '登录成功',

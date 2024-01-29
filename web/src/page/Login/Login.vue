@@ -107,7 +107,7 @@ const submit = async () => {
       const emailCodeInput = document.querySelector('#emailCode-input')
       if (emailCodeInput instanceof HTMLElement) emailCodeInput.focus()
     }
-  }, 2000)
+  }, 500)
 }
 
 const handleKeyDown = (e: KeyboardEvent) => {
@@ -140,7 +140,7 @@ const register = async () => {
         form: 'login.page.register'
       }
     })
-  }, 1000)
+  }, 500)
 }
 
 const login = async () => {
@@ -179,7 +179,7 @@ const login = async () => {
         form: 'login.page.login'
       }
     })
-  }, 1000)
+  }, 500)
 }
 
 const sure = () => {

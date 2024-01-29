@@ -109,14 +109,18 @@ router.post(
                 })
 
                 // 发送邮件
-                await sendMail({
-                    subject: 'Nya - Account 注册验证码',
-                    to: req.body.email,
-                    html: getMailTemplate('register').replace(
-                        /{{code}}/g,
-                        randomCode.toString()
-                    )
-                })
+                try {
+                    await sendMail({
+                        subject: 'Nya - Account 注册验证码',
+                        to: req.body.email,
+                        html: getMailTemplate('register').replace(
+                            /{{code}}/g,
+                            randomCode.toString()
+                        )
+                    })
+                } catch (e) {
+                    // ...
+                }
 
                 return res.send({
                     status: 200,
@@ -147,8 +151,7 @@ router.post(
                 data: {
                     authenticationType: 'password',
                     captcha: true,
-                    isRegister: false,
-                    avatar: await getAvatar(result.get('email').toString())
+                    isRegister: false
                 }
             })
         }
@@ -172,7 +175,34 @@ router.post(
                 }
             })
         }
-        // 需要使用邮箱验证码
+
+        // 需要使用邮箱验证码 判断是否要进行滑动验证码挑战
+        if (
+            !checkValue(req?.body?.captcha?.randstr, req?.body?.captcha?.ticket) &&
+            (await recentLogin(result.get('uid').toString(), req.headers.fingerprint)) < 2
+        ) {
+            // 用户近期登录成功次数小于 2 次，需要进行滑动验证码挑战
+            return res.send({
+                status: 422,
+                msg: '需要验证码',
+                data: {
+                    captcha: true
+                }
+            })
+        }
+
+        // 验证验证码
+        const checkResult = await checkTicket(
+            req.body.captcha.ticket,
+            req.body.captcha.randstr
+        )
+        if (checkResult.status !== 200) {
+            return res.send({
+                status: checkResult.status,
+                msg: '验证码验证不通过：' + checkResult.msg
+            })
+        }
+
         const result2 = await EmailCode.findAll({
             where: {
                 email: result.get('email')
@@ -206,11 +236,15 @@ router.post(
         })
 
         // 发送邮件
-        await sendMail({
-            subject: 'Nya - Account 登录验证码',
-            to: req.body.email,
-            html: getMailTemplate('login').replace(/{{code}}/g, randomCode.toString())
-        })
+        try {
+            await sendMail({
+                subject: 'Nya - Account 登录验证码',
+                to: req.body.email,
+                html: getMailTemplate('login').replace(/{{code}}/g, randomCode.toString())
+            })
+        } catch (error) {
+            // ...
+        }
 
         return res.send({
             status: 200,

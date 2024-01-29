@@ -1,6 +1,7 @@
 import { Op } from 'sequelize'
 import _ from 'lodash'
 import CryptoJS from 'crypto-js'
+import validator from 'validator'
 import { isMail } from './../utils/mail'
 import { User, LoginLog } from './../database/table'
 
@@ -9,6 +10,14 @@ const getUser = async (account: string) => {
         const res = await User.findOne({
             where: {
                 email: account
+            }
+        })
+        return res
+    }
+    if (validator.isUUID(account, 4)) {
+        const res = await User.findOne({
+            where: {
+                uid: account
             }
         })
         return res

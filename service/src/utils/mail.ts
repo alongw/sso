@@ -1,8 +1,10 @@
 import { createTransport } from 'nodemailer'
 import fse from 'fs-extra'
+import dayjs from 'dayjs'
+import { Op } from 'sequelize'
 import { getMail } from './system'
 import logger from './log'
-
+import { EmailCode } from './../database/table'
 import type Mail from 'nodemailer/lib/mailer'
 
 import type SMTPTransport from 'nodemailer/lib/smtp-transport'
@@ -24,9 +26,27 @@ const info = await getMail()
 
 const transport = createTransport(info)
 
-export const sendMail = (
+export const sendMail = async (
     mailOptions: Mail.Options
 ): Promise<SMTPTransport.SentMessageInfo> => {
+    // 频繁邮件全局拦截
+    // 查找最近24小时的邮件
+    const result = await EmailCode.findAll({
+        where: {
+            sendTime: {
+                [Op.between]: [
+                    dayjs().subtract(1, 'day').startOf('day').toDate(),
+                    dayjs().endOf('day').toDate()
+                ]
+            },
+            email: mailOptions.to.toString()
+        },
+        limit: 4
+    })
+    if (result.length >= 4) {
+        logger.warn(`[MAIL] - 频繁邮件拦截：${mailOptions.to}`)
+        return Promise.reject(new Error('频繁邮件拦截'))
+    }
     return new Promise((resolve, reject) => {
         transport.sendMail(
             {
