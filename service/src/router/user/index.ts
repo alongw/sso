@@ -17,6 +17,10 @@ router.use('/register', async (req, res, next) =>
     (await import('./register')).default(req, res, next)
 )
 
+router.use('/perfect', async (req, res, next) =>
+    (await import('./perfect')).default(req, res, next)
+)
+
 router.post(
     '/getAccountStatus',
     async (

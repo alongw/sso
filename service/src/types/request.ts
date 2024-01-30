@@ -5,6 +5,18 @@ interface SystemHeader {
     fingerprint: string
 }
 
+export interface User {
+    uid: string
+    username: string
+    email: string
+    status: number
+    nickname: string
+    group: number
+    createdAt: Date
+    updatedAt: Date
+    info: 'Nya-Account | https://alongw.cn | https://github.com/alongw/sso'
+}
+
 export interface Request<
     B = Partial<Record<string, never>>,
     Q extends ExpressRequest['query'] = Partial<Record<string, never>>,
@@ -15,4 +27,6 @@ export interface Request<
     params: P
     query: Q
     body: B
+    userIp: string
+    user: User
 }

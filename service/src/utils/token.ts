@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { getJwtSecret } from './system'
-import { User } from '../types/express'
+import { User } from '../types/request'
 
 const jwtSecretKey = await getJwtSecret()
 

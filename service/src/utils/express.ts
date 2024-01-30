@@ -5,7 +5,7 @@ import cors from 'cors'
 
 import logger, { authLogger } from './log'
 
-import { Request } from '../types/express'
+import { Request } from '../types/request'
 
 import { getBaseUrl, getJwtSecret, getJwtUnless } from './system'
 

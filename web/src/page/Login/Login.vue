@@ -3,7 +3,7 @@ import { computed, reactive, ref } from 'vue'
 import ModalBoxComponents from '@/components/ModalBox.vue'
 import { ArrowCircleRight, LoadingOne } from '@icon-park/vue-next'
 import getCaptcha from 'nia-captcha'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { message } from 'ant-design-vue'
 import _ from 'lodash'
 import { getAccountStatus, register as registerApi, login as loginApi } from '@/api/login'
@@ -12,6 +12,7 @@ defineOptions({
 })
 
 const router = useRouter()
+const route = useRoute()
 
 enum AuthenticationType {
   Email = 'email',
@@ -33,6 +34,11 @@ const title = computed(() => {
 
 const showPasswordInput = () => {
   startAnimation.animationPlayState = 'running'
+}
+
+const getPushPath = (defaultPath: string) => {
+  if (route.query && route.query.redirect) return `/redirect?url=${route.query.redirect.toString()}`
+  return defaultPath
 }
 
 const startAnimation = reactive({
@@ -137,7 +143,8 @@ const register = async () => {
     router.push({
       path: '/user/perfect',
       query: {
-        form: 'login.page.register'
+        form: 'login.page.register',
+        ...route.query
       }
     })
   }, 500)
@@ -174,7 +181,7 @@ const login = async () => {
   window.localStorage.setItem('expire', res.data.data.expire.toString())
   setTimeout(() => {
     router.push({
-      path: '/user',
+      path: getPushPath('/user'),
       query: {
         form: 'login.page.login'
       }

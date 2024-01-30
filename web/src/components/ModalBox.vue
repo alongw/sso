@@ -11,6 +11,10 @@ defineProps({
   title: {
     type: String,
     default: ''
+  },
+  maxWidth: {
+    type: String,
+    default: '100%'
   }
 })
 </script>
@@ -30,7 +34,15 @@ defineProps({
       </div>
 
       <div class="title" v-if="title">{{ title }}</div>
-      <slot />
+      <div
+        :style="{
+          maxWidth: maxWidth,
+          margin: '0 auto',
+          height: '100%'
+        }"
+      >
+        <slot />
+      </div>
     </div>
   </div>
 </template>
