@@ -16,6 +16,7 @@
     "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@fingerprintjs/fingerprintjs": "^4.2.1",
     "@icon-park/vue-next": "^1.4.2",
     "ant-design-vue": "^4.1.1",

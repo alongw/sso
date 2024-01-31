@@ -1,3 +1,8 @@
+import { h } from 'vue'
+import { Spin } from 'ant-design-vue'
+
+import { LoadingOutlined } from '@ant-design/icons-vue'
+
 import '@/assets/style/base.less'
 
 import '@icon-park/vue-next/styles/index.css'
@@ -16,5 +21,9 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(Antd)
+
+Spin.setDefaultIndicator({
+  indicator: h(LoadingOutlined, { class: 'anticon anticon-loading anticon-spin ant-spin-dot' })
+})
 
 app.mount('#app')

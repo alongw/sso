@@ -17,6 +17,11 @@ const router = createRouter({
       path: '/user/perfect',
       name: 'Perfect',
       component: () => import('@/page/Perfect/Perfect.vue')
+    },
+    {
+      path: '/user',
+      name: 'User',
+      component: () => import('@/page/User/User.vue')
     }
   ]
 })

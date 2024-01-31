@@ -10,7 +10,7 @@ defineOptions({
   <div class="base">
     <nav-component />
 
-    <div style="padding-top: 70px"><router-view /></div>
+    <div style="padding-top: 70px; flex: 1"><router-view /></div>
   </div>
 </template>
 
@@ -20,5 +20,7 @@ defineOptions({
   margin: 0 auto;
   height: 100vh;
   background-color: #fcfcfc;
+  display: flex;
+  flex-direction: column;
 }
 </style>
