@@ -29,40 +29,44 @@ const transport = createTransport(info)
 export const sendMail = async (
     mailOptions: Mail.Options
 ): Promise<SMTPTransport.SentMessageInfo> => {
-    // 频繁邮件全局拦截
-    // 查找最近24小时的邮件
-    const result = await EmailCode.findAll({
-        where: {
-            sendTime: {
-                [Op.between]: [
-                    dayjs().subtract(1, 'day').startOf('day').toDate(),
-                    dayjs().endOf('day').toDate()
-                ]
+    try {
+        // 频繁邮件全局拦截
+        // 查找最近24小时的邮件
+        const result = await EmailCode.findAll({
+            where: {
+                sendTime: {
+                    [Op.between]: [
+                        dayjs().subtract(1, 'day').startOf('day').toDate(),
+                        dayjs().endOf('day').toDate()
+                    ]
+                },
+                email: mailOptions.to.toString()
             },
-            email: mailOptions.to.toString()
-        },
-        limit: 4
-    })
-    if (result.length >= 4) {
-        logger.warn(`[MAIL] - 频繁邮件拦截：${mailOptions.to}`)
-        return Promise.reject(new Error('频繁邮件拦截'))
-    }
-    return new Promise((resolve, reject) => {
-        transport.sendMail(
-            {
-                ...mailOptions,
-                from: info.from
-            },
-            (err, info) => {
-                if (err) {
-                    logger.error(`[MAIL] - 发生错误：${err}`)
-                    return reject(err)
+            limit: 4
+        })
+        if (result.length >= 4) {
+            logger.warn(`[MAIL] - 频繁邮件拦截：${mailOptions.to}`)
+            return Promise.reject(new Error('频繁邮件拦截'))
+        }
+        return new Promise((resolve, reject) => {
+            transport.sendMail(
+                {
+                    ...mailOptions,
+                    from: info.from
+                },
+                (err, info) => {
+                    if (err) {
+                        logger.error(`[MAIL] - 发生错误：${err}`)
+                        return reject(err)
+                    }
+                    logger.info(`[MAIL] - 已向 ${mailOptions.to} 发送邮件`)
+                    resolve(info)
                 }
-                logger.info(`[MAIL] - 已向 ${mailOptions.to} 发送邮件`)
-                resolve(info)
-            }
-        )
-    })
+            )
+        })
+    } catch (error) {
+        logger.error(`[MAIL] - 发生错误：${error}`)
+    }
 }
 
 export const getMailTemplate = (name: string) => {

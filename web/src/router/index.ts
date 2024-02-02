@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('@/page/Login/Login.vue')
     },
     {
+      path: '/authorize',
+      name: 'Authorize',
+      component: () => import('@/page/Authorize/Authorize.vue')
+    },
+    {
       path: '/user/perfect',
       name: 'Perfect',
       component: () => import('@/page/Perfect/Perfect.vue')

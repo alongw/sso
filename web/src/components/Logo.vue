@@ -11,15 +11,23 @@ defineProps({
   showTitle: {
     type: Boolean,
     default: true
+  },
+  link: {
+    type: Boolean,
+    default: true
   }
 })
 </script>
 
 <template>
-  <router-link to="/" class="logo">
+  <router-link v-if="link === true" to="/" class="logo">
     <img v-if="showLogo" src="@/assets/logo/48x.png" alt="" />
     <p v-if="showTitle">Nya Account</p>
   </router-link>
+  <a v-else class="logo">
+    <img v-if="showLogo" src="@/assets/logo/48x.png" alt="" />
+    <p v-if="showTitle">Nya Account</p>
+  </a>
 </template>
 
 <style scoped lang="less">

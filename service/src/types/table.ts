@@ -60,13 +60,40 @@ export interface ApplicationTable {
     approve: number
 }
 
+export interface ApplicationPermissionTable {
+    apppid: number
+    name: string
+    description: string
+    typeRequire: number
+    defaultCheck: boolean
+    lock: boolean
+    priority: number
+}
+
+export interface ApplicationUserPermissionTable {
+    aupid: number
+    appid: string
+    apppid: number
+}
+
 export interface LoginLogTable {
     id: number
     uid: string
     ip: string
     time: number
-    type: number
-    captcha: string
+    type: string
+    captcha: boolean
+    ua: string
+    fingerprint: string
+}
+
+export interface AuthLogTable {
+    id: number
+    uid: string
+    appid: string
+    ip: string
+    time: number
+    exp: number
     ua: string
     fingerprint: string
 }

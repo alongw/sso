@@ -95,8 +95,8 @@ router.post(
 
             // 写入登录记录
             await LoginLog.create({
-                uid: result.get('uid'),
-                ip: req.headers['x-real-ip'] || req.ip,
+                uid: result.get('uid').toString(),
+                ip: (req.headers['x-real-ip'] || req.ip).toString(),
                 captcha: req.body.captcha?.randstr ? true : false,
                 ua: req.headers['user-agent'],
                 type: 'mail',
@@ -154,8 +154,8 @@ router.post(
 
             // 写入登录记录
             await LoginLog.create({
-                uid: result.get('uid'),
-                ip: req.headers['x-real-ip'] || req.ip,
+                uid: result.get('uid').toString(),
+                ip: (req.headers['x-real-ip'] || req.ip).toString(),
                 captcha: req.body.captcha?.randstr ? true : false,
                 ua: req.headers['user-agent'],
                 type: 'password',

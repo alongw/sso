@@ -39,7 +39,7 @@ export const recentLogin = async (account: string, fingerprint: string) => {
         where: {
             uid: user.get('uid'),
             fingerprint,
-            createdAt: {
+            time: {
                 [Op.gt]: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 7)
             }
         },

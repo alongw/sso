@@ -78,6 +78,18 @@ export const getJwtSecret = async () => {
     return jwtSecret.toJSON().value as string
 }
 
+export const getCodeSecret = async () => {
+    const [jwtSecret] = await Config.findOrCreate({
+        where: {
+            key: 'codeSecret'
+        },
+        defaults: {
+            value: '5dff9c5505ddef573d555880a253eb9b'
+        }
+    })
+    return jwtSecret.toJSON().value as string
+}
+
 export const getJwtUnless = async () => {
     const [jwtUnless] = await Config.findOrCreate({
         where: {

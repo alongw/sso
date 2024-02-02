@@ -33,3 +33,17 @@
 ### 效验回调
 
 解密回调，判断日期、用户授权等信息，分发最终信息给程序后端
+
+
+
+## auth
+
+客户端携带 client_id, scope, redirect_uri, state 等信息引导用户请求授权服务器的授权端点下发 code
+
+授权服务器验证客户端身份，验证通过则询问用户是否同意授权（此时会跳转到用户能够直观看到的授权页面，等待用户点击确认授权）
+
+假设用户同意授权，此时授权服务器会将 code 和 state（如果客户端传递了该参数）拼接在 redirect_uri 后面，以302形式下发 code
+
+客户端携带 code, redirect_uri, 以及 client_secret 请求授权服务器的令牌端点下发 access_token （这一步实际上中间经过了客户端的服务器，除了 code，其它参数都是在应用服务器端添加）
+
+授权服务器验证客户端身份，同时验证 code，以及 redirect_uri 是否与请求 code 时相同，验证通过后下发 access_token，并选择性下发 refresh_token

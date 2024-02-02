@@ -10,7 +10,11 @@ import type {
     PermissionTable,
     SystemTable,
     UserTable,
-    EmailCodeTable
+    EmailCodeTable,
+    ApplicationPermissionTable,
+    ApplicationUserPermissionTable,
+    LoginLogTable,
+    AuthLogTable
 } from './../types/table'
 
 export const System = sequelize.define<Model<SystemTable>>('System', {
@@ -78,7 +82,7 @@ export const User = sequelize.define<Model<UserTable>>('User', {
     }
 })
 
-export const LoginLog = sequelize.define('LoginLog', {
+export const LoginLog = sequelize.define<Model<LoginLogTable>>('LoginLog', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -102,6 +106,42 @@ export const LoginLog = sequelize.define('LoginLog', {
     },
     type: {
         type: DataTypes.STRING,
+        allowNull: false
+    },
+    ua: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    fingerprint: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+})
+
+export const AuthLog = sequelize.define<Model<AuthLogTable>>('LoginLog', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    uid: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
+    appid: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
+    ip: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    time: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
+    exp: {
+        type: DataTypes.DATE,
         allowNull: false
     },
     ua: {
@@ -239,6 +279,61 @@ export const Application = sequelize.define<Model<ApplicationTable>>('Applicatio
     }
 })
 
+export const ApplicationPermission = sequelize.define<Model<ApplicationPermissionTable>>(
+    'ApplicationPermission',
+    {
+        apppid: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        description: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        typeRequire: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        defaultCheck: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        lock: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        priority: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
+    }
+)
+
+export const ApplicationUserPermission = sequelize.define<
+    Model<ApplicationUserPermissionTable>
+>('ApplicationUserPermission', {
+    aupid: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    appid: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
+    apppid: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
+})
+
 Group.belongsToMany(Permission, {
     through: {
         model: GroupPermission,
@@ -251,6 +346,20 @@ Permission.belongsToMany(Group, {
         model: GroupPermission,
         unique: false
     }
+})
+
+Application.belongsToMany(ApplicationPermission, {
+    through: ApplicationUserPermission,
+    as: 'permissionList',
+    foreignKey: 'appid',
+    otherKey: 'apppid'
+})
+
+ApplicationPermission.belongsToMany(Application, {
+    through: ApplicationUserPermission,
+    as: 'applicationList',
+    foreignKey: 'apppid',
+    otherKey: 'appid'
 })
 
 User.hasMany(Application, {
