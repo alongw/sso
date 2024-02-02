@@ -9,7 +9,7 @@ import type { Request } from './../../types/request'
 const router = Router()
 
 // 获取应用实例是否有效、需要的权限等信息
-router.get(
+router.post(
     '/',
     async (
         req: Request<{
@@ -20,7 +20,7 @@ router.get(
         if (!checkValue(req.body && req.body.appid))
             return res.send({
                 status: 400,
-                message: '参数错误'
+                msg: '参数错误'
             })
 
         // 获取 app 信息
@@ -39,7 +39,7 @@ router.get(
         if (!app)
             return res.send({
                 status: 404,
-                message: '应用不存在'
+                msg: '应用不存在'
             })
 
         // app 的状态不能是 0
@@ -79,7 +79,11 @@ router.get(
                             priority: e.priority
                         }
                     }
-                )
+                ),
+                user: {
+                    email: req.user.email
+                },
+                redirect: app.toJSON().redirect
             }
         })
     }

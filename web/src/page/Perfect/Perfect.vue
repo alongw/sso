@@ -65,19 +65,10 @@ const submit = async () => {
       }
 
       message.success(result.data.msg)
-      const query = route.query?.redirect
-      if (query) {
-        return router.push({
-          path: `/redirect`,
-          query: {
-            from: 'perfect.setUsername',
-            url: query
-          }
-        })
-      }
       return router.push({
-        path: '/user',
+        path: route.query.appid ? '/authorize' : '/user',
         query: {
+          ...route.query,
           from: 'perfect.setUsername'
         }
       })

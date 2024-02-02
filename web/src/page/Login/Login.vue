@@ -36,11 +36,6 @@ const showPasswordInput = () => {
   startAnimation.animationPlayState = 'running'
 }
 
-const getPushPath = (defaultPath: string) => {
-  if (route.query && route.query.redirect) return `/redirect?url=${route.query.redirect.toString()}`
-  return defaultPath
-}
-
 const startAnimation = reactive({
   animationPlayState: 'paused'
 })
@@ -181,8 +176,9 @@ const login = async () => {
   window.localStorage.setItem('expire', res.data.data.expire.toString())
   setTimeout(() => {
     router.push({
-      path: getPushPath('/user'),
+      path: route.query.appid ? '/authorize' : '/user',
       query: {
+        ...route.query,
         form: 'login.page.login'
       }
     })

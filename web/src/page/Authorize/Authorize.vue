@@ -1,112 +1,110 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { ref, onMounted, h } from 'vue'
+import { LoadingOutlined } from '@ant-design/icons-vue'
+import { useAuthorize } from '@/hook/useAuthorize'
+import { useRoute, useRouter } from 'vue-router'
+
+import { More } from '@icon-park/vue-next'
+import { isLogin } from '@/hook/useUser'
 import ModalBoxComponents from '@/components/ModalBox.vue'
 import ButtonComponents from '@/components/Button.vue'
 import LogoComponents from '@/components/Logo.vue'
-
-import { IdcardFilled } from '@ant-design/icons-vue'
 
 defineOptions({
   name: 'AuthorizePage'
 })
 
-enum Approve {
-  'default' = 0,
-  'agree' = 5,
-  'master' = 10
-}
+const indicator = h(LoadingOutlined, {
+  style: {
+    fontSize: '80px'
+  },
+  spin: true
+})
 
-const approve = ref<Approve>(Approve.master)
+const route = useRoute()
+const router = useRouter()
 
-const permissionList = reactive<
-  {
-    id: number
-    icon: any
-    title: string
-  }[]
->([
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
-  },
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
-  },
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
-  },
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
-  },
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
-  },
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
-  },
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
-  },
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
-  },
-  {
-    id: 1,
-    icon: IdcardFilled,
-    title: '读取您的个人资料'
+const {
+  getApplicationInfo,
+  agree,
+  deny,
+  userEmail,
+  appName,
+  approve,
+  permissionList,
+  permissionIcon,
+  loading
+} = useAuthorize(route.query)
+
+const userPermissionList = ref<{
+  [key: number]: boolean
+}>({})
+
+onMounted(async () => {
+  if (!isLogin()) {
+    return router.push({
+      path: '/login',
+      query: {
+        ...route.query,
+        from: 'authorize.noLogin'
+      }
+    })
   }
-])
+
+  await getApplicationInfo()
+  permissionList.value.forEach((e) => {
+    userPermissionList.value[e.apppid] = e.defaultCheck
+  })
+})
 </script>
 
 <template>
   <modal-box-components>
     <logo-components :link="false" />
     <div class="box">
-      <div class="email">110@gov.cn</div>
+      <div class="email">{{ userEmail }}</div>
       <div class="title">是否允许此应用访问你的信息？</div>
       <div class="subtitle">
-        <div class="application-name">NIA-IMG</div>
+        <div class="application-name">{{ appName }}</div>
         <div>&nbsp;需要得到你的许可才能执行以下操作：</div>
       </div>
       <div v-if="approve === 10" class="application-status master">受信任的应用程序</div>
       <div v-else-if="approve === 5" class="application-status agree">已验证其开发者</div>
       <div v-else class="application-status unkonw">未知的应用程序</div>
       <ul>
-        <li v-for="item in permissionList" :key="item.id">
+        <li v-for="item in permissionList" :key="item.apppid">
           <div class="icon">
-            <component :is="item.icon" style="font-size: 30px; opacity: 0.8" />
+            <component
+              :is="permissionIcon[item.apppid] || More"
+              style="font-size: 30px; opacity: 0.8"
+            />
           </div>
           <div class="info">
             <div class="title">
-              {{ item.title }}
+              {{ item.name }}
             </div>
-            <div class="desc">NIA-IMG 将能够{{ item.title }}</div>
+            <div class="desc">{{ appName }} 将能够{{ item.name }}</div>
           </div>
           <div class="check-box">
-            <a-checkbox />
+            <a-checkbox v-model:checked="userPermissionList[item.apppid]" :disabled="item.lock" />
           </div>
         </li>
       </ul>
       <div class="button-group">
-        <ButtonComponents type="cancel" style="width: 96px; height: 36px"> 取消 </ButtonComponents>
-        <ButtonComponents type="verify" style="width: 96px; height: 36px; margin-left: 6px">
+        <ButtonComponents @click="deny" type="cancel" style="width: 96px; height: 36px">
+          取消
+        </ButtonComponents>
+        <ButtonComponents
+          @click="agree(userPermissionList)"
+          type="verify"
+          style="width: 96px; height: 36px; margin-left: 6px"
+        >
           接受
         </ButtonComponents>
+      </div>
+      <div v-show="loading" class="loading">
+        <a-spin :indicator="indicator" />
+        <h2>正在授权</h2>
       </div>
     </div>
   </modal-box-components>
@@ -114,6 +112,7 @@ const permissionList = reactive<
 
 <style scoped lang="less">
 .box {
+  position: relative;
   width: 100%;
   max-width: 460px;
   margin: 0 auto;
@@ -233,6 +232,23 @@ const permissionList = reactive<
     display: flex;
     align-items: center;
     justify-content: right;
+  }
+
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fffffff0;
+
+    h2 {
+      margin-top: 30px;
+    }
   }
 }
 </style>

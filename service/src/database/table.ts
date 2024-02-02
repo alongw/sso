@@ -118,7 +118,7 @@ export const LoginLog = sequelize.define<Model<LoginLogTable>>('LoginLog', {
     }
 })
 
-export const AuthLog = sequelize.define<Model<AuthLogTable>>('LoginLog', {
+export const AuthLog = sequelize.define<Model<AuthLogTable>>('AuthLog', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

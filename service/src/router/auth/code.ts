@@ -22,10 +22,10 @@ router.post(
         }>,
         res
     ) => {
-        if (!checkValue(req.body, req.body.appid, req.body.permissionList))
+        if (!checkValue(req.body?.appid, req.body?.permissionList))
             return res.send({
                 status: 400,
-                message: '参数错误'
+                msg: '参数错误'
             })
 
         // 获取 app
