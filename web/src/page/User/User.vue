@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import dayjs from 'dayjs'
 import { User } from '@icon-park/vue-next'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useScreen } from '@/hook/useScreen'
 
 import UserInfoComponent from '@/components/user/Info.vue'
@@ -11,6 +11,7 @@ defineOptions({
 })
 
 const route = useRoute()
+const router = useRouter()
 
 const { screenWidth } = useScreen()
 
@@ -35,6 +36,16 @@ const menu = reactive<
     component: UserInfoComponent
   }
 ])
+
+onMounted(() => {
+  if (!route.query?.path) {
+    return router.push({
+      query: {
+        path: '1'
+      }
+    })
+  }
+})
 </script>
 <template>
   <a-layout style="height: 100%; border-top: 1px solid #f0f0f0">

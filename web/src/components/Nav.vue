@@ -65,8 +65,11 @@ const phoneMenu = ref(false)
       <div v-if="!isLoginStatus">
         <button-component to="/login">立即登录</button-component>
       </div>
-      <div v-else>
+      <div v-else-if="!route.query.path">
         <button-component type="small-sub" to="/user">控制台</button-component>
+      </div>
+      <div v-else>
+        <button-component type="small-sub" to="/loginout">退出登录</button-component>
       </div>
     </div>
     <div class="phone">

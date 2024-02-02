@@ -23,7 +23,9 @@ const emit = defineEmits({
 
 const handleButtonClick = () => {
   if (prop.to) {
-    router.push(prop.to)
+    router.push({
+      path: prop.to.toString()
+    })
   }
   if (emit) {
     emit('click')
