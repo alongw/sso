@@ -3,11 +3,11 @@ import expressJWT from 'express-jwt'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
-import logger, { authLogger } from './log'
+import logger, { authLogger } from './log.js'
 
-import { Request } from '../types/request'
+import { Request } from '../types/request.js'
 
-import { getBaseUrl, getNodeSecret, getJwtUnless } from './system'
+import { getBaseUrl, getNodeSecret, getJwtUnless } from './system.js'
 
 const baseUrl = await getBaseUrl()
 const unless = await getJwtUnless()

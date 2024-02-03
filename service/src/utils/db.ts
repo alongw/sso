@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize'
-import { dbLogger } from './log'
-import config from './config'
+import { dbLogger } from './log.js'
+import config from './config.js'
 
 const { db } = config
 

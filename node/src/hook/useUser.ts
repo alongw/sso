@@ -2,8 +2,8 @@ import { Op } from 'sequelize'
 import _ from 'lodash'
 import CryptoJS from 'crypto-js'
 import validator from 'validator'
-import { isMail } from './../utils/mail'
-import { User, LoginLog } from './../database/table'
+import { isMail } from './../utils/mail.js'
+import { User, LoginLog } from './../database/table.js'
 
 const getUser = async (account: string) => {
     if (isMail(account)) {

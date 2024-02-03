@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import logger from './log'
+import logger from './log.js'
 
 export async function checkTicket(
     ticket: string,

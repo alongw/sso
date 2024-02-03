@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { User } from './../../database/table'
-import checkValue from './../../utils/checkValue'
+import { User } from './../../database/table.js'
+import checkValue from './../../utils/checkValue.js'
 import validator from 'validator'
 
-import type { Request } from './../../types/request'
+import type { Request } from './../../types/request.js'
 
 const router = Router()
 

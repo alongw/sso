@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import dayjs from 'dayjs'
-import { Application, AuthLog, User } from './../../database/table'
-import { authLogger } from './../../utils/log'
-import token from './../../utils/token'
-import { decrypt } from './../../utils/crypt'
+import { Application, AuthLog, User } from './../../database/table.js'
+import { authLogger } from './../../utils/log.js'
+import token from './../../utils/token.js'
+import { decrypt } from './../../utils/crypt.js'
 import CryptoJS from 'crypto-js'
-import checkValue from './../../utils/checkValue'
+import checkValue from './../../utils/checkValue.js'
 // import { Request } from './../../types/request'
 
 interface CodeType {

@@ -1,10 +1,10 @@
 import { Router } from 'express'
 import dayjs from 'dayjs'
 
-import { getAvatar } from './../../hook/useUser'
-import { User } from './../../database/table'
+import { getAvatar } from './../../hook/useUser.js'
+import { User } from './../../database/table.js'
 
-import { Request } from './../../types/request'
+import { Request } from './../../types/request.js'
 
 const router = Router()
 

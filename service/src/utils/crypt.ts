@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 
-import { getCodeSecret } from './system'
+import { getCodeSecret } from './system.js'
 
 const codeSecret = await getCodeSecret()
 

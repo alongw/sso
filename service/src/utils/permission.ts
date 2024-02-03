@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { GroupPermission, Permission, User } from './../database/table'
-import { authLogger, authLoggerOnlyFile } from './log'
+import { GroupPermission, Permission, User } from './../database/table.js'
+import { authLogger, authLoggerOnlyFile } from './log.js'
 
-import { defaultPermissions } from './../data/permission'
+import { defaultPermissions } from './../data/permission.js'
 
 enum StatusCode {
     Forbidden = 403,

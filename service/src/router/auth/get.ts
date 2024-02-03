@@ -1,10 +1,10 @@
 import { Router } from 'express'
 
-import checkValue from './../../utils/checkValue'
+import checkValue from './../../utils/checkValue.js'
 
-import { Application, ApplicationPermission } from './../../database/table'
+import { Application, ApplicationPermission } from './../../database/table.js'
 
-import type { Request } from './../../types/request'
+import type { Request } from './../../types/request.js'
 
 const router = Router()
 

@@ -3,14 +3,14 @@ import dayjs from 'dayjs'
 
 import { Op } from 'sequelize'
 
-import checkValue from './../../utils/checkValue'
-import { encrypt } from './../../utils/crypt'
+import checkValue from './../../utils/checkValue.js'
+import { encrypt } from './../../utils/crypt.js'
 
-import { AuthLog, Application } from './../../database/table'
+import { AuthLog, Application } from './../../database/table.js'
 
-import logger, { authLogger } from './../../utils/log'
+import logger, { authLogger } from './../../utils/log.js'
 
-import type { Request } from './../../types/request'
+import type { Request } from './../../types/request.js'
 
 const router = Router()
 
