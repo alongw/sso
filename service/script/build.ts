@@ -37,7 +37,7 @@ deleteFolderContents('dist')
 createDirectoryIfNotExists('dist')
 
 // 编译 TypeScript 文件
-shell.exec('tsc')
+shell.exec('tsc --module esnext')
 
 // 复制 public 文件夹到 dist/ncc 目录（包括文件夹本身）
 copyFolder('public', 'dist/public')

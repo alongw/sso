@@ -12,7 +12,7 @@
         "format": "prettier --write --cache .",
         "dev": "nodemon -x node --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/app.ts",
         "build": "npx eslint . && npx tsx ./script/build.ts",
-        "build:nolint": "npx ts-node ./script/build.ts",
+        "build:nolint": "npx tsx ./script/build.ts",
         "start": "yarn start:ts",
         "start:ts": "ts-node-esm --experimental-specifier-resolution=node src/app.ts",
         "start:node": "node --es-module-specifier-resolution=node dist/app.js"
