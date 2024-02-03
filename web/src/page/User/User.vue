@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 import dayjs from 'dayjs'
-import { User } from '@icon-park/vue-next'
+import { User, ApplicationTwo } from '@icon-park/vue-next'
 import { useRoute, useRouter } from 'vue-router'
 import { useScreen } from '@/hook/useScreen'
 
 import UserInfoComponent from '@/components/user/Info.vue'
+import ApplicationComonent from '@/components/user/Application.vue'
 defineOptions({
   name: 'UserPage'
 })
@@ -16,10 +17,30 @@ const router = useRouter()
 const { screenWidth } = useScreen()
 
 enum MenuKey {
-  User = '1'
+  User = '1',
+  Application = '2'
 }
 
 const selectedKeys = ref<string[]>([route.query?.path ? route.query.path.toString() : '1'])
+
+watch(
+  () => selectedKeys.value[0],
+  () => {
+    router.push({
+      query: {
+        ...route.query,
+        path: selectedKeys.value[0]
+      }
+    })
+  }
+)
+
+watch(
+  () => route.query?.path,
+  () => {
+    selectedKeys.value = [route.query?.path ? route.query.path.toString() : '1']
+  }
+)
 
 const menu = reactive<
   {
@@ -34,6 +55,12 @@ const menu = reactive<
     icon: User,
     key: MenuKey.User,
     component: UserInfoComponent
+  },
+  {
+    title: '应用管理',
+    icon: ApplicationTwo,
+    key: MenuKey.Application,
+    component: ApplicationComonent
   }
 ])
 

@@ -24,19 +24,19 @@ const menu = [
   },
   {
     name: '解决方案',
-    to: '/'
+    to: '/solution'
   },
   {
     name: '接入管理',
-    to: '/'
+    to: '/user?path=2'
   },
   {
     name: '账号中心',
-    to: '/'
+    to: '/user'
   },
   {
     name: '获取支持',
-    to: '/'
+    to: '/help'
   }
 ]
 

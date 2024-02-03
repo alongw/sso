@@ -16,7 +16,19 @@ defineOptions({
       </p>
       <div class="button-group">
         <nya-button type="sub">使用文档</nya-button>
-        <nya-button type="main">立即使用</nya-button>
+        <nya-button
+          type="main"
+          @click="
+            $router.push({
+              path: '/user',
+              query: {
+                path: 1,
+                from: 'home.banner.button'
+              }
+            })
+          "
+          >立即使用</nya-button
+        >
       </div>
     </div>
   </div>

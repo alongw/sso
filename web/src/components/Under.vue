@@ -11,20 +11,20 @@ defineOptions({
     <ul>
       <li>
         版权所有 © {{ dayjs().year() }}
-        <a href="javascript:;"> Nya Account </a>
+        <a href="https://www.alongw.cn/" target="_blank"> Nya Account </a>
         保留所有权利
       </li>
       <li>
-        <a href="javascript:;">京ICP备1145141919810号</a>
+        <a href="https://icp.gov.moe/?keyword=20241204" target="_blank">萌ICP备20241204号</a>
         友情链接&nbsp;
-        <a href="javascript:;">xxx</a>
+        <a href="https://www.alongw.cn/" target="_blank">阿龙的笔记</a>
         &nbsp;
-        <a href="javascript:;">xxx</a>
+        <a href="https://cloud.alongw.cn/" target="_blank">幻昼云存储</a>
         &nbsp;
-        <a href="javascript:;">xxx</a>
+        <a href="https://status.alongw.cn/" target="_blank">服务器状态</a>
       </li>
       <li>
-        Email：<a href="javascript:;">110@gov.cn</a>
+        Email：<a href="mailto:admin@lolinya.net">admin@lolinya.net</a>
         &nbsp; 特别鸣谢&nbsp;
         <a href="https://docs.qq.com/" target="_blank">腾讯文档官网</a>&nbsp;
         <a href="https://appleid.apple.com/" target="_blank">AppleID</a>&nbsp;
