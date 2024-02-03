@@ -170,12 +170,8 @@ router.post(
             })
         }
 
-        // 需要使用邮箱验证码 判断是否要进行滑动验证码挑战
-        if (
-            !checkValue(req?.body?.captcha?.randstr, req?.body?.captcha?.ticket) &&
-            (await recentLogin(result.get('uid').toString(), req.headers.fingerprint)) < 2
-        ) {
-            // 用户近期登录成功次数小于 2 次，需要进行滑动验证码挑战
+        // 需要进行滑动验证码挑战
+        if (!checkValue(req?.body?.captcha?.randstr, req?.body?.captcha?.ticket)) {
             return res.send({
                 status: 422,
                 msg: '需要验证码',
@@ -223,7 +219,7 @@ router.post(
         const randomCode = Math.floor(100000 + Math.random() * 900000)
         await EmailCode.create({
             code: randomCode.toString(),
-            email: req.body.email,
+            email: result.get('email').toString(),
             expire: dayjs().add(10, 'minute').valueOf(),
             sendTime: dayjs().valueOf(),
             ip: req.ip
@@ -233,7 +229,7 @@ router.post(
         try {
             await sendMail({
                 subject: 'Nya - Account 登录验证码',
-                to: req.body.email,
+                to: result.get('email').toString(),
                 html: getMailTemplate('login').replace(/{{code}}/g, randomCode.toString())
             })
         } catch (error) {

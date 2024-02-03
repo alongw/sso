@@ -42,9 +42,9 @@ export const sendMail = async (
                 },
                 email: mailOptions.to.toString()
             },
-            limit: 4
+            limit: 8
         })
-        if (result.length >= 4) {
+        if (result.length >= 8) {
             logger.warn(`[MAIL] - 频繁邮件拦截：${mailOptions.to}`)
             return Promise.reject(new Error('频繁邮件拦截'))
         }

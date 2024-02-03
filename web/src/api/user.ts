@@ -14,3 +14,17 @@ export const getUserInfo = () =>
       password: boolean
     }>
   >('/user/info')
+
+export const updateUserInfo = (data: {
+  code?: string
+  password?: string
+  email?: string
+  nickname?: string
+  code2?: string
+}) => {
+  return axios.put<Response>('/user/info', data)
+}
+
+export const getEmailCode = (data: { randstr: string; ticket: string; email?: string }) => {
+  return axios.post<Response>('/user/info/getCode', data)
+}
