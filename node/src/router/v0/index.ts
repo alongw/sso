@@ -53,8 +53,16 @@ router.post('/token', async (req, res) => {
 
     // 效验
     if (req.body.grant_type === 'authorization_code') {
+        let decode = null
         // 效验 code
-        const decode = JSON.parse(decrypt(req.body.code)) as unknown as CodeType
+        try {
+            decode = JSON.parse(decrypt(req.body.code)) as unknown as CodeType
+        } catch (error) {
+            return res.status(400).send({
+                error: 'invalid_request',
+                error_description: 'invalid code'
+            })
+        }
         if (
             !checkValue(
                 decode,
