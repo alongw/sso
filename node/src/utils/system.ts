@@ -54,10 +54,34 @@ export const getListenPort = async () => {
     return Number(listenPort.toJSON().value)
 }
 
+export const getNodePort = async () => {
+    const [listenPort] = await Config.findOrCreate({
+        where: {
+            key: 'nodePort'
+        },
+        defaults: {
+            value: '10010'
+        }
+    })
+    return Number(listenPort.toJSON().value)
+}
+
 export const getBaseUrl = async () => {
     const [baseUrl] = await Config.findOrCreate({
         where: {
             key: 'baseUrl'
+        },
+        defaults: {
+            value: '/api'
+        }
+    })
+    return baseUrl.toJSON().value as string
+}
+
+export const getNodeBaseUrl = async () => {
+    const [baseUrl] = await Config.findOrCreate({
+        where: {
+            key: 'nodeBaseUrl'
         },
         defaults: {
             value: '/api'
@@ -82,6 +106,18 @@ export const getCodeSecret = async () => {
     const [jwtSecret] = await Config.findOrCreate({
         where: {
             key: 'codeSecret'
+        },
+        defaults: {
+            value: '5dff9c5505ddef573d555880a253eb9b'
+        }
+    })
+    return jwtSecret.toJSON().value as string
+}
+
+export const getNodeSecret = async () => {
+    const [jwtSecret] = await Config.findOrCreate({
+        where: {
+            key: 'nodeSecret'
         },
         defaults: {
             value: '5dff9c5505ddef573d555880a253eb9b'

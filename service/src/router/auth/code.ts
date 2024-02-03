@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import dayjs from 'dayjs'
 
+import { Op } from 'sequelize'
+
 import checkValue from './../../utils/checkValue'
 import { encrypt } from './../../utils/crypt'
 
@@ -42,20 +44,31 @@ router.post(
             })
         }
 
-        // 分发 code
-        const code = encrypt(
-            JSON.stringify({
+        let authId = null
+
+        // 判断近期是否频繁授权
+        const count = await AuthLog.count({
+            where: {
                 uid: req.user.uid,
                 appid: req.body.appid,
-                permissionList: req.body.permissionList,
-                time: dayjs().valueOf(),
-                exp: dayjs().add(5, 'minute').valueOf()
-            })
-        )
+                time: {
+                    [Op.gte]: dayjs().subtract(1, 'h').valueOf()
+                }
+            }
+        })
 
-        // 写入数据库
+        if (count > 10) {
+            logger.info(
+                `用户 ${req.user.uid} 授权应用 ${req.body.appid} 过于频繁，去了，因此拦截授权请求`
+            )
+            return res.send({
+                status: 403,
+                msg: '不...不行...太快了...请...请慢一点...❤'
+            })
+        }
+
         try {
-            await AuthLog.create({
+            const db = await AuthLog.create({
                 uid: req.user.uid,
                 appid: req.body.appid,
                 ip: (req.headers['x-real-ip'] || req.ip).toString(),
@@ -64,9 +77,22 @@ router.post(
                 ua: req.headers['user-agent'],
                 fingerprint: req.headers.fingerprint
             })
+            authId = db.toJSON().id
         } catch (error) {
             logger.error(error)
         }
+
+        // 分发 code
+        const code = encrypt(
+            JSON.stringify({
+                uid: req.user.uid,
+                appid: req.body.appid,
+                permissionList: req.body.permissionList,
+                time: dayjs().valueOf(),
+                exp: dayjs().add(5, 'minute').valueOf(),
+                authId
+            })
+        )
 
         authLogger.info(
             `用户 ${req.user.uid} 授权应用 ${req.body.appid} 权限 ${req.body.permissionList} 生成 code `
