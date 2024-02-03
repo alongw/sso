@@ -120,6 +120,12 @@ router.post('/token', async (req, res) => {
 
         // 判断如果只需要用户信息则返回用户信息
         if (req.body?.type === 'info') {
+            authLogger.info(
+                `[TOKEN] - appid ${app.get('appid')} 获得了用户 uid ${
+                    decode.uid
+                } 的基本信息`
+            )
+
             return res.send({
                 uid: decode.uid,
                 nickname: user?.nickname || '',
