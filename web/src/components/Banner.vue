@@ -4,6 +4,10 @@ import nyaButton from '@/components/Button.vue'
 defineOptions({
   name: 'BannerComponent'
 })
+
+const openDocs = () => {
+  window.open('https://account.lolinya.net/docs/', '_blank')
+}
 </script>
 
 <template>
@@ -15,7 +19,7 @@ defineOptions({
         Nya Account 允许用户提供一个令牌，而不是用户名和密码来访问他们存放在特定服务提供者的数据
       </p>
       <div class="button-group">
-        <nya-button type="sub">使用文档</nya-button>
+        <nya-button type="sub" @click="openDocs()">使用文档</nya-button>
         <nya-button
           type="main"
           @click="

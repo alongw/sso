@@ -109,7 +109,7 @@ onMounted(() => {
       </a-layout-content>
       <a-layout-footer style="text-align: center">
         版权所有 © {{ dayjs().year() }}
-        <a href="javascript:;" style="color: inherit"> Nya Account </a>
+        <a href="https://www.alongw.cn" target="_blank" style="color: inherit"> Nya Account </a>
         保留所有权利
       </a-layout-footer>
     </a-layout>
