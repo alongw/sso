@@ -4,7 +4,7 @@ import { Application, AuthLog, User } from './../../database/table'
 import { authLogger } from './../../utils/log'
 import token from './../../utils/token'
 import { decrypt } from './../../utils/crypt'
-
+import CryptoJS from 'crypto-js'
 import checkValue from './../../utils/checkValue'
 // import { Request } from './../../types/request'
 
@@ -118,6 +118,18 @@ router.post('/token', async (req, res) => {
 
         const user = result?.toJSON()
 
+        // 判断如果只需要用户信息则返回用户信息
+        if (req.body?.type === 'info') {
+            return res.send({
+                uid: decode.uid,
+                nickname: user?.nickname || '',
+                status: user?.status || 0,
+                avatar: `https://cravatar.cn/avatar/${CryptoJS.MD5(
+                    user.email?.toString()
+                ).toString()}`
+            })
+        }
+
         authLogger.info(
             `[TOKEN] - appid ${app.get('appid')} 获得了用户 uid ${
                 decode.uid
@@ -151,6 +163,11 @@ router.post('/token', async (req, res) => {
             scope: decode.permissionList
         })
     }
+
+    return res.status(400).send({
+        error: 'unsupported_grant_type',
+        error_description: 'unsupported grant type'
+    })
 })
 
 export default router
