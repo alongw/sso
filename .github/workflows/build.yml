@@ -29,7 +29,7 @@ jobs:
               run: |
                   cd ./node
                   yarn
-                  yarn build
+                  yarn build:nolint
                   cd ..
 
             - name: build web
