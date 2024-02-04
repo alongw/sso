@@ -7,9 +7,9 @@ import logger, { authLogger } from './log.js'
 
 import { Request } from '../types/request.js'
 
-import { getBaseUrl, getNodeSecret, getJwtUnless } from './system.js'
+import { getNodeBaseUrl, getNodeSecret, getJwtUnless } from './system.js'
 
-const baseUrl = await getBaseUrl()
+const baseUrl = await getNodeBaseUrl()
 const unless = await getJwtUnless()
 const jwtSecret = await getNodeSecret()
 
