@@ -16,10 +16,18 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: 'Examples',
+        text: 'Base',
         items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
+          { text: 'Quickly start', link: '/quickly-start' },
+          { text: 'User', link: '/user' },
+          { text: 'About', link: '/about' }
+        ]
+      },
+      {
+        text: 'Api',
+        items: [
+          { text: 'Get Token', link: '/api/getToken' },
+          { text: 'Get User Info', link: '/api/info' }
         ]
       }
     ],
