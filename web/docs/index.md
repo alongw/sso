@@ -11,8 +11,8 @@ hero:
       text: Quick Start
       link: /quickly-start
     - theme: alt
-      text: Docs
-      link: /
+      text: About
+      link: /about
 
 features:
   - title: Open Access

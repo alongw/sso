@@ -17,6 +17,7 @@ export interface User {
     appid: string
     authId: number
     permissionList: number[]
+    avatar: string
     info: 'Nya-Account | https://alongw.cn | https://github.com/alongw/sso'
 }
 

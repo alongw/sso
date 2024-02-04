@@ -19,6 +19,10 @@ interface CodeType {
 
 const router = Router()
 
+router.use('/info', async (req, res, next) =>
+    (await import('./info.js')).default(req, res, next)
+)
+
 router.post('/token', async (req, res) => {
     if (
         !checkValue(
@@ -159,6 +163,9 @@ router.post('/token', async (req, res) => {
                     email: user?.email || '',
                     status: user?.status || 0,
                     nickname: user?.nickname || '',
+                    avatar: `https://cravatar.cn/avatar/${CryptoJS.MD5(
+                        user.email?.toString()
+                    ).toString()}`,
                     group: user?.group || 0,
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     createdAt: (user as any)?.createdAt || '',
