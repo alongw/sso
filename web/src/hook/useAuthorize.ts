@@ -23,10 +23,10 @@ export enum Approve {
 }
 
 export const useAuthorize = (query: LocationQuery) => {
-  if (!query?.appid) {
+  if (!query?.client_id) {
     Modal.error({
       title: '笨蛋！',
-      content: '你还没有提供 appid ！！',
+      content: '你还没有提供 client_id ！！',
       onOk: () => {
         window.location.reload()
       }
@@ -50,7 +50,9 @@ export const useAuthorize = (query: LocationQuery) => {
   const redirect = ref('')
 
   const getApplicationInfo = async () => {
-    const { data: result } = await getApplicationInfoApi({ appid: query.appid?.toString() || '' })
+    const { data: result } = await getApplicationInfoApi({
+      appid: query.client_id?.toString() || ''
+    })
     if (result.status !== 200) {
       return Modal.error({
         title: '笨蛋！',
@@ -75,7 +77,7 @@ export const useAuthorize = (query: LocationQuery) => {
     const permissionList = Object.keys(userPermission).filter((key) => userPermission[Number(key)])
     // 发送请求
     const { data: result } = await getApplicationCodeApi({
-      appid: query.appid?.toString() || '',
+      appid: query.client_id?.toString() || '',
       permissionList: permissionList.map(Number),
       state: query.state?.toString() || ''
     })

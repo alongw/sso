@@ -176,7 +176,7 @@ const login = async () => {
   window.localStorage.setItem('expire', res.data.data.expire.toString())
   setTimeout(() => {
     router.push({
-      path: route.query.appid ? '/authorize' : '/user',
+      path: route.query.client_id ? '/authorize' : '/user',
       query: {
         ...route.query,
         form: 'login.page.login'
