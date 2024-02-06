@@ -65,7 +65,18 @@ export const useAuthorize = (query: LocationQuery) => {
     userEmail.value = result.data.user.email
     appName.value = result.data.name
     approve.value = result.data.approve
-    permissionList.value = result.data.permissionList
+    permissionList.value =
+      result.data.permissionList.length > 0
+        ? result.data.permissionList
+        : [
+            {
+              apppid: 1,
+              defaultCheck: true,
+              lock: true,
+              name: '读取您的基础信息',
+              priority: 100
+            }
+          ]
     redirect.value = result.data.redirect
 
     loading.value = false
