@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import dayjs from 'dayjs'
 import { User, ApplicationTwo } from '@icon-park/vue-next'
 import { useRoute, useRouter } from 'vue-router'
@@ -42,14 +42,12 @@ watch(
   }
 )
 
-const menu = reactive<
-  {
-    title: string
-    icon: any
-    key: MenuKey
-    component: any
-  }[]
->([
+const menu: {
+  title: string
+  icon: any
+  key: MenuKey
+  component: any
+}[] = [
   {
     title: '个人信息',
     icon: User,
@@ -62,7 +60,7 @@ const menu = reactive<
     key: MenuKey.Application,
     component: ApplicationComonent
   }
-])
+]
 
 onMounted(() => {
   if (!isLogin()) {

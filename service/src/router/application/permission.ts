@@ -39,7 +39,9 @@ router.get(
                 where: {
                     appid: req.query.appid,
                     owner: req.user.uid,
-                    status: 1
+                    status: {
+                        [Op.or]: [0, 1]
+                    }
                 }
             })
 
@@ -56,7 +58,7 @@ router.get(
             const permissionListResoult = await ApplicationPermission.findAll({
                 where: {
                     typeRequire: {
-                        [Op.lt]: approve || 0
+                        [Op.lte]: approve || 0
                     }
                 }
             })
@@ -108,7 +110,7 @@ router.post(
     async (
         req: Request<{
             appid: string
-            apppid: number
+            apppid: number[]
         }>,
         res
     ) => {
@@ -124,7 +126,9 @@ router.post(
                 where: {
                     appid: req.body.appid,
                     owner: req.user.uid,
-                    status: 1
+                    status: {
+                        [Op.or]: [0, 1]
+                    }
                 }
             })
 
@@ -139,7 +143,7 @@ router.post(
                 where: {
                     apppid: req.body.apppid,
                     typeRequire: {
-                        [Op.lt]: appResoult.toJSON().approve || 0
+                        [Op.lte]: appResoult.toJSON().approve || 0
                     }
                 }
             })
@@ -158,16 +162,18 @@ router.post(
         }
 
         try {
-            await ApplicationUserPermission.findOrCreate({
-                where: {
-                    appid: req.body.appid,
-                    apppid: req.body.apppid
-                },
-                defaults: {
-                    appid: req.body.appid,
-                    apppid: req.body.apppid
-                }
-            })
+            for (const apppid of req.body.apppid) {
+                await ApplicationUserPermission.findOrCreate({
+                    where: {
+                        appid: req.body.appid,
+                        apppid
+                    },
+                    defaults: {
+                        appid: req.body.appid,
+                        apppid
+                    }
+                })
+            }
         } catch (error) {
             return res.send({
                 status: 500,
@@ -182,13 +188,89 @@ router.post(
     }
 )
 
+// 获取使用中的权限
+router.get(
+    '/using',
+    async (
+        req: Request<
+            object,
+            {
+                appid: string
+            }
+        >,
+        res
+    ) => {
+        if (!checkValue(req.query.appid)) {
+            return res.send({
+                status: 400,
+                msg: '参数错误'
+            })
+        }
+
+        const appResoult = await Application.findOne({
+            where: {
+                appid: req.query.appid,
+                owner: req.user.uid,
+                status: {
+                    [Op.or]: [0, 1]
+                }
+            }
+        })
+
+        if (!appResoult) {
+            return res.send({
+                status: 404,
+                msg: '应用程序不存在'
+            })
+        }
+
+        const usePermissionResoult = await ApplicationUserPermission.findAll({
+            where: {
+                appid: req.query.appid
+            }
+        })
+        const usePermission = usePermissionResoult.map((e) => e.toJSON())
+
+        // 获取相关权限的信息
+        const permissionListResoult = await ApplicationPermission.findAll({
+            where: {
+                apppid: usePermission.map((e) => e.apppid)
+            }
+        })
+
+        if (!permissionListResoult) {
+            return res.send({
+                status: 500,
+                msg: '获取使用中的权限失败'
+            })
+        }
+
+        const usePermissionList = permissionListResoult.map((e) => e.toJSON())
+        res.send({
+            status: 200,
+            msg: '获取使用中的权限成功',
+            data: {
+                usePermissionList: usePermissionList.map((e) => {
+                    return {
+                        apppid: e.apppid,
+                        name: e.name,
+                        description: e.description,
+                        typeRequire: e.typeRequire,
+                        priority: e.priority
+                    }
+                })
+            }
+        })
+    }
+)
+
 // 删除权限
 router.delete(
     '/',
     async (
         req: Request<{
             appid: string
-            apppid: number
+            apppid: number[]
         }>,
         res
     ) => {
@@ -204,7 +286,9 @@ router.delete(
                 where: {
                     appid: req.body.appid,
                     owner: req.user.uid,
-                    status: 1
+                    status: {
+                        [Op.or]: [0, 1]
+                    }
                 }
             })
 
@@ -215,33 +299,12 @@ router.delete(
                 })
             }
 
-            const permissionResult = await ApplicationPermission.findOne({
-                where: {
-                    apppid: req.body.apppid,
-                    typeRequire: {
-                        [Op.lt]: appResoult.toJSON().approve || 0
-                    }
-                }
-            })
-
-            if (!permissionResult) {
-                return res.send({
-                    status: 404,
-                    msg: '权限不存在'
-                })
-            }
-        } catch (error) {
-            return res.send({
-                status: 500,
-                msg: '删除权限失败'
-            })
-        }
-
-        try {
             await ApplicationUserPermission.destroy({
                 where: {
-                    appid: req.body.appid,
-                    apppid: req.body.apppid
+                    apppid: {
+                        [Op.in]: req.body.apppid
+                    },
+                    appid: req.body.appid
                 }
             })
         } catch (error) {

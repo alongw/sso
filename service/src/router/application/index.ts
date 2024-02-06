@@ -8,6 +8,8 @@ import checkValue from './../../utils/checkValue.js'
 
 import { checkTicket } from '../../utils/captcha.js'
 
+import { Op } from 'sequelize'
+
 import type { Request } from './../../types/request.js'
 
 const router = Router()
@@ -17,10 +19,13 @@ router.use('/permission', async (req, res, next) =>
 )
 
 // 获取自己的所有应用程序
-router.get('/', async (req: Request, res) => {
+router.get('/all', async (req: Request, res) => {
     const applications = await Application.findAll({
         where: {
-            owner: req.user.uid
+            owner: req.user.uid,
+            status: {
+                [Op.or]: [0, 1]
+            }
         }
     })
 
@@ -32,7 +37,7 @@ router.get('/', async (req: Request, res) => {
             description: app.description,
             status: app.status,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            createTime: (app as any)?.createAt || 0,
+            createTime: (app as any)?.createdAt || 0,
             approve: app.approve
         }
     })
@@ -58,7 +63,7 @@ router.get(
         >,
         res
     ) => {
-        if (!checkValue(req.params.appid)) {
+        if (!checkValue(req.query.appid)) {
             return res.send({
                 status: 400,
                 msg: '参数错误'
@@ -67,9 +72,11 @@ router.get(
 
         const result = await Application.findOne({
             where: {
-                appid: req.params.appid,
+                appid: req.query.appid,
                 owner: req.user.uid,
-                status: 1
+                status: {
+                    [Op.or]: [0, 1]
+                }
             }
         })
 
@@ -95,7 +102,7 @@ router.get(
                 redirect: app.redirect,
                 approve: app.approve,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                createTime: (app as any)?.createAt || 0
+                createTime: (app as any)?.createdAt || 0
             }
         })
     }
@@ -121,7 +128,9 @@ router.put(
             where: {
                 appid: req.body.appid,
                 owner: req.user.uid,
-                status: 1
+                status: {
+                    [Op.or]: [0, 1]
+                }
             }
         })
 
@@ -215,7 +224,9 @@ router.delete('/', async (req: Request<{ appid: string }>, res) => {
         where: {
             appid: req.body.appid,
             owner: req.user.uid,
-            status: 1
+            status: {
+                [Op.or]: [0, 1]
+            }
         }
     })
 
@@ -227,8 +238,9 @@ router.delete('/', async (req: Request<{ appid: string }>, res) => {
     }
 
     try {
-        result.set('status', -1)
-        result.save()
+        result.update({
+            status: -1
+        })
     } catch (error) {
         return res.send({
             status: 500,
@@ -261,11 +273,40 @@ router.put(
             })
         }
 
+        if (req.body.name && (req.body.name.length > 50 || req.body.name.length < 1)) {
+            return res.send({
+                status: 400,
+                msg: '应用程序名称不合法'
+            })
+        }
+
+        if (
+            req.body.description &&
+            (req.body.description.length > 100 || req.body.description.length < 1)
+        ) {
+            return res.send({
+                status: 400,
+                msg: '应用程序描述不合法'
+            })
+        }
+
+        if (
+            req.body.redirect &&
+            (req.body.redirect.length > 100 || req.body.redirect.length < 1)
+        ) {
+            return res.send({
+                status: 400,
+                msg: '应用重定向 url 不合法'
+            })
+        }
+
         const result = await Application.findOne({
             where: {
                 appid: req.body.appid,
                 owner: req.user.uid,
-                status: 1
+                status: {
+                    [Op.or]: [0, 1]
+                }
             }
         })
 
