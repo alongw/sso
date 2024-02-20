@@ -65,8 +65,7 @@ onMounted(async () => {
       <div class="email">{{ userEmail }}</div>
       <div class="title">是否允许此应用访问你的信息？</div>
       <div class="subtitle">
-        <div class="application-name">{{ appName }}</div>
-        <div>&nbsp;需要得到你的许可才能执行以下操作：</div>
+        <div>{{ appName }}&nbsp;需要得到你的许可才能执行以下操作：</div>
       </div>
       <div v-if="approve === 10" class="application-status master">受信任的应用程序</div>
       <div v-else-if="approve === 5" class="application-status agree">已验证其开发者</div>
