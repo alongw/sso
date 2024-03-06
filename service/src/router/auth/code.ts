@@ -68,7 +68,7 @@ router.post(
             }
         })
 
-        if (count > 10) {
+        if (count > 10 && app.toJSON().owner !== req.user.uid) {
             logger.info(
                 `用户 ${req.user.uid} 授权应用 ${req.body.appid} 过于频繁，去了，因此拦截授权请求`
             )
