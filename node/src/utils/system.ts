@@ -1,5 +1,5 @@
 import fse from 'fs-extra'
-import { System, Config } from './../database/table.js'
+import { System, Config } from './../database/table'
 
 interface PackageFile {
     key: string

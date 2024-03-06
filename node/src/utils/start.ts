@@ -1,8 +1,8 @@
 import figlet from 'figlet'
-import sql from './db.js'
-import logger from './log.js'
-import app from './express.js'
-import { getSystemVersion, getNodePort, getNodeBaseUrl } from './system.js'
+import sql from './db'
+import logger from './log'
+import app from './express'
+import { getSystemVersion, getNodePort, getNodeBaseUrl } from './system'
 
 export const showStartInfo = () => {
     logger.info('------------------------------------------------------')
@@ -40,7 +40,7 @@ export const checkDatabase = async () => {
 
 export const initialExpress = async () => {
     app.use(await getNodeBaseUrl(), async (req, res, next) =>
-        (await import('./../router/index.js')).default(req, res, next)
+        (await import('./../router/index')).default(req, res, next)
     )
     logger.info('初始化服务器...')
     const port = await getNodePort()

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import type { Request } from './../../types/request.js'
+import type { Request } from './../../types/request'
 
 const router = Router()
 

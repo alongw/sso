@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import dayjs from 'dayjs'
-import { Application, AuthLog, User } from './../../database/table.js'
-import { authLogger } from './../../utils/log.js'
-import token from './../../utils/token.js'
-import { decrypt } from './../../utils/crypt.js'
+import { Application, AuthLog, User } from './../../database/table'
+import { authLogger } from './../../utils/log'
+import token from './../../utils/token'
+import { decrypt } from './../../utils/crypt'
 import CryptoJS from 'crypto-js'
-import checkValue from './../../utils/checkValue.js'
+import checkValue from './../../utils/checkValue'
 // import { Request } from './../../types/request'
 
 interface CodeType {
@@ -20,7 +20,7 @@ interface CodeType {
 const router = Router()
 
 router.use('/info', async (req, res, next) =>
-    (await import('./info.js')).default(req, res, next)
+    (await import('./info')).default(req, res, next)
 )
 
 router.post('/token', async (req, res) => {
