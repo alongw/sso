@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import dayjs from 'dayjs'
+import { Op } from 'sequelize'
 import { Application, AuthLog, User } from './../../database/table'
 import { authLogger } from './../../utils/log'
 import token from './../../utils/token'
@@ -44,7 +45,10 @@ router.post('/token', async (req, res) => {
         where: {
             appid: req.body.client_id,
             secret: req.body.client_secret,
-            redirect: req.body.redirect_uri
+            redirect: req.body.redirect_uri,
+            status: {
+                [Op.ne]: -1
+            }
         }
     })
 
@@ -129,6 +133,14 @@ router.post('/token', async (req, res) => {
         })
 
         const user = result?.toJSON()
+
+        // 过滤未审核的应用
+        if (app.toJSON().status === 0 && app.toJSON().owner !== decode.uid) {
+            return res.status(503).send({
+                error: 'invalid_request',
+                error_description: 'app not verified'
+            })
+        }
 
         // 判断如果只需要用户信息则返回用户信息
         if (req.body?.type === 'info') {
