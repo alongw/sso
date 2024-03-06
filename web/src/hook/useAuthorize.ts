@@ -36,6 +36,7 @@ export const useAuthorize = (query: LocationQuery) => {
   const loading = ref(true)
   const userEmail = ref('')
   const appName = ref('')
+  const appStatus = ref<number | null>()
   const approve = ref<Approve>()
   const permissionList = ref<
     {
@@ -65,6 +66,7 @@ export const useAuthorize = (query: LocationQuery) => {
     userEmail.value = result.data.user.email
     appName.value = result.data.name
     approve.value = result.data.approve
+    appStatus.value = result.data.status
     permissionList.value =
       result.data.permissionList.length > 0
         ? result.data.permissionList
@@ -110,6 +112,7 @@ export const useAuthorize = (query: LocationQuery) => {
     userEmail,
     appName,
     approve,
+    appStatus,
     permissionList,
     permissionIcon,
     loading

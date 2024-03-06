@@ -6,6 +6,7 @@ export const getApplicationInfo = (data: { appid: string }) => {
       appid: string
       name: string
       description: string
+      status: number
       approve: number
       permissionList: {
         name: string

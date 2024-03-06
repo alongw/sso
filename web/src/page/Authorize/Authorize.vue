@@ -31,6 +31,7 @@ const {
   userEmail,
   appName,
   approve,
+  appStatus,
   permissionList,
   permissionIcon,
   loading
@@ -67,9 +68,16 @@ onMounted(async () => {
       <div class="subtitle">
         <div>{{ appName }}&nbsp;需要得到你的许可才能执行以下操作：</div>
       </div>
-      <div v-if="approve === 10" class="application-status master">受信任的应用程序</div>
-      <div v-else-if="approve === 5" class="application-status agree">已验证其开发者</div>
-      <div v-else class="application-status unkonw">未知的应用程序</div>
+      <div class="appType">
+        <div v-if="appStatus === 0">
+          <div class="application-status unkonw">应用尚未审核，仅供调试</div>
+        </div>
+        <div v-else>
+          <div v-if="approve === 10" class="application-status master">受信任的应用程序</div>
+          <div v-else-if="approve === 5" class="application-status agree">已验证其开发者</div>
+          <div v-else class="application-status unkonw">未知的应用程序</div>
+        </div>
+      </div>
       <ul>
         <li v-for="item in permissionList" :key="item.apppid">
           <div class="icon">

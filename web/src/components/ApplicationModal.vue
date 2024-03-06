@@ -95,7 +95,7 @@ const handleChange = async (nextTargetKeys: string[], direction: string, moveKey
 const handleSubmitReview = () => {
   Modal.confirm({
     title: '提审',
-    content: '当前暂不支持自助提审，如需提审，请点击导航栏中的获取支持，再选择一种联系方式联系我们'
+    content: '当前暂不支持自动提审，如需提审，请点击导航栏中的获取支持，再选择一种联系方式联系我们'
   })
 }
 

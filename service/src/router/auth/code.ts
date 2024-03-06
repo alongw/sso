@@ -33,7 +33,10 @@ router.post(
         // 获取 app
         const app = await Application.findOne({
             where: {
-                appid: req.body.appid
+                appid: req.body.appid,
+                status: {
+                    [Op.ne]: -1
+                }
             }
         })
 
@@ -41,6 +44,14 @@ router.post(
             return res.send({
                 status: 404,
                 msg: '应用程序不存在'
+            })
+        }
+
+        // 未审核应用过滤
+        if (app.toJSON().status === 0 && app.toJSON().owner !== req.user.uid) {
+            return res.send({
+                status: 503,
+                msg: '应用未审核，仅支持应用所有者调试使用'
             })
         }
 

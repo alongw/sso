@@ -1,5 +1,7 @@
 import { Router } from 'express'
 
+import { Op } from 'sequelize'
+
 import checkValue from './../../utils/checkValue'
 
 import { Application, ApplicationPermission } from './../../database/table'
@@ -26,7 +28,10 @@ router.post(
         // 获取 app 信息
         const app = await Application.findOne({
             where: {
-                appid: req.body.appid
+                appid: req.body.appid,
+                status: {
+                    [Op.ne]: -1
+                }
             },
             include: [
                 {
@@ -42,11 +47,11 @@ router.post(
                 msg: '应用不存在'
             })
 
-        // app 的状态不能是 0
-        if (app.toJSON().status === 0)
+        // app 的状态不能是 0 ，并且不是自己的应用
+        if (app.toJSON().status === 0 && app.toJSON().owner !== req.user.uid)
             return res.send({
                 status: 503,
-                message: '应用未审核'
+                msg: '应用未审核，仅支持应用所有者调试使用'
             })
 
         // 将 app 的 permissionList 按照 priority 从大到小排序
@@ -63,6 +68,7 @@ router.post(
                 name: app.toJSON().name,
                 description: app.toJSON().description,
                 approve: app.toJSON().approve,
+                status: app.toJSON().status,
                 permissionList: permissionList.map(
                     (e: {
                         name: string
