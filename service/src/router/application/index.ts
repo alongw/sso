@@ -2,20 +2,20 @@ import { Router } from 'express'
 
 import CryptoJS from 'crypto-js'
 
-import { Application } from './../../database/table.js'
+import { Application } from './../../database/table'
 
-import checkValue from './../../utils/checkValue.js'
+import checkValue from './../../utils/checkValue'
 
-import { checkTicket } from '../../utils/captcha.js'
+import { checkTicket } from '../../utils/captcha'
 
 import { Op } from 'sequelize'
 
-import type { Request } from './../../types/request.js'
+import type { Request } from './../../types/request'
 
 const router = Router()
 
 router.use('/permission', async (req, res, next) =>
-    (await import('./permission.js')).default(req, res, next)
+    (await import('./permission')).default(req, res, next)
 )
 
 // 获取自己的所有应用程序

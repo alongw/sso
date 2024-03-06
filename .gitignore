@@ -2,3 +2,6 @@ node_modules
 
 # tempfile
 /temp
+
+sso.7z.backup
+sso.7z

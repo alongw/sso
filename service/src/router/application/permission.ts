@@ -2,15 +2,15 @@ import { Router } from 'express'
 import { Op } from 'sequelize'
 const router = Router()
 
-import checkValue from './../../utils/checkValue.js'
+import checkValue from './../../utils/checkValue'
 
 import {
     Application,
     ApplicationPermission,
     ApplicationUserPermission
-} from './../../database/table.js'
+} from './../../database/table'
 
-import { Request } from './../../types/request.js'
+import { Request } from './../../types/request'
 
 export default router
 

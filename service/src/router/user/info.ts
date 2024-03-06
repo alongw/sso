@@ -4,17 +4,17 @@ import validator from 'validator'
 import CryptoJS from 'crypto-js'
 
 import { Sequelize, Op } from 'sequelize'
-import logger from './../../utils/log.js'
-import { sendMail, getMailTemplate } from './../../utils/mail.js'
+import logger from './../../utils/log'
+import { sendMail, getMailTemplate } from './../../utils/mail'
 
-import { EmailCode } from './../../database/table.js'
+import { EmailCode } from './../../database/table'
 
-import checkValue from './../../utils/checkValue.js'
-import { checkTicket } from './../../utils/captcha.js'
+import checkValue from './../../utils/checkValue'
+import { checkTicket } from './../../utils/captcha'
 
-import { User } from './../../database/table.js'
+import { User } from './../../database/table'
 
-import { Request } from './../../types/request.js'
+import { Request } from './../../types/request'
 
 const router = Router()
 

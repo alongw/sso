@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 
-import sequelize from './../utils/db.js'
+import sequelize from './../utils/db'
 
 import type {
     ApplicationTable,
@@ -15,7 +15,7 @@ import type {
     ApplicationUserPermissionTable,
     LoginLogTable,
     AuthLogTable
-} from './../types/table.js'
+} from './../types/table'
 
 export const System = sequelize.define<Model<SystemTable>>('System', {
     id: {

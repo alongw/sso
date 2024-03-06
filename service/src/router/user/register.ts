@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import { Op, Sequelize } from 'sequelize'
 import dayjs from 'dayjs'
-import checkValue from './../../utils/checkValue.js'
-import { User, EmailCode, LoginLog } from './../../database/table.js'
-import token from './../../utils/token.js'
-import { checkTicket } from './../../utils/captcha.js'
-import { Request } from './../../types/request.js'
+import checkValue from './../../utils/checkValue'
+import { User, EmailCode, LoginLog } from './../../database/table'
+import token from './../../utils/token'
+import { checkTicket } from './../../utils/captcha'
+import { Request } from './../../types/request'
 
 const router = Router()
 

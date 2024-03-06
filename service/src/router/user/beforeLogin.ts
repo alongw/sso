@@ -1,13 +1,13 @@
 import { Router } from 'express'
 
 import dayjs from 'dayjs'
-import checkValue from './../../utils/checkValue.js'
-import logger from './../../utils/log.js'
-import { checkTicket } from './../../utils/captcha.js'
-import { sendMail, getMailTemplate, isMail, hideMail } from './../../utils/mail.js'
-import { User, EmailCode } from './../../database/table.js'
-import { Request } from '../../types/request.js'
-import { needCaptcha, recentLogin, getAvatar } from './../../hook/useUser.js'
+import checkValue from './../../utils/checkValue'
+import logger from './../../utils/log'
+import { checkTicket } from './../../utils/captcha'
+import { sendMail, getMailTemplate, isMail, hideMail } from './../../utils/mail'
+import { User, EmailCode } from './../../database/table'
+import { Request } from '../../types/request'
+import { needCaptcha, recentLogin, getAvatar } from './../../hook/useUser'
 
 const router = Router()
 

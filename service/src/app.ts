@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import logger from './utils/log.js'
-import sql from './utils/db.js'
+import logger from './utils/log'
+import sql from './utils/db'
 
-import { showStartInfo, checkDatabase, initialExpress } from './utils/start.js'
-import { getDatabaseVersion } from './utils/system.js'
+import { showStartInfo, checkDatabase, initialExpress } from './utils/start'
+import { getDatabaseVersion } from './utils/system'
 
 // logger.info('开始同步数据库...')
 // try {
