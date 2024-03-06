@@ -20,7 +20,8 @@ export default defineConfig({
         items: [
           { text: 'Quickly start', link: '/quickly-start' },
           { text: 'User', link: '/user' },
-          { text: 'About', link: '/about' }
+          { text: 'About', link: '/about' },
+          { text: 'Review', link: '/review' }
         ]
       },
       {
