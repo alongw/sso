@@ -22,14 +22,14 @@ jobs:
               run: |
                   cd ./service
                   yarn
-                  yarn build:nolint
+                  yarn build
                   cd ..
 
             - name: build node
               run: |
                   cd ./node
                   yarn
-                  yarn build:nolint
+                  yarn build
                   cd ..
 
             - name: build web
