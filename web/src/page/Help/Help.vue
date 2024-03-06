@@ -23,7 +23,7 @@ defineOptions({
       </li>
       <li>
         Website：
-        <a href="https://connect.alongw.cn/" target="_blank"> connect.alongw.cn </a>
+        <a href="https://contact.alongw.cn/" target="_blank"> contact.alongw.cn </a>
       </li>
     </ul>
   </div>

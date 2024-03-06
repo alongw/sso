@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { message } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import dayjs from 'dayjs'
 
 import { useApplication, status, approve, type StatusType } from '@/hook/useApplication'
@@ -92,6 +92,13 @@ const handleChange = async (nextTargetKeys: string[], direction: string, moveKey
   }
 }
 
+const handleSubmitReview = () => {
+  Modal.confirm({
+    title: '提审',
+    content: '当前暂不支持自助提审，如需提审，请点击导航栏中的获取支持，再选择一种联系方式联系我们'
+  })
+}
+
 onMounted(async () => {
   await fetch()
   const { data: result1 } = await getAllPermission({ appid: prop.appid || '0' })
@@ -171,6 +178,10 @@ onMounted(async () => {
     </a-spin>
 
     <a-space style="margin-top: 15px">
+      <a-button v-if="appInfo?.status === 0" type="primary" @click="handleSubmitReview">
+        提审
+      </a-button>
+      <a-button v-else type="primary" danger>应急下架</a-button>
       <a-button type="primary" danger @click="refreshSecret">重置秘钥</a-button>
       <a-button danger @click="deleteApp">删除应用</a-button>
     </a-space>
