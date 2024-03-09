@@ -11,16 +11,19 @@ export const defaultPermissions: Permission[] = [
     {
         pid: 100,
         name: 'common',
-        path: 'common'
+        path: 'common',
+        desc: '通用顶级权限'
     },
     {
-        pid: 101,
+        pid: 200,
         name: 'admin',
-        path: 'admin'
+        path: 'admin',
+        desc: '管理员顶级权限'
     },
     {
-        pid: 102,
+        pid: 300,
         name: 'user',
-        path: 'user'
+        path: 'user',
+        desc: '用户顶级权限'
     }
 ]
