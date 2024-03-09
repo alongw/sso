@@ -1,3 +1,6 @@
+// 为解决旧版文件引用问题，暂时保留此文件
+// 此后将逐步删除此文件，禁止引用此文件。新数据请直接使用数据库存储（数据库同步配置文件中的数据）
+
 import fse from 'fs-extra'
 import { System, Config } from './../database/table'
 
@@ -41,6 +44,9 @@ export const getDatabaseVersion = async () => {
     })
     return version.toJSON().value as string
 }
+
+// 以下为旧版配置文件，新数据请直接使用数据库存储（数据库同步配置文件中的数据）
+// 禁止再引用此文件
 
 export const getListenPort = async () => {
     const [listenPort] = await Config.findOrCreate({

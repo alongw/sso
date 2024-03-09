@@ -1,13 +1,5 @@
-const checkValue = (...value: unknown[]): boolean => {
-    for (const e of value) {
-        if (e === undefined || e === null || e === '') return false
+// 为解决旧版文件引用问题，暂时保留此文件
 
-        if (e instanceof Array && !checkValue(...e)) return false
-
-        if (typeof e === 'object' && !checkValue(...Object.values(e))) return false
-    }
-
-    return true
-}
+import { checkValue } from './common'
 
 export default checkValue
