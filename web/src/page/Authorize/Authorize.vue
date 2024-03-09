@@ -90,7 +90,7 @@ onMounted(async () => {
             <div class="title">
               {{ item.name }}
             </div>
-            <div class="desc">{{ appName }} 将能够{{ item.name }}</div>
+            <div class="desc">{{ appName }} 将能够{{ item.desc }}</div>
           </div>
           <div class="check-box">
             <a-checkbox v-model:checked="userPermissionList[item.apppid]" :disabled="item.lock" />

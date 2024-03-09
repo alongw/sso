@@ -4,7 +4,8 @@ import {
   getAppInfo as getAppInfoApi,
   updateApp as updateAppApi,
   refreshSecret as refreshSecretApi,
-  deleteApp as deleteAppApi
+  deleteApp as deleteAppApi,
+  removeReview as removeReviewApi
 } from '@/api/application'
 import { message, Modal } from 'ant-design-vue'
 
@@ -123,10 +124,19 @@ export const useApplication = (appid: string) => {
     })
   }
 
+  const removeReview = async () => {
+    const { data: result } = await removeReviewApi({ appid })
+    if (result.status !== 200) {
+      return message.error(result.msg)
+    }
+    message.success('下架应用程序成功')
+  }
+
   return {
     getAppInfo,
     updateApp,
     refreshSecret,
-    deleteApp
+    deleteApp,
+    removeReview
   }
 }

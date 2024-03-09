@@ -339,4 +339,45 @@ router.put(
     }
 )
 
+// 应急下架应用程序
+router.post('/removeReview', async (req: Request<{ appid: string }>, res) => {
+    if (!checkValue(req.body.appid)) {
+        return res.send({
+            status: 400,
+            msg: '参数错误'
+        })
+    }
+
+    const result = await Application.findOne({
+        where: {
+            appid: req.body.appid,
+            owner: req.user.uid,
+            status: 1
+        }
+    })
+
+    if (!result) {
+        return res.send({
+            status: 404,
+            msg: '应用程序不存在'
+        })
+    }
+
+    try {
+        result.update({
+            status: 0
+        })
+    } catch (error) {
+        return res.send({
+            status: 500,
+            msg: '下架应用程序失败'
+        })
+    }
+
+    return res.send({
+        status: 200,
+        msg: '下架应用程序成功'
+    })
+})
+
 export default router

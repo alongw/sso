@@ -20,7 +20,9 @@ const prop = defineProps({
   appid: String
 })
 
-const { getAppInfo, updateApp, refreshSecret, deleteApp } = useApplication(prop.appid || '')
+const { getAppInfo, updateApp, refreshSecret, deleteApp, removeReview } = useApplication(
+  prop.appid || ''
+)
 
 let appInfo = ref<{
   appid: string
@@ -96,6 +98,18 @@ const handleSubmitReview = () => {
   Modal.confirm({
     title: '提审',
     content: '当前暂不支持自动提审，如需提审，请点击导航栏中的获取支持，再选择一种联系方式联系我们'
+  })
+}
+
+const handleRemoveReview = async () => {
+  Modal.confirm({
+    title: '你确定要应急下架此应用程序吗？',
+    content:
+      '应急下架后，应用将恢复未审核状态，如需使用，需要重新提审（拥有调用未审核应用权限的用户仍然可以调用）',
+    async onOk() {
+      await removeReview()
+      await fetch()
+    }
   })
 }
 
@@ -181,7 +195,7 @@ onMounted(async () => {
       <a-button v-if="appInfo?.status === 0" type="primary" @click="handleSubmitReview">
         提审
       </a-button>
-      <a-button v-else type="primary" danger>应急下架</a-button>
+      <a-button v-else type="primary" danger @click="handleRemoveReview">应急下架</a-button>
       <a-button type="primary" danger @click="refreshSecret">重置秘钥</a-button>
       <a-button danger @click="deleteApp">删除应用</a-button>
     </a-space>

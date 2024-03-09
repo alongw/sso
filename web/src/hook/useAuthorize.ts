@@ -8,12 +8,13 @@ import {
   getApplicationInfo as getApplicationInfoApi
 } from '@/api/authorize'
 
-import { IdcardFilled } from '@ant-design/icons-vue'
+import { IdcardFilled, MailOutlined } from '@ant-design/icons-vue'
 
 export const permissionIcon: {
   [key: number]: any
 } = {
-  1: IdcardFilled
+  1: IdcardFilled,
+  2: MailOutlined
 }
 
 export enum Approve {
@@ -45,6 +46,7 @@ export const useAuthorize = (query: LocationQuery) => {
       defaultCheck: boolean
       lock: boolean
       priority: number
+      desc: string
     }[]
   >([])
 
@@ -76,7 +78,8 @@ export const useAuthorize = (query: LocationQuery) => {
               defaultCheck: true,
               lock: true,
               name: '读取您的基础信息',
-              priority: 100
+              priority: 100,
+              desc: '读取您的基础信息'
             }
           ]
     redirect.value = result.data.redirect

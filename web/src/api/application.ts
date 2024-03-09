@@ -43,6 +43,10 @@ export const deleteApp = (data: { appid: string }) => {
   return axios.delete<Response>('/application', { data: data })
 }
 
+export const removeReview = (data: { appid: string }) => {
+  return axios.post<Response>('/application/removeReview', data)
+}
+
 export const updateApp = (data: {
   appid: string
   name?: string

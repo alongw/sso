@@ -1,6 +1,8 @@
-import { Group, Permission } from './table'
+import { Group, Permission, ApplicationPermission } from './table'
 
 import { defaultPermissions } from '@/permission/permission'
+
+import { defaultAppPermission } from '@/permission/applitcation'
 
 await Group.findOrCreate({
     where: {
@@ -12,6 +14,7 @@ await Group.findOrCreate({
     }
 })
 
+// userPermissionList
 for (const e of defaultPermissions) {
     await Permission.findOrCreate({
         where: {
@@ -22,6 +25,24 @@ for (const e of defaultPermissions) {
             name: e.name,
             parent: e.parent,
             description: e.desc
+        }
+    })
+}
+
+// applicationPermissionList
+for (const e of defaultAppPermission) {
+    await ApplicationPermission.findOrCreate({
+        where: {
+            apppid: e.apppid
+        },
+        defaults: {
+            apppid: e.apppid,
+            name: e.name,
+            description: e.description,
+            typeRequire: e.typeRequire,
+            defaultCheck: e.defaultCheck,
+            lock: e.lock,
+            priority: e.priority
         }
     })
 }

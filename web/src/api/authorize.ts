@@ -14,6 +14,7 @@ export const getApplicationInfo = (data: { appid: string }) => {
         defaultCheck: boolean
         lock: boolean
         priority: number
+        desc: string
       }[]
       user: {
         email: string

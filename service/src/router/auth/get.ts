@@ -80,13 +80,15 @@ router.post(
                         defaultCheck: boolean
                         lock: boolean
                         priority: number
+                        description: string
                     }) => {
                         return {
                             name: e.name,
                             apppid: e.apppid,
                             defaultCheck: e.defaultCheck,
                             lock: e.lock,
-                            priority: e.priority
+                            priority: e.priority,
+                            desc: e.description
                         }
                     }
                 ),

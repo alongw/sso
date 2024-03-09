@@ -134,14 +134,6 @@ router.post('/token', async (req, res) => {
 
         const user = result?.toJSON()
 
-        // 过滤未审核的应用
-        if (app.toJSON().status === 0 && app.toJSON().owner !== decode.uid) {
-            return res.status(503).send({
-                error: 'invalid_request',
-                error_description: 'app not verified'
-            })
-        }
-
         // 判断如果只需要用户信息则返回用户信息
         if (req.body?.type === 'info') {
             authLogger.info(
