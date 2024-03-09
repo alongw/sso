@@ -10,6 +10,8 @@ import { AuthLog, Application } from './../../database/table'
 
 import logger, { authLogger } from './../../utils/log'
 
+import { auth } from '@/utils/permission'
+
 import type { Request } from './../../types/request'
 
 const router = Router()
@@ -48,11 +50,13 @@ router.post(
         }
 
         // 未审核应用过滤
-        if (app.toJSON().status === 0 && app.toJSON().owner !== req.user.uid) {
-            return res.send({
-                status: 503,
-                msg: '应用未审核，仅支持应用所有者调试使用'
-            })
+        if (!(await auth('admin.noreview', req.user.uid))) {
+            if (app.toJSON().status === 0 && app.toJSON().owner !== req.user.uid) {
+                return res.send({
+                    status: 503,
+                    msg: '应用未审核，仅支持应用所有者调试使用'
+                })
+            }
         }
 
         let authId = null

@@ -4,6 +4,8 @@ import { Op } from 'sequelize'
 
 import checkValue from './../../utils/checkValue'
 
+import { auth } from '@/utils/permission'
+
 import { Application, ApplicationPermission } from './../../database/table'
 
 import type { Request } from './../../types/request'
@@ -47,12 +49,14 @@ router.post(
                 msg: '应用不存在'
             })
 
-        // app 的状态不能是 0 ，并且不是自己的应用
-        if (app.toJSON().status === 0 && app.toJSON().owner !== req.user.uid)
-            return res.send({
-                status: 503,
-                msg: '应用未审核，仅支持应用所有者调试使用'
-            })
+        if (!(await auth('admin.noreview', req.user.uid))) {
+            // app 的状态不能是 0 ，并且不是自己的应用
+            if (app.toJSON().status === 0 && app.toJSON().owner !== req.user.uid)
+                return res.send({
+                    status: 503,
+                    msg: '应用未审核，仅支持应用所有者调试使用'
+                })
+        }
 
         // 将 app 的 permissionList 按照 priority 从大到小排序
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
