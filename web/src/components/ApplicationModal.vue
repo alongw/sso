@@ -129,7 +129,7 @@ onMounted(async () => {
     result2.data.usePermissionList.map((e) => {
       return {
         key: e.apppid.toString(),
-        title: `${e.apppid} - ${e.description}`,
+        title: `${e.apppid} - ${e.name}`,
         description: e.description
       }
     })
