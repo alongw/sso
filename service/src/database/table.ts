@@ -2,6 +2,9 @@ import { DataTypes, Model } from 'sequelize'
 
 import sequelize from './../utils/db'
 
+import logger from '@/utils/log'
+import config from '@/utils/config'
+
 import type {
     ApplicationTable,
     ConfigTable,
@@ -388,3 +391,16 @@ User.belongsTo(Group, {
     foreignKey: 'group',
     as: 'userGroup'
 })
+
+if (config.db.sync === true) {
+    logger.info('开始同步数据库...')
+    try {
+        await sequelize.sync({ alter: true })
+        import('./default')
+        logger.info('数据库同步成功')
+    } catch (error) {
+        logger.error('数据库同步失败')
+        logger.error(error)
+        process.exit(0)
+    }
+}

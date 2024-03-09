@@ -1,19 +1,21 @@
 {
     "compilerOptions": {
-      "allowJs": true,
-      "module": "esnext",
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
-      "target": "esnext",
-      "noImplicitAny": true,
-      "moduleResolution": "node",
-      "sourceMap": true,
-      "outDir": "dist",
-      "baseUrl": "src",
-      "typeRoots": ["node_modules/@types"],
-      "types": ["node"],
-      "skipLibCheck": true
+        "allowJs": true,
+        "module": "esnext",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "esnext",
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "baseUrl": "src",
+        "typeRoots": ["node_modules/@types"],
+        "types": ["node"],
+        "skipLibCheck": true,
+        "paths": {
+            "@/*": ["*"]
+        }
     },
     "include": ["src/**/*"]
-  }
-  
+}

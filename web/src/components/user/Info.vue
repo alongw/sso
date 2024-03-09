@@ -206,7 +206,10 @@ onMounted(async () => {
             <template #extra>
               <a-button @click="handleOpen(dialogType.password)" type="link">修改</a-button>
             </template>
-            <p v-if="userInfo.password"><a-tag color="green">已设置密码</a-tag></p>
+            <div v-if="userInfo.password">
+              <p><a-tag color="green">已设置密码</a-tag></p>
+              <p>系统会按照实际情况，向您分配登录方式</p>
+            </div>
             <p v-else><a-tag color="orange">未设置密码</a-tag></p>
           </a-card>
         </div>

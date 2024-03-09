@@ -1,7 +1,0 @@
-# 数据库
-db:
-    host: www.gov.cn
-    port: 3306
-    user: root
-    password: admin123
-    database: Nya-Account
