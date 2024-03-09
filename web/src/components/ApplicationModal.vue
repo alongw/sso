@@ -119,7 +119,7 @@ onMounted(async () => {
   mockData.value = result1.data.permissionList.map((e) => {
     return {
       key: e.apppid.toString(),
-      title: `${e.apppid} - ${e.description}`,
+      title: `${e.apppid} - ${e.name}`,
       description: e.description
     }
   })
