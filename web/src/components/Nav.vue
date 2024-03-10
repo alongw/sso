@@ -65,8 +65,8 @@ const phoneMenu = ref(false)
       <div v-if="!isLoginStatus">
         <button-component to="/login">立即登录</button-component>
       </div>
-      <div v-else-if="!route.query.path">
-        <button-component type="small-sub" to="/user">控制台</button-component>
+      <div v-else-if="route?.matched[0]?.name !== 'Console'">
+        <button-component type="small-sub" to="/console">控制台</button-component>
       </div>
       <div v-else>
         <button-component type="small-sub" to="/loginout">退出登录</button-component>
@@ -115,6 +115,7 @@ nav {
   max-width: 2500px;
   height: 70px;
   padding: 0 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
   .logo {
     flex: 1;
