@@ -34,7 +34,7 @@ export const useConsoleMenu = () => {
         {
           label: '个人信息',
           key: '1-1',
-          onClick: () => router.push('/console11')
+          onClick: () => router.push('/console/info')
         }
       ]
     }

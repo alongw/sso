@@ -40,9 +40,12 @@ defineOptions({
 
   .content {
     flex: 1;
+    margin: 0 auto;
     overflow: scroll;
     overflow-x: hidden;
     padding: 15px;
+    width: 100%;
+    max-width: 840px;
   }
 
   ::-webkit-scrollbar {
