@@ -179,6 +179,14 @@ router.post(
             })
         }
 
+        // 名字不能超过 50 个字符
+        if (req.body.name.length > 50) {
+            return res.send({
+                status: 400,
+                msg: '应用程序名称不合法'
+            })
+        }
+
         // 效验验证码
         const captchaBack = await checkTicket(req.body.ticket, req.body.randstr)
         if (captchaBack.status !== 200) {
