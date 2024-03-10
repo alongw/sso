@@ -66,7 +66,7 @@ const submit = async () => {
 
       message.success(result.data.msg)
       return router.push({
-        path: route.query.client_id ? '/authorize' : '/user',
+        path: route.query.client_id ? '/authorize' : '/console',
         query: {
           ...route.query,
           from: 'perfect.setUsername'

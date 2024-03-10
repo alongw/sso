@@ -58,6 +58,11 @@ const router = createRouter({
           name: 'ConsoleInfo',
           component: () => import('@/page/Console/Info.vue')
         },
+        {
+          path: '/console/secrecy',
+          name: 'ConsoleSecrecy',
+          component: () => import('@/page/Console/Secrecy.vue')
+        },
         // edit
         {
           path: '/console/edit/username',
@@ -69,6 +74,16 @@ const router = createRouter({
           name: 'ConsoleEditAvatar',
           component: () => import('@/page/Console/Edit/Avatar.vue')
         },
+        {
+          path: '/console/edit/password',
+          name: 'ConsoleEditPassword',
+          component: () => import('@/page/Console/Edit/Password.vue')
+        },
+        // {
+        //   path: '/console/edit/email',
+        //   name: 'ConsoleEditEmail',
+        //   component: () => import('@/page/Console/Edit/Email.vue')
+        // },
         // 404
         {
           path: '/:pathMatch(.*)*',

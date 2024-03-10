@@ -6,7 +6,11 @@ import {
   User as UserIcon,
   DataUser as DataUserIcon,
   EditName as EditNameIcon,
-  Avatar as AvatarIcon
+  Avatar as AvatarIcon,
+  SwitchButton as SwitchButtonIcon,
+  Shield as ShieldIcon,
+  Mail as MailIcon,
+  Key as KeyIcon
 } from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
@@ -43,6 +47,12 @@ export const useConsoleMenu = () => {
           icon: () => h(DataUserIcon)
         },
         {
+          label: '隐私设置',
+          key: 'ConsoleSecrecy',
+          onClick: () => router.push('/console/secrecy'),
+          icon: () => h(SwitchButtonIcon)
+        },
+        {
           label: '编辑用户信息',
           key: '1-1',
           type: 'group'
@@ -58,6 +68,25 @@ export const useConsoleMenu = () => {
           key: 'ConsoleEditAvatar',
           onClick: () => router.push('/console/edit/avatar'),
           icon: () => h(AvatarIcon)
+        },
+        {
+          label: '修改密码',
+          key: 'ConsoleEditPassword',
+          onClick: () => router.push('/console/edit/password'),
+          icon: () => h(ShieldIcon)
+        },
+        {
+          label: '编辑邮箱',
+          key: 'ConsoleEditEmail',
+          onClick: () => router.push('/console/edit/email'),
+          icon: () => h(MailIcon)
+        },
+        {
+          label: '配置令牌',
+          key: 'ConsoleEditEmail',
+          onClick: () => router.push('/console/edit/key'),
+          icon: () => h(KeyIcon),
+          disabled: true
         }
       ]
     }

@@ -48,7 +48,9 @@ onMounted(async () => {
             <a-space direction="vertical">
               <p>管理您的隐私信息</p>
               <p>包括密码、邮箱和 api 令牌</p>
-              <a-button type="primary" class="right"> 进入 </a-button>
+              <a-button type="primary" class="right" @click="$router.push('/console/secrecy')">
+                进入
+              </a-button>
             </a-space>
           </a-card>
         </div>

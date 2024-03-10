@@ -25,16 +25,16 @@ const props = defineProps<{
             @click="item.action(item)"
             :icon="h(RightOutlined)"
           />
-          <solt name="actions" :item="item" />
+          <slot name="actions" :item="item" />
         </template>
         <a-list-item-meta :description="item.desc">
           <template #title>
             {{ item.title }}
-            <solt name="title" :item="item" />
+            <slot name="title" :item="item" />
           </template>
           <template #avatar>
             <component class="icon" :is="item.icon" />
-            <solt name="avatar" :item="item" />
+            <slot name="avatar" :item="item" />
           </template>
         </a-list-item-meta>
       </a-list-item>
