@@ -24,6 +24,10 @@ router.use('/info', async (req, res, next) =>
     (await import('./info')).default(req, res, next)
 )
 
+router.use('/email', async (req, res, next) =>
+    (await import('./email')).default(req, res, next)
+)
+
 router.post('/token', async (req, res) => {
     if (
         !checkValue(
