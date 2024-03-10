@@ -90,6 +90,17 @@ onMounted(async () => {
             </a-space>
           </a-card>
         </div>
+
+        <!-- 第五行 -->
+        <div class="card">
+          <a-card class="card-item" title="第三方账号管理">
+            <a-space direction="vertical">
+              <p>管理第三方应用单点登录</p>
+              <p>第三方应用绑定管理</p>
+              <a-button type="primary" class="right">进入</a-button>
+            </a-space>
+          </a-card>
+        </div>
       </div>
     </div>
   </a-spin>
