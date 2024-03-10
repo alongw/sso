@@ -2,7 +2,11 @@ import { h } from 'vue'
 
 import { useRouter } from 'vue-router'
 
-import { User as UserIcon } from '@icon-park/vue-next'
+import {
+  User as UserIcon,
+  DataUser as DataUserIcon,
+  EditName as EditNameIcon
+} from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
 import { useScreen } from '@/hook/useScreen'
@@ -17,7 +21,7 @@ export const useConsoleMenu = () => {
   const items: ItemType[] = [
     {
       label: '首页',
-      key: '0',
+      key: 'ConsoleHome',
       icon: () => h(HomeOutlined),
       onClick: () => router.push('/console')
     },
@@ -33,8 +37,20 @@ export const useConsoleMenu = () => {
         },
         {
           label: '个人信息',
+          key: 'ConsoleInfo',
+          onClick: () => router.push('/console/info'),
+          icon: () => h(DataUserIcon)
+        },
+        {
+          label: '编辑用户信息',
           key: '1-1',
-          onClick: () => router.push('/console/info')
+          type: 'group'
+        },
+        {
+          label: '编辑用户名',
+          key: 'ConsoleEditUsername',
+          onClick: () => router.push('/console/edit/username'),
+          icon: () => h(EditNameIcon)
         }
       ]
     }

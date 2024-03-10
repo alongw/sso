@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import MenuComponent from '@/components/console/Menu.vue'
 
-import { useConsoleMenu } from '@/hook/useConsoleMenu'
+import { useConsoleMenu } from '@/hook/console/useConsoleMenu'
 
 const { show } = useConsoleMenu()
 
@@ -73,3 +73,4 @@ defineOptions({
   }
 }
 </style>
+@/hook/console/useConsoleMenu

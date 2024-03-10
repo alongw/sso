@@ -84,12 +84,7 @@ onMounted(async () => {
       title: '笨蛋！',
       content: '你已经设置过用户名啦！不能再设置了哦！！',
       onOk() {
-        router.push({
-          path: '/user',
-          query: {
-            from: 'perfect.baka'
-          }
-        })
+        router.go(-1)
       },
       okText: '知道啦'
     })

@@ -1,15 +1,26 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useConsoleMenu } from '@/hook/useConsoleMenu'
+import { ref, watch } from 'vue'
+import { useConsoleMenu } from '@/hook/console/useConsoleMenu'
+
+import { useRoute } from 'vue-router'
 
 defineOptions({
   name: 'ConsoleMenuComponent'
 })
 
+const route = useRoute()
+
 const { items, show } = useConsoleMenu()
 
-const selectedKeys = ref<string[]>(['0'])
+const selectedKeys = ref<string[]>([route.name?.toString() || 'ConsoleHome'])
 const openKeys = ref<string[]>(show ? ['1'] : [])
+
+watch(
+  () => route.name,
+  (name) => {
+    selectedKeys.value = [name?.toString() || 'ConsoleHome']
+  }
+)
 </script>
 
 <template>
@@ -23,3 +34,4 @@ const openKeys = ref<string[]>(show ? ['1'] : [])
     :items="items"
   ></a-menu>
 </template>
+@/hook/console/useConsoleMenu

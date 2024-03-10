@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useConsoleHome } from '@/hook/useConsoleHome'
+import { useConsoleHome } from '@/hook/console/useConsoleHome'
 
 defineOptions({
   name: 'ConsoleHomePage'
@@ -39,14 +39,16 @@ onMounted(async () => {
             <a-space direction="vertical">
               <p>管理您在 Nya Account 中的个人信息</p>
               <p>包括用户名、昵称和头像</p>
-              <a-button type="primary" class="right">进入</a-button>
+              <a-button type="primary" class="right" @click="$router.push('/console/info')">
+                进入
+              </a-button>
             </a-space>
           </a-card>
           <a-card class="card-item" title="数据和隐私设置">
             <a-space direction="vertical">
               <p>管理您的隐私信息</p>
               <p>包括密码、邮箱和 api 令牌</p>
-              <a-button type="primary" class="right">进入</a-button>
+              <a-button type="primary" class="right"> 进入 </a-button>
             </a-space>
           </a-card>
         </div>
@@ -172,3 +174,4 @@ onMounted(async () => {
   }
 }
 </style>
+@/hook/console/useConsoleHome

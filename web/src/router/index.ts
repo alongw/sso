@@ -54,6 +54,17 @@ const router = createRouter({
           component: () => import('@/page/Console/Home.vue')
         },
         {
+          path: '/console/info',
+          name: 'ConsoleInfo',
+          component: () => import('@/page/Console/Info.vue')
+        },
+        // edit
+        {
+          path: '/console/edit/username',
+          name: 'ConsoleEditUsername',
+          component: () => import('@/page/Console/Edit/Username.vue')
+        },
+        {
           path: '/:pathMatch(.*)*',
           name: 'NotFound',
           component: () => import('@/page/Console/Home.vue')
