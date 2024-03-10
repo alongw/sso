@@ -27,8 +27,9 @@ export default defineConfig({
       {
         text: 'Api',
         items: [
-          { text: 'Get Token', link: '/api/getToken' },
-          { text: 'Get User Info', link: '/api/info' }
+          { text: 'Get Token', link: '/api/get-token' },
+          { text: 'Get User Info', link: '/api/info' },
+          { text: 'Get User Email', link: '/api/email' }
         ]
       }
     ],
