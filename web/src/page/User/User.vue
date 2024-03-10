@@ -107,6 +107,10 @@ onMounted(() => {
         <a-layout-content :style="{ margin: '24px 16px 0' }">
           <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
             <div class="item">
+              <h3>
+                你当前正在访问旧版的控制台菜单，<router-link to="/console"> 点击此处 </router-link>
+                体验新版
+              </h3>
               <component
                 :is="menu[+selectedKeys[0] - 1].component"
                 :title="menu[+selectedKeys[0] - 1].title"

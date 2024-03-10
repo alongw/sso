@@ -22,7 +22,9 @@ defineOptions({
       <menu-component style="height: 100%" />
     </div>
     <div class="content">
-      <router-view />
+      <div class="item">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -45,7 +47,13 @@ defineOptions({
     overflow-x: hidden;
     padding: 15px;
     width: 100%;
-    max-width: 840px;
+    // max-width: 840px;
+
+    .item {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 840px;
+    }
   }
 
   ::-webkit-scrollbar {
