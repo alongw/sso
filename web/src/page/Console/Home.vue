@@ -39,14 +39,14 @@ onMounted(async () => {
             <a-space direction="vertical">
               <p>管理您在 Nya Account 中的个人信息</p>
               <p>包括用户名、昵称和头像</p>
-              <a-button type="primary">进入</a-button>
+              <a-button type="primary" class="right">进入</a-button>
             </a-space>
           </a-card>
           <a-card class="card-item" title="数据和隐私设置">
             <a-space direction="vertical">
               <p>管理您的隐私信息</p>
               <p>包括密码、邮箱和 api 令牌</p>
-              <a-button type="primary">进入</a-button>
+              <a-button type="primary" class="right">进入</a-button>
             </a-space>
           </a-card>
         </div>
@@ -79,14 +79,14 @@ onMounted(async () => {
             <a-space direction="vertical">
               <p>管理您的支付信息</p>
               <p>实名认证设置和支付设置</p>
-              <a-button type="primary">进入</a-button>
+              <a-button type="primary" class="right">进入</a-button>
             </a-space>
           </a-card>
           <a-card class="card-item" title="授权记录查询">
             <a-space direction="vertical">
               <p>查询近期授权记录</p>
               <p>包括应用程序名称、权重和给予权限</p>
-              <a-button type="primary">进入</a-button>
+              <a-button type="primary" class="right">进入</a-button>
             </a-space>
           </a-card>
         </div>
