@@ -65,6 +65,12 @@ const router = createRouter({
           component: () => import('@/page/Console/Edit/Username.vue')
         },
         {
+          path: '/console/edit/avatar',
+          name: 'ConsoleEditAvatar',
+          component: () => import('@/page/Console/Edit/Avatar.vue')
+        },
+        // 404
+        {
           path: '/:pathMatch(.*)*',
           name: 'NotFound',
           component: () => import('@/page/Console/Home.vue')

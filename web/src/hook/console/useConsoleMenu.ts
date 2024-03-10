@@ -5,7 +5,8 @@ import { useRouter } from 'vue-router'
 import {
   User as UserIcon,
   DataUser as DataUserIcon,
-  EditName as EditNameIcon
+  EditName as EditNameIcon,
+  Avatar as AvatarIcon
 } from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
@@ -47,10 +48,16 @@ export const useConsoleMenu = () => {
           type: 'group'
         },
         {
-          label: '编辑用户名',
+          label: '编辑昵称',
           key: 'ConsoleEditUsername',
           onClick: () => router.push('/console/edit/username'),
           icon: () => h(EditNameIcon)
+        },
+        {
+          label: '编辑头像',
+          key: 'ConsoleEditAvatar',
+          onClick: () => router.push('/console/edit/avatar'),
+          icon: () => h(AvatarIcon)
         }
       ]
     }
