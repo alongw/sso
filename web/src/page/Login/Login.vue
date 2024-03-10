@@ -203,6 +203,7 @@ const sure = () => {
           type="text"
           placeholder="电子邮箱或用户名"
           maxlength="32"
+          :autofocus="true"
           :style="startAnimation"
           :disabled="loading.user"
         />
@@ -232,6 +233,7 @@ const sure = () => {
           type="password"
           maxlength="32"
           placeholder="密码"
+          autofocus
           id="password-input"
           @keydown="handleKeyDown"
         />
@@ -240,6 +242,7 @@ const sure = () => {
           v-model="form.password"
           type="text"
           maxlength="6"
+          autofocus
           placeholder="邮件验证码"
           id="emailCode-input"
           @keydown="handleKeyDown"
