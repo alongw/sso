@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
-import { getJwtSecret } from './system'
+import { getNodeSecret } from './system'
 import { User } from '../types/request'
 
-const jwtSecretKey = await getJwtSecret()
+const jwtSecretKey = await getNodeSecret()
 
 export default (data: User, expiresIn: number) => {
     // 需要在客户端拼接 Bearer 的前缀
