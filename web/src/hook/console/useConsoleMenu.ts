@@ -10,7 +10,8 @@ import {
   SwitchButton as SwitchButtonIcon,
   Shield as ShieldIcon,
   Mail as MailIcon,
-  Key as KeyIcon
+  Key as KeyIcon,
+  InternalData as InternalDataIcon
 } from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
@@ -51,6 +52,12 @@ export const useConsoleMenu = () => {
           key: 'ConsoleSecrecy',
           onClick: () => router.push('/console/secrecy'),
           icon: () => h(SwitchButtonIcon)
+        },
+        {
+          label: '展示设置',
+          key: 'ConsoleShow',
+          onClick: () => router.push('/console/show'),
+          icon: () => h(InternalDataIcon)
         },
         {
           label: '编辑用户信息',

@@ -61,7 +61,9 @@ onMounted(async () => {
             <a-space direction="vertical">
               <p>管理您的对外授权信息</p>
               <p>包括基础信息、联系信息、隐私信息等信息的展示设置</p>
-              <a-button type="primary" class="right">进入</a-button>
+              <a-button type="primary" class="right" @click="$router.push('/console/show')"
+                >进入</a-button
+              >
             </a-space>
           </a-card>
         </div>

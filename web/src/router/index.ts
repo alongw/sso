@@ -63,6 +63,11 @@ const router = createRouter({
           name: 'ConsoleSecrecy',
           component: () => import('@/page/Console/Secrecy.vue')
         },
+        {
+          path: '/console/show',
+          name: 'ConsoleShow',
+          component: () => import('@/page/Console/Show.vue')
+        },
         // edit
         {
           path: '/console/edit/username',
