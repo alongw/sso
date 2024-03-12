@@ -79,6 +79,11 @@ const router = createRouter({
           name: 'ConsoleEditPassword',
           component: () => import('@/page/Console/Edit/Password.vue')
         },
+        {
+          path: '/console/edit/email',
+          name: 'ConsoleEditEmail',
+          component: () => import('@/page/Console/Edit/Email.vue')
+        },
         // {
         //   path: '/console/edit/email',
         //   name: 'ConsoleEditEmail',

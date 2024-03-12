@@ -10,6 +10,7 @@ export const updateUserInfo = (data: {
   email?: string
   nickname?: string
   code2?: string
+  public_email?: string
 }) => {
   return axios.put<Response>('/user/info', data)
 }

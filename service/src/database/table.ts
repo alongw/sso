@@ -70,6 +70,10 @@ export const User = sequelize.define<Model<UserTable>>('User', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    public_email: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     status: {
         type: DataTypes.INTEGER,
         defaultValue: 0,

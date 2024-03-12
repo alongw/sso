@@ -15,6 +15,7 @@ export interface UserTable {
     username: string
     password: string
     email: string
+    public_email: string
     status: number
     nickname: string
     group: number

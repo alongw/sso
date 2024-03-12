@@ -175,6 +175,14 @@ nav {
   }
 }
 
+@media (max-width: 460px) {
+  nav {
+    .logo {
+      flex: none;
+    }
+  }
+}
+
 @media (max-width: 425px) {
   nav {
     padding: 0 15px;

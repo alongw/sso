@@ -8,4 +8,5 @@ export interface User {
   group: string
   createTime: string
   password: boolean
+  public_email: string
 }

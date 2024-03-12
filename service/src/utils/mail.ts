@@ -46,7 +46,7 @@ export const sendMail = async (
         })
         if (result.length >= 8) {
             logger.warn(`[MAIL] - 频繁邮件拦截：${mailOptions.to}`)
-            return Promise.reject(new Error('频繁邮件拦截'))
+            return Promise.reject('频繁邮件拦截')
         }
         return new Promise((resolve, reject) => {
             transport.sendMail(

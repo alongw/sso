@@ -151,7 +151,8 @@ router.get('/', async (req: Request, res) => {
             createTime: dayjs(result?.get('createdAt').toString()).format(
                 'YYYY-MM-DD HH:mm:ss'
             ),
-            password: result?.get('password') === null ? false : true
+            password: result?.get('password') === null ? false : true,
+            public_email: result?.get('public_email')
         }
     })
 })
@@ -171,8 +172,15 @@ router.put('/', async (req: Request, res) => {
         })
     }
 
+    if (req.body?.public_email && req.body?.email) {
+        return res.send({
+            status: 403,
+            msg: '禁止同时修改多个邮箱'
+        })
+    }
+
     // 如果修改密码或者邮箱，需要验证码
-    if (req.body?.password || req.body?.email) {
+    if (req.body?.password || req.body?.email || req.body?.public_email) {
         if (!checkValue(req.body.code)) {
             return res.send({
                 status: 400,
@@ -183,7 +191,7 @@ router.put('/', async (req: Request, res) => {
         // 检查验证码
         const emailCode = await EmailCode.findOne({
             where: {
-                email: result.get('email'),
+                email: req?.body?.public_email || result.get('email'),
                 code: req.body.code,
                 expire: {
                     [Op.gte]: Sequelize.fn('UNIX_TIMESTAMP', Sequelize.col('expire'))
@@ -242,7 +250,8 @@ router.put('/', async (req: Request, res) => {
         email: req.body?.email || user.email,
         password: req.body?.password
             ? CryptoJS.MD5(req.body?.password).toString()
-            : user.password
+            : user.password,
+        public_email: req.body?.public_email || user.public_email
     })
 
     return res.send({

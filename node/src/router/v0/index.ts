@@ -168,7 +168,7 @@ router.post('/token', async (req, res) => {
                 {
                     uid: decode.uid,
                     username: user?.username || '',
-                    email: user?.email || '',
+                    email: user?.public_email || user?.email || '',
                     status: user?.status || 0,
                     nickname: user?.nickname || '',
                     avatar: `https://cravatar.cn/avatar/${CryptoJS.MD5(
