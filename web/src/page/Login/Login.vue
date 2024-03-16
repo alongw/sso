@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { h } from 'vue'
 import ModalBoxComponents from '@/components/ModalBox.vue'
 import { ArrowCircleRight, LoadingOne } from '@icon-park/vue-next'
 import getCaptcha from 'nia-captcha'
 import { useRouter, useRoute } from 'vue-router'
 import { message } from 'ant-design-vue'
+import { QqOutlined, WechatOutlined } from '@ant-design/icons-vue'
 import _ from 'lodash'
+import { useLogin } from '@/hook/useLogin'
 import { getAccountStatus, register as registerApi, login as loginApi } from '@/api/login'
 defineOptions({
   name: 'LoginPage'
@@ -14,52 +16,17 @@ defineOptions({
 const router = useRouter()
 const route = useRoute()
 
-enum AuthenticationType {
-  Email = 'email',
-  Password = 'password',
-  Null = ''
-}
-
-const userInfo = reactive({
-  username: '',
-  authenticationType: AuthenticationType.Null,
-  captcha: false,
-  isRegister: false,
-  tips: ''
-})
-
-const title = computed(() => {
-  return userInfo.isRegister ? '注册 Lolinya Account 账号' : '通过 Lolinya Account 登录'
-})
-
-const showPasswordInput = () => {
-  startAnimation.animationPlayState = 'running'
-}
-
-const startAnimation = reactive({
-  animationPlayState: 'paused'
-})
-
-const loading = reactive<{
-  user: boolean
-  password: boolean
-}>({
-  user: false,
-  password: false
-})
-
-const form = reactive({
-  user: '',
-  password: '',
-  keepLogin: false
-})
-
-const captcha = reactive({
-  randstr: '',
-  ticket: ''
-})
-
-const avatarUrl = ref('logo')
+const {
+  AuthenticationType,
+  userInfo,
+  showPasswordInput,
+  startAnimation,
+  title,
+  loading,
+  form,
+  captcha,
+  avatarUrl
+} = useLogin()
 
 const submit = async () => {
   if (!form.user || form.user === '') return message.error('请正确填写表单')
@@ -112,7 +79,6 @@ const submit = async () => {
 }
 
 const handleKeyDown = (e: KeyboardEvent) => {
-  // 检查是否按下的是Enter键（keyCode为13）
   if (e.key === 'Enter') {
     sure()
   }
@@ -226,6 +192,41 @@ const sure = () => {
           />
         </div>
       </div>
+      <div
+        v-if="userInfo.authenticationType === AuthenticationType.Null"
+        class="oauth-button-group"
+      >
+        <a-space direction="vertical">
+          <p>或使用以下第三方登录方式</p>
+          <ul>
+            <a-button
+              type="text"
+              shape="circle"
+              class="oauth-button"
+              :icon="
+                h(QqOutlined, {
+                  style: {
+                    fontSize: '14px'
+                  }
+                })
+              "
+            />
+
+            <a-button
+              type="text"
+              shape="circle"
+              class="oauth-button"
+              :icon="
+                h(WechatOutlined, {
+                  style: {
+                    fontSize: '14px'
+                  }
+                })
+              "
+            />
+          </ul>
+        </a-space>
+      </div>
       <div class="password" :style="startAnimation">
         <input
           v-if="userInfo.authenticationType == AuthenticationType.Password"
@@ -290,7 +291,6 @@ const sure = () => {
 form {
   display: flex;
   flex-direction: column;
-  // justify-content: center;
   align-items: center;
   height: 100px;
 
@@ -300,6 +300,11 @@ form {
     max-width: 400px;
     height: 45px;
     border: 1px solid #86868b;
+  }
+
+  .oauth-button-group {
+    margin: 10px auto 0;
+    text-align: center;
   }
 
   .user-icon {
