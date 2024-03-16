@@ -31,6 +31,7 @@
         "@types/node": "^20.4.0",
         "@types/nodemailer": "^6.4.11",
         "@types/shelljs": "^0.8.12",
+        "@types/uuid": "^9.0.8",
         "@typescript-eslint/eslint-plugin": "^6.13.1",
         "@typescript-eslint/parser": "^6.13.1",
         "@vercel/ncc": "^0.38.1",

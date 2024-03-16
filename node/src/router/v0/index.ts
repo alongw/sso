@@ -16,6 +16,7 @@ interface CodeType {
     time: number | undefined
     exp: number | undefined
     authId: number | undefined
+    keyUUID: string | undefined
 }
 
 const router = Router()
@@ -83,7 +84,8 @@ router.post('/token', async (req, res) => {
                 decode.authId,
                 decode.exp,
                 decode.time,
-                decode.permissionList
+                decode.permissionList,
+                decode.keyUUID
             )
         ) {
             return res.status(400).send({
@@ -132,9 +134,16 @@ router.post('/token', async (req, res) => {
         // 获取用户信息
         const result = await User.findOne({
             where: {
-                uid: decode.uid
+                uid: decode.keyUUID
             }
         })
+
+        if (!result) {
+            return res.status(400).send({
+                error: 'invalid_request',
+                error_description: 'invalid user'
+            })
+        }
 
         const user = result?.toJSON()
 
@@ -167,6 +176,7 @@ router.post('/token', async (req, res) => {
             access_token: token(
                 {
                     uid: decode.uid,
+                    keyUUID: decode.keyUUID,
                     username: user?.username || '',
                     email: user?.public_email || user?.email || '',
                     status: user?.status || 0,

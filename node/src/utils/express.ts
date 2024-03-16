@@ -3,6 +3,10 @@ import expressJWT from 'express-jwt'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
+import { decrypt } from '@/utils/crypt'
+
+import { Config } from '@/database/table'
+
 import logger, { authLogger } from './log'
 
 import { Request } from '../types/request'
@@ -12,6 +16,14 @@ import { getNodeBaseUrl, getNodeSecret, getJwtUnless } from './system'
 const baseUrl = await getNodeBaseUrl()
 const unless = await getJwtUnless()
 const jwtSecret = await getNodeSecret()
+
+const tokenSecretResult = await Config.findOne({
+    where: {
+        key: 'nodeTokenSecret'
+    }
+})
+
+const tokenSecret = tokenSecretResult.toJSON().value
 
 const app = express()
 
@@ -45,6 +57,18 @@ app.use(
         })
     })
 )
+
+// 解密 token
+app.use('*', (req: Request, res, next) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!req.user || !(req.user as any).secret) {
+        return next()
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const data = decrypt((req.user as any).secret, tokenSecret)
+    req.user = JSON.parse(data)
+    next()
+})
 
 // 错误中间件
 app.use(

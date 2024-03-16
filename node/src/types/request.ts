@@ -7,6 +7,7 @@ import { Request as ExpressRequest } from 'express'
 
 export interface User {
     uid: string
+    keyUUID: string
     username: string
     email: string
     status: number

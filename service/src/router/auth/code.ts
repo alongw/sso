@@ -12,6 +12,8 @@ import logger, { authLogger } from './../../utils/log'
 
 import { auth } from '@/utils/permission'
 
+import { getUserIdByApplitcation } from '@/utils/uuid'
+
 import type { Request } from './../../types/request'
 
 const router = Router()
@@ -97,10 +99,13 @@ router.post(
             logger.error(error)
         }
 
+        const uuid = await getUserIdByApplitcation(req.user.uid, req.body.appid)
+
         // 分发 code
         const code = encrypt(
             JSON.stringify({
-                uid: req.user.uid,
+                uid: uuid,
+                keyUUID: req.user.uid,
                 appid: req.body.appid,
                 permissionList: req.body.permissionList,
                 time: dayjs().valueOf(),

@@ -1,4 +1,4 @@
-import { Group, Permission, ApplicationPermission } from './table'
+import { Group, Permission, ApplicationPermission, Config } from './table'
 
 import { defaultPermissions } from '@/permission/permission'
 
@@ -11,6 +11,26 @@ await Group.findOrCreate({
     defaults: {
         gid: 1,
         name: 'default'
+    }
+})
+
+await Config.findOrCreate({
+    where: {
+        key: 'uuidV5Key'
+    },
+    defaults: {
+        key: 'uuidV5Key',
+        value: '6bad7a6ac49cc8b4e50e2b76d37f0841'
+    }
+})
+
+await Config.findOrCreate({
+    where: {
+        key: 'nodeTokenSecret'
+    },
+    defaults: {
+        key: 'nodeTokenSecret',
+        value: '6b9ebf1fe871a1c15bdc45961d32aef0'
     }
 })
 
