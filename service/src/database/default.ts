@@ -1,6 +1,9 @@
 import { Group, Permission, ApplicationPermission, Config } from './table'
 
-import { defaultPermissions } from '@/permission/permission'
+import {
+    defaultPermissions,
+    type Permission as PermissionType
+} from '@/permission/permission'
 
 import { defaultAppPermission } from '@/permission/applitcation'
 
@@ -35,7 +38,7 @@ await Config.findOrCreate({
 })
 
 // userPermissionList
-for (const e of defaultPermissions) {
+for (const e of defaultPermissions as unknown as PermissionType[]) {
     await Permission.findOrCreate({
         where: {
             pid: e.pid

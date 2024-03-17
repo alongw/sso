@@ -7,7 +7,9 @@ export interface Permission {
     desc?: string
 }
 
-export const defaultPermissions: Permission[] = [
+export type PermissionNode = (typeof defaultPermissions)[number]['path']
+
+export const defaultPermissions = [
     // common
     {
         pid: 10,
@@ -45,4 +47,4 @@ export const defaultPermissions: Permission[] = [
         path: 'user',
         desc: '用户顶级权限'
     }
-]
+] as const
