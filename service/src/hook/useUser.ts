@@ -45,7 +45,12 @@ export const recentLogin = async (account: string, fingerprint: string) => {
         },
         limit: 3
     })
-    return loginLog.length
+
+    // 筛选出成功的登录
+    const log = loginLog.filter(
+        (e) => e.toJSON().type === 'email' || e.toJSON().type === 'password'
+    )
+    return log.length
 }
 
 export const needCaptcha = async (account: string, fingerprint: string) => {

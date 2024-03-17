@@ -51,6 +51,11 @@ onMounted(async () => {
 
       <h2>你的账号唯一标识符</h2>
       <a-typography-paragraph copyable>{{ userInfo?.uid || '未知' }}</a-typography-paragraph>
+
+      <a-typography-paragraph>
+        正常情况下第三方应用程序获取到的 ID 可能与此不同，因为我们针对不同的应用程序生成了不同的
+        ID，以保证您的隐私安全。
+      </a-typography-paragraph>
     </a-skeleton>
   </a-card>
 </template>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { h } from 'vue'
+// import { h } from 'vue'
 import ModalBoxComponents from '@/components/ModalBox.vue'
 import { ArrowCircleRight, LoadingOne } from '@icon-park/vue-next'
 import getCaptcha from 'nia-captcha'
 import { useRouter, useRoute } from 'vue-router'
 import { message } from 'ant-design-vue'
-import { QqOutlined, WechatOutlined } from '@ant-design/icons-vue'
+// import { QqOutlined, WechatOutlined } from '@ant-design/icons-vue'
 import _ from 'lodash'
 import { useLogin } from '@/hook/useLogin'
 import { getAccountStatus, register as registerApi, login as loginApi } from '@/api/login'
@@ -192,7 +192,9 @@ const sure = () => {
           />
         </div>
       </div>
-      <div
+
+      <!-- 第三方登录 -->
+      <!-- <div
         v-if="userInfo.authenticationType === AuthenticationType.Null"
         class="oauth-button-group"
       >
@@ -226,7 +228,8 @@ const sure = () => {
             />
           </ul>
         </a-space>
-      </div>
+      </div> -->
+
       <div class="password" :style="startAnimation">
         <input
           v-if="userInfo.authenticationType == AuthenticationType.Password"

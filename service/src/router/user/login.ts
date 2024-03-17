@@ -145,7 +145,19 @@ router.post(
                     password: CryptoJS.MD5(req.body.codeinput).toString()
                 }
             })
+
             if (!user) {
+                // 写入登录记录
+                await LoginLog.create({
+                    uid: result.get('uid').toString(),
+                    ip: (req.headers['x-real-ip'] || req.ip).toString(),
+                    captcha: req.body.captcha?.randstr ? true : false,
+                    ua: req.headers['user-agent'],
+                    type: 'FailedPassword',
+                    time: dayjs().valueOf(),
+                    fingerprint: req.headers.fingerprint
+                })
+
                 return res.send({
                     status: 403,
                     msg: '登录失败，请重试'
