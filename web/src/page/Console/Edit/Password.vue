@@ -188,8 +188,8 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="less">
-::v-deep .ant-statistic-content-value,
-::v-deep .ant-statistic-content {
+:deep(.ant-statistic-content-value),
+:deep(.ant-statistic-content) {
   font-size: 14px !important;
 }
 
