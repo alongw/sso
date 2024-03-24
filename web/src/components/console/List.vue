@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h } from 'vue'
+import { h, type Ref } from 'vue'
 
 import { RightOutlined } from '@ant-design/icons-vue'
 
@@ -10,7 +10,7 @@ defineOptions({
 })
 
 const props = defineProps<{
-  data: List[]
+  data: List[] | Ref<List[]> | undefined
 }>()
 </script>
 
@@ -29,12 +29,14 @@ const props = defineProps<{
         </template>
         <a-list-item-meta :description="item.desc">
           <template #title>
-            {{ item.title }}
-            <slot name="title" :item="item" />
+            <slot name="title" :item="item">
+              {{ item.title }}
+            </slot>
           </template>
           <template #avatar>
-            <component class="icon" :is="item.icon" />
-            <slot name="avatar" :item="item" />
+            <slot name="avatar" :item="item">
+              <component class="icon" :is="item.icon" />
+            </slot>
           </template>
         </a-list-item-meta>
       </a-list-item>

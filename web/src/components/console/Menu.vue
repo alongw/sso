@@ -13,7 +13,7 @@ const route = useRoute()
 const { items, show } = useConsoleMenu()
 
 const selectedKeys = ref<string[]>([route.name?.toString() || 'ConsoleHome'])
-const openKeys = ref<string[]>(show ? ['1'] : [])
+const openKeys = ref<string[]>(show ? ['1', '2'] : [])
 
 watch(
   () => route.name,

@@ -375,7 +375,6 @@ ApplicationPermission.belongsToMany(Application, {
 })
 
 User.hasMany(Application, {
-    sourceKey: 'uid',
     foreignKey: 'owner',
     as: 'application'
 })
@@ -386,7 +385,6 @@ Application.belongsTo(User, {
 })
 
 Group.hasMany(User, {
-    sourceKey: 'gid',
     foreignKey: 'group',
     as: 'user'
 })

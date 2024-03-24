@@ -74,7 +74,9 @@ onMounted(async () => {
             <a-space direction="vertical">
               <p>管理您接入的应用程序</p>
               <p>包括基础信息、权限信息、秘钥配置、应急下架等操作</p>
-              <a-button type="primary" class="right">进入</a-button>
+              <a-button type="primary" class="right" @click="$router.push('/console/application')">
+                进入
+              </a-button>
             </a-space>
           </a-card>
         </div>

@@ -53,6 +53,7 @@ const router = createRouter({
           name: 'ConsoleHome',
           component: () => import('@/page/Console/Home.vue')
         },
+        // 个人信息相关
         {
           path: '/console/info',
           name: 'ConsoleInfo',
@@ -88,6 +89,12 @@ const router = createRouter({
           path: '/console/edit/email',
           name: 'ConsoleEditEmail',
           component: () => import('@/page/Console/Edit/Email.vue')
+        },
+        // 应用程序相关
+        {
+          path: '/console/application',
+          name: 'ConsoleApplication',
+          component: () => import('@/page/Console/Application/Application.vue')
         },
         // {
         //   path: '/console/edit/email',

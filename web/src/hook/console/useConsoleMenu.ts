@@ -11,7 +11,9 @@ import {
   Shield as ShieldIcon,
   Mail as MailIcon,
   Key as KeyIcon,
-  InternalData as InternalDataIcon
+  InternalData as InternalDataIcon,
+  ApplicationTwo as ApplicationTwoIcon,
+  AllApplication as AllApplicationIcon
 } from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
@@ -94,6 +96,24 @@ export const useConsoleMenu = () => {
           onClick: () => router.push('/console/edit/key'),
           icon: () => h(KeyIcon),
           disabled: true
+        }
+      ]
+    },
+    {
+      label: '应用程序',
+      key: '2',
+      icon: () => h(ApplicationTwoIcon),
+      children: [
+        {
+          label: '应用程序相关',
+          key: '2-0',
+          type: 'group'
+        },
+        {
+          label: '接入管理',
+          key: 'ConsoleApp',
+          onClick: () => router.push('/console/application'),
+          icon: () => h(AllApplicationIcon)
         }
       ]
     }

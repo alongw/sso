@@ -5,4 +5,12 @@ export interface List {
   desc: string
   icon: Component
   action: () => void
+  application?: {
+    appid: string
+    name: string
+    description: string
+    status: number
+    createTime: number
+    approve: number
+  }
 }

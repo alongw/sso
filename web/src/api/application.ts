@@ -1,16 +1,11 @@
 import axios, { type Response } from '@/utils/axios'
 
+import type { ApplicationList } from '@/types/application'
+
 export const getAppList = () => {
   return axios.get<
     Response<{
-      applicationList: {
-        appid: string
-        name: string
-        description: string
-        status: number
-        createTime: number
-        approve: number
-      }[]
+      applicationList: ApplicationList[]
     }>
   >('/application/all')
 }
