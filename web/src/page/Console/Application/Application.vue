@@ -4,6 +4,7 @@ import ConsoleListComponent from '@/components/console/List.vue'
 
 import { useConsoleApplication } from '@/hook/console/useApplication'
 import { onMounted } from 'vue'
+import { useScreen } from '@/hook/useScreen'
 
 import type { ApplicationList } from '@/types/application'
 import type { List as MenuListType } from '@/types/console'
@@ -11,6 +12,8 @@ import type { List as MenuListType } from '@/types/console'
 defineOptions({
   name: 'ConsoleApplicationPage'
 })
+
+const { isPhone } = useScreen()
 
 const { getAppList, itemList, appStatus } = useConsoleApplication()
 
@@ -41,6 +44,9 @@ onMounted(async () => {
   </a-card>
 
   <a-card title="应用列表" class="console-card">
+    <a-typography-paragraph>
+      该页面较为复杂，建议使用大屏查看及操作。使用手机屏幕可能导致内容显示不完整。
+    </a-typography-paragraph>
     <template #extra>
       <a-button type="primary">创建应用</a-button>
     </template>
@@ -48,11 +54,20 @@ onMounted(async () => {
       <console-list-component :data="itemList">
         <template #title="{ item }: { item: ApplicationList & MenuListType }">
           {{ item.title }}
-          <!-- TODO: 样式 -->
-          <a-tag :color="appStatus[item.application?.status as 0].color || 'cyan'">
+          <a-tag
+            v-if="!isPhone"
+            :color="appStatus[item.application?.status as 0].color || 'cyan'"
+            style="margin-left: 5px"
+          >
             {{ appStatus[item.application?.status as 0].text || '未知' }}
           </a-tag></template
         >
+
+        <template #desc="{ item }: { item: ApplicationList & MenuListType }">
+          <a-typography-paragraph :ellipsis="true">
+            {{ item.desc }}
+          </a-typography-paragraph>
+        </template>
       </console-list-component>
     </a-skeleton>
   </a-card>

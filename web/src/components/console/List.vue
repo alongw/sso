@@ -27,7 +27,7 @@ const props = defineProps<{
           />
           <slot name="actions" :item="item" />
         </template>
-        <a-list-item-meta :description="item.desc">
+        <a-list-item-meta>
           <template #title>
             <slot name="title" :item="item">
               {{ item.title }}
@@ -36,6 +36,11 @@ const props = defineProps<{
           <template #avatar>
             <slot name="avatar" :item="item">
               <component class="icon" :is="item.icon" />
+            </slot>
+          </template>
+          <template #description>
+            <slot name="desc" :item="item">
+              {{ item.desc }}
             </slot>
           </template>
         </a-list-item-meta>
