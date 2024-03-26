@@ -15,7 +15,8 @@ defineOptions({
 
 const { isPhone } = useScreen()
 
-const { getAppList, itemList, appStatus } = useConsoleApplication()
+const { getAppList, itemList, appStatus, modalOpen, createApp, modalBtnLoading, modalIpt } =
+  useConsoleApplication()
 
 onMounted(async () => {
   getAppList()
@@ -48,7 +49,7 @@ onMounted(async () => {
       该页面较为复杂，建议使用大屏查看及操作。使用手机屏幕可能导致内容显示不完整。
     </a-typography-paragraph>
     <template #extra>
-      <a-button type="primary">创建应用</a-button>
+      <a-button @click="modalOpen = !modalOpen" type="primary">创建应用</a-button>
     </template>
     <a-skeleton :loading="!itemList">
       <console-list-component :data="itemList">
@@ -65,10 +66,20 @@ onMounted(async () => {
 
         <template #desc="{ item }: { item: ApplicationList & MenuListType }">
           <a-typography-paragraph :ellipsis="true">
-            {{ item.desc }}
+            {{ item.desc || '-' }}
           </a-typography-paragraph>
         </template>
       </console-list-component>
     </a-skeleton>
   </a-card>
+
+  <!-- Modal -->
+  <a-modal
+    v-model:open="modalOpen"
+    title="创建新应用"
+    @ok="createApp"
+    :confirmLoading="modalBtnLoading"
+  >
+    <a-input v-model:value="modalIpt" placeholder="应用名称" />
+  </a-modal>
 </template>

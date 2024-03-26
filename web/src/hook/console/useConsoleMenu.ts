@@ -111,7 +111,7 @@ export const useConsoleMenu = () => {
         },
         {
           label: '接入管理',
-          key: 'ConsoleApp',
+          key: 'ConsoleApplication',
           onClick: () => router.push('/console/application'),
           icon: () => h(AllApplicationIcon)
         }
