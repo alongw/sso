@@ -1,5 +1,7 @@
 import axios, { type Response } from '@/utils/axios'
 
+import type {} from '@simplewebauthn/types'
+
 enum AuthenticationType {
   Email = 'email',
   Password = 'password',
@@ -21,6 +23,7 @@ export const getAccountStatus = (data: {
       tips?: string
       username?: string
       avatar?: string
+      options?: any
     }>
   >('/user/getAccountStatus', data)
 }
@@ -50,6 +53,7 @@ export const login = (data: {
     ticket: string
   }
   keep?: boolean
+  authn?: any
 }) => {
   return axios.post<
     Response<{

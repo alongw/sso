@@ -18,3 +18,29 @@ export const updateUserInfo = (data: {
 export const getEmailCode = (data: { randstr: string; ticket: string; email?: string }) => {
   return axios.post<Response>('/user/info/getCode', data)
 }
+
+export const getCreateAuthnInfo = () => {
+  return axios.get<
+    Response<{
+      options: any
+    }>
+  >('/user/authenticator')
+}
+
+export const createAuthn = (data: { options: any }) => {
+  return axios.post<Response>('/user/authenticator', data)
+}
+
+export const getAuthnList = () => {
+  return axios.get<
+    Response<{
+      authenticatorList: {
+        credentialID: string
+      }[]
+    }>
+  >('/user/authenticator/all')
+}
+
+export const deleteAuthn = (data: { credentialID: string }) => {
+  return axios.delete<Response>('/user/authenticator', { data })
+}

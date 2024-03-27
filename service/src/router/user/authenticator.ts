@@ -14,6 +14,33 @@ import type { UserTable, AuthenticatorTable } from '@/types/table'
 
 const router = Router()
 
+router.get('/all', async (req: Request, res) => {
+    try {
+        const result = await Authenticator.findAll({
+            where: {
+                owner: req.user.uid
+            }
+        })
+
+        return res.send({
+            status: 200,
+            msg: '获取验证器列表成功',
+            data: {
+                authenticatorList: result.map((e) => {
+                    return {
+                        credentialID: e.toJSON().credentialID
+                    }
+                })
+            }
+        })
+    } catch (error) {
+        return res.send({
+            status: 500,
+            msg: '不好..里面坏掉了...❤'
+        })
+    }
+})
+
 router.get('/', async (req: Request, res) => {
     try {
         const result = await User.findOne({
@@ -163,5 +190,43 @@ router.post('/', async (req: Request, res) => {
         msg: '创建新外部验证器成功'
     })
 })
+
+router.delete(
+    '/',
+    async (
+        req: Request<{
+            id: Uint8Array
+        }>,
+        res
+    ) => {
+        if (!req.body || !req.body.id) {
+            return res.send({
+                status: 400,
+                msg: '请求参数错误'
+            })
+        }
+
+        try {
+            const result = await Authenticator.destroy({
+                where: {
+                    owner: req.user.uid,
+                    credentialID: req.body.id
+                }
+            })
+
+            if (result === 0) {
+                return res.send({
+                    status: 400,
+                    msg: '未找到记录'
+                })
+            }
+        } catch (error) {
+            return res.send({
+                status: 500,
+                msg: '不好..里面坏掉了...❤'
+            })
+        }
+    }
+)
 
 export default router
