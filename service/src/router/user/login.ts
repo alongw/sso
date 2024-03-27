@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'express'
-import { Op, Sequelize } from 'sequelize'
 import { needCaptcha } from './../../hook/useUser'
-import { isMail } from './../../utils/mail'
 import { Request } from './../../types/request'
 import { checkTicket } from './../../utils/captcha'
 import token from './../../utils/token'
-import { User, EmailCode, LoginLog } from './../../database/table'
 import checkValue from './../../utils/checkValue'
 import dayjs from 'dayjs'
-import CryptoJS from 'crypto-js'
+
+import { useLogin } from '@/hook/useLogin'
+
+import { UserTable } from '@/types/table'
+import logger from '@/utils/log'
 
 const router = Router()
 
@@ -17,7 +18,7 @@ router.post(
     '/',
     async (
         req: Request<{
-            type: 'mail' | 'password' | undefined
+            type: 'mail' | 'password' | 'authenticator' | undefined
             userinput: string | undefined
             codeinput: string | undefined
             captcha:
@@ -27,18 +28,27 @@ router.post(
                   }
                 | undefined
             keep: boolean | undefined
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            authn: any | undefined
         }>,
         res
     ) => {
-        if (!checkValue(req.body, req.body.userinput, req.body.codeinput)) {
+        if (
+            !checkValue(req.body, req.body.userinput, req.body.codeinput, req.body.type)
+        ) {
             return res.send({
                 status: 400,
                 msg: '参数错误'
             })
         }
 
+        // 判断用户是否有外部验证器
+
         // 效验验证码
-        if (await needCaptcha(req.body.userinput, req.headers.fingerprint)) {
+        if (
+            (await needCaptcha(req.body.userinput, req.headers.fingerprint)) &&
+            req.body.type !== 'authenticator'
+        ) {
             if (!checkValue(req.body.captcha?.randstr, req.body.captcha?.ticket)) {
                 return res.send({
                     status: 400,
@@ -58,150 +68,73 @@ router.post(
             }
         }
 
-        // 判断是不是邮箱
-        const loginType = isMail(req.body.userinput) ? 'email' : 'username'
+        const { checkLogin } = useLogin(
+            req.body.userinput,
+            req.body.codeinput,
+            req.headers['user-agent'],
+            req.headers.fingerprint,
+            (req.headers['x-real-ip'] || req.ip).toString(),
+            req.body.captcha?.randstr ? true : false
+        )
 
-        // 判断账号是否存在
-        const result = await User.findOne({
-            where: {
-                [loginType]: req.body.userinput
-            }
-        })
-
-        if (!result) {
-            return res.send({
-                status: 403,
-                msg: '登录失败，请重试'
-            })
+        const { email, password, authenticator } = await checkLogin()
+        let result: {
+            status: number
+            msg: string
+            user?: UserTable
         }
 
         if (req.body.type === 'mail') {
-            // 判断验证码是否正确
-            const emailCode = await EmailCode.findOne({
-                where: {
-                    email: result.get('email'),
-                    code: req.body.codeinput,
-                    expire: {
-                        [Op.gte]: Sequelize.fn('UNIX_TIMESTAMP', Sequelize.col('expire'))
-                    }
-                }
-            })
-            if (!emailCode) {
-                return res.send({
-                    status: 403,
-                    msg: '登录失败，请重试'
-                })
-            }
-
-            // 写入登录记录
-            await LoginLog.create({
-                uid: result.get('uid').toString(),
-                ip: (req.headers['x-real-ip'] || req.ip).toString(),
-                captcha: req.body.captcha?.randstr ? true : false,
-                ua: req.headers['user-agent'],
-                type: 'mail',
-                time: dayjs().valueOf(),
-                fingerprint: req.headers.fingerprint
-            })
-
-            if (emailCode.get('code') === req.body.codeinput) {
-                return res.send({
-                    status: 200,
-                    msg: '登录成功',
-                    data: {
-                        token: token(
-                            {
-                                uid: result.get('uid') as string,
-                                group: result.get('group') as number,
-                                username: (result.get('username') as string) || '',
-                                email: result.get('email') as string,
-                                nickname:
-                                    (result.get('nickname') as string) ||
-                                    (result.get('username') as string) ||
-                                    '',
-                                status: (result.get('status') as number) || 0,
-                                createdAt: result.get('createdAt') as Date,
-                                updatedAt: result.get('updatedAt') as Date,
-                                info: 'Nya-Account | https://alongw.cn | https://github.com/alongw/sso'
-                            },
-                            req.body.keep ? 60 * 60 * 24 * 7 : 60 * 60 * 12
-                        ),
-                        expire: dayjs()
-                            .add(
-                                req.body.keep ? 60 * 60 * 24 * 7 : 60 * 60 * 12,
-                                'second'
-                            )
-                            .valueOf()
-                    }
-                })
-            }
-        }
-
-        if (req.body.type === 'password') {
-            // 判断密码是否正确
-            const user = await User.findOne({
-                where: {
-                    [loginType]: req.body.userinput,
-                    password: CryptoJS.MD5(req.body.codeinput).toString()
-                }
-            })
-
-            if (!user) {
-                // 写入登录记录
-                await LoginLog.create({
-                    uid: result.get('uid').toString(),
-                    ip: (req.headers['x-real-ip'] || req.ip).toString(),
-                    captcha: req.body.captcha?.randstr ? true : false,
-                    ua: req.headers['user-agent'],
-                    type: 'FailedPassword',
-                    time: dayjs().valueOf(),
-                    fingerprint: req.headers.fingerprint
-                })
-
-                return res.send({
-                    status: 403,
-                    msg: '登录失败，请重试'
-                })
-            }
-
-            // 写入登录记录
-            await LoginLog.create({
-                uid: result.get('uid').toString(),
-                ip: (req.headers['x-real-ip'] || req.ip).toString(),
-                captcha: req.body.captcha?.randstr ? true : false,
-                ua: req.headers['user-agent'],
-                type: 'password',
-                time: dayjs().valueOf(),
-                fingerprint: req.headers.fingerprint
-            })
-
+            result = await email()
+        } else if (req.body.type === 'password') {
+            result = await password()
+        } else if (req.body.type === 'authenticator') {
+            result = await authenticator(req.body.authn)
+        } else {
             return res.send({
-                status: 200,
-                msg: '登录成功',
-                data: {
-                    token: token(
-                        {
-                            uid: result.get('uid') as string,
-                            group: result.get('group') as number,
-                            username: (result.get('username') as string) || '',
-                            email: result.get('email') as string,
-                            nickname:
-                                (result.get('nickname') as string) ||
-                                (result.get('username') as string) ||
-                                '',
-                            status: (result.get('status') as number) || 0,
-                            createdAt: result.get('createdAt') as Date,
-                            updatedAt: result.get('updatedAt') as Date,
-                            info: 'Nya-Account | https://alongw.cn | https://github.com/alongw/sso'
-                        },
-                        req.body.keep ? 60 * 60 * 24 * 7 : 60 * 60 * 12
-                    ),
-                    expire: dayjs()
-                        .add(req.body.keep ? 60 * 60 * 24 * 7 : 60 * 60 * 12, 'second')
-                        .valueOf()
-                }
+                status: 400,
+                msg: '参数错误'
             })
         }
+
+        // 登录失败
+        if (result.status !== 200) {
+            return res.send({
+                status: result.status,
+                msg: result.msg
+            })
+        }
+        logger.info(
+            `用户 ${result.user.username || '未命名'}${
+                result.user.nickname ? `(${result.user?.nickname})` : ''
+            }（${result.user.uid}）登录系统`
+        )
+        // 登录成功
+        return res.send({
+            status: 200,
+            msg: '登录成功',
+            data: {
+                token: token(
+                    {
+                        uid: result.user.uid,
+                        group: result.user.group,
+                        username: result.user.username || '',
+                        email: result.user.email,
+                        nickname: result.user.nickname || result.user.username || '',
+                        status: result.user.status || 0,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        createdAt: (result as any).user.createdAt as Date,
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        updatedAt: (result as any).user.updatedAt as Date,
+                        info: 'Nya-Account | https://alongw.cn | https://github.com/alongw/sso'
+                    },
+                    req.body.keep ? 60 * 60 * 24 * 7 : 60 * 60 * 12
+                ),
+                expire: dayjs()
+                    .add(req.body.keep ? 60 * 60 * 24 * 7 : 60 * 60 * 12, 'second')
+                    .valueOf()
+            }
+        })
     }
 )
 

@@ -18,7 +18,8 @@ import type {
     ApplicationUserPermissionTable,
     LoginLogTable,
     AuthLogTable,
-    AuthenticatorTable
+    AuthenticatorTable,
+    AuthenticatorOptionsTable
 } from './../types/table'
 
 export const System = sequelize.define<Model<SystemTable>>('System', {
@@ -350,30 +351,66 @@ export const ApplicationUserPermission = sequelize.define<
 export const Authenticator = sequelize.define<Model<AuthenticatorTable>>(
     'Authenticator',
     {
-        id: {
-            type: DataTypes.INTEGER,
+        credentialID: {
+            type: DataTypes.STRING,
             primaryKey: true,
-            autoIncrement: true
+            allowNull: false
         },
-        status: {
+        credentialPublicKey: {
+            type: DataTypes.BLOB,
+            allowNull: false
+        },
+        counter: {
             type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        credentialDeviceType: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        credentialBackedUp: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
+        transports: {
+            type: DataTypes.STRING,
             allowNull: false
         },
         owner: {
             type: DataTypes.UUID,
             allowNull: false
+        }
+    }
+)
+
+export const AuthenticatorOptions = sequelize.define<Model<AuthenticatorOptionsTable>>(
+    'AuthenticatorOptions',
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
         },
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        key: {
-            type: DataTypes.STRING,
+        uid: {
+            type: DataTypes.UUID,
             allowNull: false
         },
         type: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        options: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        update_time: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        used: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true
         }
     }
 )

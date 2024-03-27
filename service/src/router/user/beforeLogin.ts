@@ -1,13 +1,22 @@
 import { Router } from 'express'
-
+import { generateAuthenticationOptions } from '@simplewebauthn/server'
 import dayjs from 'dayjs'
 import checkValue from './../../utils/checkValue'
 import logger from './../../utils/log'
 import { checkTicket } from './../../utils/captcha'
 import { sendMail, getMailTemplate, isMail, hideMail } from './../../utils/mail'
-import { User, EmailCode } from './../../database/table'
+import {
+    User,
+    EmailCode,
+    Authenticator,
+    AuthenticatorOptions
+} from './../../database/table'
 import { Request } from '../../types/request'
 import { needCaptcha, recentLogin, getAvatar } from './../../hook/useUser'
+
+import { getWebAuthnRpId } from '@/utils/system'
+
+import type { UserTable, AuthenticatorTable } from '@/types/table'
 
 const router = Router()
 
@@ -135,7 +144,13 @@ router.post(
         const result = await User.findOne({
             where: {
                 [type]: req.body.email
-            }
+            },
+            include: [
+                {
+                    model: Authenticator,
+                    as: 'authenticators'
+                }
+            ]
         })
         if (!result) {
             // 用户不存在，返回需要密码
@@ -150,7 +165,53 @@ router.post(
             })
         }
 
-        // 用户存在，判断需要什么验证方式
+        const user = result.toJSON() as UserTable & {
+            authenticators: AuthenticatorTable[]
+        }
+
+        // 判断用户是否拥有外部验证器
+        if (user.authenticators.length > 0) {
+            const userAuthenticators: AuthenticatorTable[] = user.authenticators
+
+            const options = await generateAuthenticationOptions({
+                rpID: await getWebAuthnRpId(),
+
+                allowCredentials: userAuthenticators.map((authenticator) => ({
+                    id: authenticator.credentialID,
+                    type: 'public-key',
+                    transports: authenticator.transports
+                })),
+                userVerification: 'preferred'
+            })
+
+            try {
+                await AuthenticatorOptions.create({
+                    type: 'use',
+                    uid: user.uid,
+                    options: JSON.stringify(options),
+                    update_time: dayjs().valueOf()
+                })
+            } catch (error) {
+                return res.send({
+                    status: 500,
+                    msg: '无法生成外部验证器选项，请稍后再试'
+                })
+            }
+
+            return res.send({
+                status: 200,
+                msg: '获取用户信息成功',
+                data: {
+                    authenticationType: 'authenticator',
+                    captcha: false,
+                    isRegister: false,
+                    avatar: await getAvatar(user.email.toString()),
+                    options
+                }
+            })
+        }
+
+        // 判断需要什么验证方式
         if (
             (await recentLogin(result.get('uid').toString(), req.headers.fingerprint)) > 2
         ) {

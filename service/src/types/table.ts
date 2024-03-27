@@ -1,3 +1,8 @@
+import type {
+    AuthenticatorTransportFuture,
+    CredentialDeviceType
+} from '@simplewebauthn/types'
+
 export interface SystemTable {
     id: number
     key: string
@@ -101,10 +106,28 @@ export interface AuthLogTable {
 }
 
 export interface AuthenticatorTable {
+    // SQL: Encode to base64url then store as `TEXT`. Index this column
+    credentialID: Uint8Array // 凭据的唯一标识符
+    // SQL: Store raw bytes as `BYTEA`/`BLOB`/etc...
+    credentialPublicKey: Uint8Array // 公钥字节，用于后续身份验证签名验证
+    // SQL: Consider `BIGINT` since some authenticators return atomic timestamps as counters
+    counter: number // 到目前为止，身份验证器在本网站上被使用的次数
+    // SQL: `VARCHAR(32)` or similar, longest possible value is currently 12 characters
+    // Ex: 'singleDevice' | 'multiDevice'
+    credentialDeviceType: CredentialDeviceType // 身份验证器的类型
+    // SQL: `BOOL` or whatever similar type is supported
+    credentialBackedUp: boolean // 身份验证器是否已备份
+    // SQL: `VARCHAR(255)` and store string array as a CSV string
+    // Ex: ['ble' | 'cable' | 'hybrid' | 'internal' | 'nfc' | 'smart-card' | 'usb']
+    transports?: AuthenticatorTransportFuture[] // 身份验证器的传输方式
+    owner: string // 身份验证器的所有者
+}
+
+export interface AuthenticatorOptionsTable {
     id: number
-    status: number
-    owner: string
-    name: string
-    key: string
-    type: string
+    uid: string
+    type: 'set' | 'use'
+    options: string
+    update_time: number
+    used: boolean
 }

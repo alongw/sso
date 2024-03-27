@@ -145,3 +145,39 @@ export const getMail = async () => {
         adminMail: string
     }
 }
+
+export const getWebAuthnRpId = async () => {
+    const [webAuthnRpId] = await Config.findOrCreate({
+        where: {
+            key: 'webAuthnRpId'
+        },
+        defaults: {
+            value: 'account.lolinya.net'
+        }
+    })
+    return webAuthnRpId.toJSON().value as string
+}
+
+export const getWebAuthnRpName = async () => {
+    const [webAuthnRpId] = await Config.findOrCreate({
+        where: {
+            key: 'webAuthnRpName'
+        },
+        defaults: {
+            value: 'Lolinya Account System By https://alongw.cn/'
+        }
+    })
+    return webAuthnRpId.toJSON().value as string
+}
+
+export const getWebAuthnRpOrigin = async () => {
+    const [webAuthnRpId] = await Config.findOrCreate({
+        where: {
+            key: 'webAuthnRpOrigin'
+        },
+        defaults: {
+            value: 'https://account.lolinya.net'
+        }
+    })
+    return webAuthnRpId.toJSON().value as string
+}
