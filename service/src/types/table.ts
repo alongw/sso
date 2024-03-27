@@ -99,3 +99,12 @@ export interface AuthLogTable {
     fingerprint: string
     use: boolean
 }
+
+export interface AuthenticatorTable {
+    id: number
+    status: number
+    owner: string
+    name: string
+    key: string
+    type: string
+}

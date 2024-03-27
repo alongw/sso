@@ -17,7 +17,8 @@ import type {
     ApplicationPermissionTable,
     ApplicationUserPermissionTable,
     LoginLogTable,
-    AuthLogTable
+    AuthLogTable,
+    AuthenticatorTable
 } from './../types/table'
 
 export const System = sequelize.define<Model<SystemTable>>('System', {
@@ -344,6 +345,45 @@ export const ApplicationUserPermission = sequelize.define<
         type: DataTypes.INTEGER,
         allowNull: false
     }
+})
+
+export const Authenticator = sequelize.define<Model<AuthenticatorTable>>(
+    'Authenticator',
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        status: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        owner: {
+            type: DataTypes.UUID,
+            allowNull: false
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        key: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        type: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
+    }
+)
+
+User.hasMany(Authenticator, {
+    foreignKey: 'owner'
+})
+
+Authenticator.belongsTo(User, {
+    foreignKey: 'owner'
 })
 
 Group.belongsToMany(Permission, {
