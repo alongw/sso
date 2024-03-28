@@ -7,6 +7,7 @@ import {
 } from '@/api/user'
 import { message } from 'ant-design-vue'
 import { ref } from 'vue'
+import dayjs from 'dayjs'
 
 import getCaptcha from '@/utils/captcha'
 
@@ -21,7 +22,10 @@ const columns = [
   {
     title: '创建时间',
     dataIndex: 'createTime',
-    key: 'createTime'
+    key: 'createTime',
+    customRender: ({ text }: { text: string }) => {
+      return dayjs(text).format('YYYY-MM-DD HH:mm:ss')
+    }
   },
   {
     title: '操作',

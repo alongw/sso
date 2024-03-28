@@ -225,7 +225,10 @@ export const useLogin = (
                     expectedChallenge,
                     expectedOrigin: origin,
                     expectedRPID: await getWebAuthnRpId(),
-                    authenticator
+                    authenticator: {
+                        ...authenticator,
+                        credentialID: JSON.parse(authenticator.credentialID)
+                    }
                 })
             } catch (error) {
                 // 写入登录记录
