@@ -25,7 +25,8 @@ const columns = [
   },
   {
     title: '操作',
-    key: 'action'
+    key: 'action',
+    align: 'center'
   }
 ]
 
@@ -118,8 +119,24 @@ export const useAuthn = () => {
     message.success('创建成功')
     createBtnLoading.value = false
 
+    createName.value = ''
+    createMailCode.value = ''
+
     await getAuthnList()
     open.value = false
+  }
+
+  const deleteAuthn = async (credentialID: string) => {
+    const { data: result } = await deleteAuthnApi({
+      id: credentialID
+    })
+
+    if (result.status !== 200) {
+      return message.error(result.msg)
+    }
+
+    message.success('删除成功')
+    await getAuthnList()
   }
 
   return {
@@ -132,6 +149,7 @@ export const useAuthn = () => {
     createMailCode,
     createBtnLoading,
     emailBtnLoading,
-    open
+    open,
+    deleteAuthn
   }
 }

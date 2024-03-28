@@ -43,6 +43,6 @@ export const getAuthnList = () => {
   >(`/user/authenticator/all`)
 }
 
-export const deleteAuthn = (data: { credentialID: string }) => {
+export const deleteAuthn = (data: { id: string }) => {
   return axios.delete<Response>('/user/authenticator', { data })
 }

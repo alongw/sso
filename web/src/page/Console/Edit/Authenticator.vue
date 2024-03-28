@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
 import { useAuthn } from '@/hook/console/useAuthn'
 import { onMounted } from 'vue'
 
@@ -18,7 +16,8 @@ const {
   getEmailCode,
   createBtnLoading,
   emailBtnLoading,
-  open
+  open,
+  deleteAuthn
 } = useAuthn()
 
 onMounted(async () => {
@@ -59,7 +58,20 @@ onMounted(async () => {
       <h2>我的外部验证器</h2>
       <a-button type="primary" @click="open = !open">添加新验证器</a-button>
 
-      <a-table :data-source="authData" :columns="columns" :pagination="false" />
+      <a-table :data-source="authData" :columns="columns" :pagination="false">
+        <template #bodyCell="{ column, record }">
+          <div v-if="column.key === 'action'">
+            <a-popconfirm
+              title="你确定要删除这个外部验证器吗？"
+              ok-text="Yes"
+              cancel-text="No"
+              @confirm="deleteAuthn(record.credentialID)"
+            >
+              <a-button type="link">删除</a-button>
+            </a-popconfirm>
+          </div>
+        </template>
+      </a-table>
     </a-skeleton>
   </a-card>
 

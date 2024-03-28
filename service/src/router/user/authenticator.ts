@@ -281,7 +281,7 @@ router.delete(
     '/',
     async (
         req: Request<{
-            id: Uint8Array
+            id: string
         }>,
         res
     ) => {
@@ -296,7 +296,7 @@ router.delete(
             const result = await Authenticator.destroy({
                 where: {
                     owner: req.user.uid,
-                    credentialID: JSON.stringify(req.body.id)
+                    credentialID: req.body.id
                 }
             })
 
@@ -307,11 +307,17 @@ router.delete(
                 })
             }
         } catch (error) {
+            logger.error('删除验证器失败', error)
             return res.send({
                 status: 500,
                 msg: '不好..里面坏掉了...❤'
             })
         }
+
+        return res.send({
+            status: 200,
+            msg: '删除验证器成功'
+        })
     }
 )
 
