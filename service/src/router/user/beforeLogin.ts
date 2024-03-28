@@ -177,8 +177,8 @@ router.post(
                 rpID: await getWebAuthnRpId(),
 
                 allowCredentials: userAuthenticators.map((authenticator) => ({
-                    id: authenticator.credentialID,
-                    type: 'public-key',
+                    id: JSON.parse(authenticator.credentialID),
+                    type: 'public-key' as const,
                     transports: authenticator.transports
                 })),
                 userVerification: 'preferred'
