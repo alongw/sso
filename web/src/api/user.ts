@@ -19,15 +19,15 @@ export const getEmailCode = (data: { randstr: string; ticket: string; email?: st
   return axios.post<Response>('/user/info/getCode', data)
 }
 
-export const getCreateAuthnInfo = () => {
+export const getCreateAuthnInfo = (data: { emailCode: string; name: string }) => {
   return axios.get<
     Response<{
       options: any
     }>
-  >('/user/authenticator')
+  >(`/user/authenticator?emailCode=${data.emailCode}&name=${data.name}`)
 }
 
-export const createAuthn = (data: { options: any }) => {
+export const createAuthn = (data: { options: any; name: string }) => {
   return axios.post<Response>('/user/authenticator', data)
 }
 
@@ -36,9 +36,11 @@ export const getAuthnList = () => {
     Response<{
       authenticatorList: {
         credentialID: string
+        name: string
+        createTime: string
       }[]
     }>
-  >('/user/authenticator/all')
+  >(`/user/authenticator/all`)
 }
 
 export const deleteAuthn = (data: { credentialID: string }) => {

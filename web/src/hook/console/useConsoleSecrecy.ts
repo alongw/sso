@@ -1,6 +1,6 @@
 import { useRouter } from 'vue-router'
 
-import { Shield, Mail, Key } from '@icon-park/vue-next'
+import { Shield, Mail, Key, FingerprintThree } from '@icon-park/vue-next'
 
 import type { List } from '@/types/console'
 
@@ -24,6 +24,15 @@ export const useSecrecyInfo = () => {
       action: () =>
         router.push({
           name: 'ConsoleEditEmail'
+        })
+    },
+    {
+      title: '外部验证器',
+      desc: '修改和设置您的外部验证器',
+      icon: FingerprintThree,
+      action: () =>
+        router.push({
+          name: 'ConsoleEditAuthenticator'
         })
     },
     {

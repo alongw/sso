@@ -107,7 +107,7 @@ export interface AuthLogTable {
 
 export interface AuthenticatorTable {
     // SQL: Encode to base64url then store as `TEXT`. Index this column
-    credentialID: Uint8Array // 凭据的唯一标识符
+    credentialID: string // 凭据的唯一标识符
     // SQL: Store raw bytes as `BYTEA`/`BLOB`/etc...
     credentialPublicKey: Uint8Array // 公钥字节，用于后续身份验证签名验证
     // SQL: Consider `BIGINT` since some authenticators return atomic timestamps as counters
@@ -121,6 +121,7 @@ export interface AuthenticatorTable {
     // Ex: ['ble' | 'cable' | 'hybrid' | 'internal' | 'nfc' | 'smart-card' | 'usb']
     transports?: AuthenticatorTransportFuture[] // 身份验证器的传输方式
     owner: string // 身份验证器的所有者
+    name: string // 身份验证器的名称
 }
 
 export interface AuthenticatorOptionsTable {

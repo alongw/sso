@@ -13,7 +13,8 @@ import {
   Key as KeyIcon,
   InternalData as InternalDataIcon,
   ApplicationTwo as ApplicationTwoIcon,
-  AllApplication as AllApplicationIcon
+  AllApplication as AllApplicationIcon,
+  FingerprintThree as FingerprintThreeIcon
 } from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
@@ -89,6 +90,12 @@ export const useConsoleMenu = () => {
           key: 'ConsoleEditEmail',
           onClick: () => router.push('/console/edit/email'),
           icon: () => h(MailIcon)
+        },
+        {
+          label: '外部验证器',
+          key: 'ConsoleEditAuthenticator',
+          onClick: () => router.push('/console/edit/authenticator'),
+          icon: () => h(FingerprintThreeIcon)
         },
         {
           label: '配置令牌',

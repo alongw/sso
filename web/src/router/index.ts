@@ -92,6 +92,11 @@ const router = createRouter({
           name: 'ConsoleEditEmail',
           component: () => import('@/page/Console/Edit/Email.vue')
         },
+        {
+          path: '/console/edit/authenticator',
+          name: 'ConsoleEditAuthenticator',
+          component: () => import('@/page/Console/Edit/Authenticator.vue')
+        },
 
         // 应用程序相关
         {

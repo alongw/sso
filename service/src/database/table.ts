@@ -375,10 +375,14 @@ export const Authenticator = sequelize.define<Model<AuthenticatorTable>>(
         },
         transports: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         owner: {
             type: DataTypes.UUID,
+            allowNull: false
+        },
+        name: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     }
@@ -401,7 +405,7 @@ export const AuthenticatorOptions = sequelize.define<Model<AuthenticatorOptionsT
             allowNull: false
         },
         options: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false
         },
         update_time: {
@@ -416,7 +420,8 @@ export const AuthenticatorOptions = sequelize.define<Model<AuthenticatorOptionsT
 )
 
 User.hasMany(Authenticator, {
-    foreignKey: 'owner'
+    foreignKey: 'owner',
+    as: 'authenticators'
 })
 
 Authenticator.belongsTo(User, {
