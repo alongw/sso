@@ -2,6 +2,7 @@
 // import { h } from 'vue'
 import ModalBoxComponents from '@/components/ModalBox.vue'
 import { ArrowCircleRight, LoadingOne } from '@icon-park/vue-next'
+import { browserSupportsWebAuthn, startAuthentication } from '@simplewebauthn/browser'
 import getCaptcha from 'nia-captcha'
 import { useRouter, useRoute } from 'vue-router'
 import { message } from 'ant-design-vue'
@@ -25,16 +26,20 @@ const {
   loading,
   form,
   captcha,
-  avatarUrl
+  avatarUrl,
+  showAuthnActionButton,
+  authnButtingLoading
 } = useLogin()
 
-const submit = async () => {
+const submit = async (notUseAuthn?: boolean) => {
   if (!form.user || form.user === '') return message.error('请正确填写表单')
-
+  authnButtingLoading.value = true
   loading.user = true
+
   const res = await getAccountStatus({
     email: _.trim(form.user),
-    captcha: captcha
+    captcha: captcha,
+    notUseAuthn: notUseAuthn || false
   })
 
   if (res.data.status === 418) {
@@ -44,10 +49,11 @@ const submit = async () => {
   // 需要验证码
   if (res.data.status === 422) {
     loading.user = false
+    authnButtingLoading.value = false
     const captchaCallback = await getCaptcha('2046626881')
     captcha.randstr = captchaCallback.randstr
     captcha.ticket = captchaCallback.ticket
-    submit()
+    submit(notUseAuthn)
   }
 
   captcha.randstr = ''
@@ -59,23 +65,75 @@ const submit = async () => {
     return message.error(res.data.msg)
   }
 
-  showPasswordInput()
-
   avatarUrl.value = res.data.data.avatar || 'logo'
   userInfo.username = res.data.data.username || ''
   userInfo.authenticationType = res.data.data.authenticationType || AuthenticationType.Null
   userInfo.captcha = res.data.data.captcha || false
   userInfo.isRegister = res.data.data.isRegister || false
   userInfo.tips = res.data.data.tips || ''
-  setTimeout(() => {
-    if (userInfo.authenticationType === AuthenticationType.Password) {
-      const passwordInput = document.querySelector('#password-input')
-      if (passwordInput instanceof HTMLElement) passwordInput.focus()
-    } else {
-      const emailCodeInput = document.querySelector('#emailCode-input')
-      if (emailCodeInput instanceof HTMLElement) emailCodeInput.focus()
+  userInfo.options = res.data.data.options || {}
+
+  // 仅当需要输入第二个输入框时
+  if (
+    userInfo.authenticationType === AuthenticationType.Password ||
+    userInfo.authenticationType === AuthenticationType.Email
+  ) {
+    showPasswordInput()
+    showAuthnActionButton.value = false
+
+    // 获取焦点
+    setTimeout(() => {
+      if (userInfo.authenticationType === AuthenticationType.Password) {
+        const passwordInput = document.querySelector('#password-input')
+        if (passwordInput instanceof HTMLElement) passwordInput.focus()
+      } else if (userInfo.authenticationType === AuthenticationType.Email) {
+        const emailCodeInput = document.querySelector('#emailCode-input')
+        if (emailCodeInput instanceof HTMLElement) emailCodeInput.focus()
+      }
+    }, 500)
+  }
+
+  // 处理使用外部验证器登录
+  if (userInfo.authenticationType === AuthenticationType.Authn) {
+    // 判断浏览器是否支持使用外部验证器登录
+    if (!browserSupportsWebAuthn()) {
+      submit(true)
     }
-  }, 500)
+
+    showAuthnActionButton.value = true
+
+    // 开始使用外部验证器登录
+    let asseResp
+    try {
+      asseResp = await startAuthentication((userInfo as any).options)
+    } catch (error: any) {
+      console.error(`外部验证器登录失败，详细信息：${error}`)
+      authnButtingLoading.value = false
+      return message.warning('授权失败')
+    }
+    // 获取登录结果
+    const { data: result } = await loginApi({
+      type: 'authenticator',
+      userinput: _.trim(form.user),
+      codeinput: _.trim(form.password),
+      keep: form.keepLogin,
+      authn: asseResp
+    })
+
+    if (res.data.status !== 200) return message.error(res.data.msg)
+    message.success('登录成功')
+    window.localStorage.setItem('token', result.data.token)
+    window.localStorage.setItem('expire', result.data.expire.toString())
+    setTimeout(() => {
+      router.push({
+        path: route.query.client_id ? '/authorize' : '/console',
+        query: {
+          ...route.query,
+          form: 'login.page.login'
+        }
+      })
+    }, 500)
+  }
 }
 
 const handleKeyDown = (e: KeyboardEvent) => {
@@ -191,6 +249,16 @@ const sure = () => {
             :strokeWidth="2"
           />
         </div>
+      </div>
+
+      <!-- 外部验证器选项 -->
+      <div v-if="showAuthnActionButton" class="authn-acti">
+        <a-spin :spinning="authnButtingLoading">
+          <a-space>
+            <a-button type="link" @click="submit()"> 再次尝试 </a-button>
+            <a-button type="link" @click="submit(true)"> 使用其他验证方式 </a-button>
+          </a-space>
+        </a-spin>
       </div>
 
       <!-- 第三方登录 -->

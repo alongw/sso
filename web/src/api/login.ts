@@ -1,12 +1,5 @@
 import axios, { type Response } from '@/utils/axios'
-
-import type {} from '@simplewebauthn/types'
-
-enum AuthenticationType {
-  Email = 'email',
-  Password = 'password',
-  Null = ''
-}
+import type { AuthenticationType } from '@/hook/useLogin'
 
 export const getAccountStatus = (data: {
   email: string
@@ -14,12 +7,16 @@ export const getAccountStatus = (data: {
     randstr: string
     ticket: string
   }
+  notUseAuthn?: boolean
 }) => {
   return axios.post<
     Response<{
       captcha?: boolean
       isRegister?: boolean
-      authenticationType?: AuthenticationType.Email | AuthenticationType.Password
+      authenticationType?:
+        | AuthenticationType.Email
+        | AuthenticationType.Password
+        | AuthenticationType.Authn
       tips?: string
       username?: string
       avatar?: string
@@ -45,7 +42,7 @@ export const register = (data: {
 }
 
 export const login = (data: {
-  type: 'mail' | 'password'
+  type: 'mail' | 'password' | 'authenticator'
   userinput: string
   codeinput: string
   captcha?: {

@@ -225,9 +225,10 @@ export const useLogin = (
                     expectedChallenge,
                     expectedOrigin: origin,
                     expectedRPID: await getWebAuthnRpId(),
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     authenticator: {
                         ...authenticator,
-                        credentialID: JSON.parse(authenticator.credentialID)
+                        transports: JSON.parse(authenticator.transports)
                     }
                 })
             } catch (error) {

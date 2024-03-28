@@ -351,9 +351,13 @@ export const ApplicationUserPermission = sequelize.define<
 export const Authenticator = sequelize.define<Model<AuthenticatorTable>>(
     'Authenticator',
     {
-        credentialID: {
-            type: DataTypes.STRING,
+        id: {
+            type: DataTypes.INTEGER,
             primaryKey: true,
+            autoIncrement: true
+        },
+        credentialID: {
+            type: DataTypes.BLOB,
             allowNull: false
         },
         credentialPublicKey: {

@@ -17,6 +17,7 @@ export default defineConfig({
     https: {
       key: fs.readFileSync('./../tls/localhost.key'),
       cert: fs.readFileSync('./../tls/localhost.crt')
-    }
+    },
+    port: 443
   }
 })

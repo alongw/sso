@@ -32,7 +32,7 @@ router.get('/all', async (req: Request, res) => {
             data: {
                 authenticatorList: result.map((e) => {
                     return {
-                        credentialID: e.toJSON().credentialID,
+                        id: e.toJSON().id,
                         name: e.toJSON().name,
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         createTime: (e as any).toJSON().createdAt
@@ -132,7 +132,7 @@ router.get(
                 attestationType: 'none',
                 excludeCredentials: userInfo.authenticators.map((e) => {
                     return {
-                        id: JSON.parse(e.credentialID),
+                        id: e.credentialID,
                         type: 'public-key'
                     }
                 }),
@@ -256,14 +256,24 @@ router.post(
         try {
             await Authenticator.create({
                 owner: req.user.uid,
-                credentialID: JSON.stringify(verification.registrationInfo.credentialID),
+                credentialID: verification.registrationInfo.credentialID,
                 counter: verification.registrationInfo.counter,
                 credentialPublicKey: verification.registrationInfo.credentialPublicKey,
                 credentialDeviceType: verification.registrationInfo.credentialDeviceType,
                 credentialBackedUp: verification.registrationInfo.credentialBackedUp,
-                name: req.body.name
+                name: req.body.name,
+                transports: JSON.stringify([
+                    'ble',
+                    'cable',
+                    'hybrid',
+                    'internal',
+                    'nfc',
+                    'smart-card',
+                    'usb'
+                ])
             })
         } catch (error) {
+            logger.error('创建新外部验证器失败', error)
             return res.send({
                 status: 500,
                 msg: '坏诶..里面坏掉了...❤'
@@ -296,7 +306,7 @@ router.delete(
             const result = await Authenticator.destroy({
                 where: {
                     owner: req.user.uid,
-                    credentialID: req.body.id
+                    id: req.body.id
                 }
             })
 

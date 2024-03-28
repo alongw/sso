@@ -31,6 +31,7 @@ router.post(
                       ticket: string | undefined
                   }
                 | undefined
+            notUseAuthn: boolean | undefined
         }>,
         res
     ) => {
@@ -165,50 +166,52 @@ router.post(
             })
         }
 
-        const user = result.toJSON() as UserTable & {
-            authenticators: AuthenticatorTable[]
-        }
-
-        // 判断用户是否拥有外部验证器
-        if (user.authenticators.length > 0) {
-            const userAuthenticators: AuthenticatorTable[] = user.authenticators
-
-            const options = await generateAuthenticationOptions({
-                rpID: await getWebAuthnRpId(),
-
-                allowCredentials: userAuthenticators.map((authenticator) => ({
-                    id: JSON.parse(authenticator.credentialID),
-                    type: 'public-key' as const,
-                    transports: authenticator.transports
-                })),
-                userVerification: 'preferred'
-            })
-
-            try {
-                await AuthenticatorOptions.create({
-                    type: 'use',
-                    uid: user.uid,
-                    options: JSON.stringify(options),
-                    update_time: dayjs().valueOf()
-                })
-            } catch (error) {
-                return res.send({
-                    status: 500,
-                    msg: '无法生成外部验证器选项，请稍后再试'
-                })
+        if (req.body?.notUseAuthn !== true) {
+            // 引导用户使用外部验证器
+            const user = result.toJSON() as UserTable & {
+                authenticators: AuthenticatorTable[]
             }
 
-            return res.send({
-                status: 200,
-                msg: '获取用户信息成功',
-                data: {
-                    authenticationType: 'authenticator',
-                    captcha: false,
-                    isRegister: false,
-                    avatar: await getAvatar(user.email.toString()),
-                    options
+            // 判断用户是否拥有外部验证器
+            if (user.authenticators.length > 0) {
+                const userAuthenticators: AuthenticatorTable[] = user.authenticators
+
+                const options = await generateAuthenticationOptions({
+                    rpID: await getWebAuthnRpId(),
+                    allowCredentials: userAuthenticators.map((authenticator) => ({
+                        id: authenticator.credentialID,
+                        type: 'public-key' as const,
+                        transports: JSON.parse(authenticator.transports)
+                    })),
+                    userVerification: 'preferred'
+                })
+
+                try {
+                    await AuthenticatorOptions.create({
+                        type: 'use',
+                        uid: user.uid,
+                        options: JSON.stringify(options),
+                        update_time: dayjs().valueOf()
+                    })
+                } catch (error) {
+                    return res.send({
+                        status: 500,
+                        msg: '无法生成外部验证器选项，请稍后再试'
+                    })
                 }
-            })
+
+                return res.send({
+                    status: 200,
+                    msg: '获取用户信息成功',
+                    data: {
+                        authenticationType: 'authenticator',
+                        captcha: false,
+                        isRegister: false,
+                        avatar: await getAvatar(user.email.toString()),
+                        options
+                    }
+                })
+            }
         }
 
         // 判断需要什么验证方式

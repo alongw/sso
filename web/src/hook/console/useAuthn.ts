@@ -130,9 +130,9 @@ export const useAuthn = () => {
     open.value = false
   }
 
-  const deleteAuthn = async (credentialID: string) => {
+  const deleteAuthn = async (id: string) => {
     const { data: result } = await deleteAuthnApi({
-      id: credentialID
+      id: id
     })
 
     if (result.status !== 200) {

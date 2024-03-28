@@ -1,10 +1,13 @@
 import { reactive, computed, ref } from 'vue'
 
-enum AuthenticationType {
+export enum AuthenticationType {
   Email = 'email',
   Password = 'password',
+  Authn = 'authenticator',
   Null = ''
 }
+
+export const showAuthnActionButton = ref(false)
 
 export const useLogin = () => {
   const userInfo = reactive({
@@ -12,7 +15,8 @@ export const useLogin = () => {
     authenticationType: AuthenticationType.Null,
     captcha: false,
     isRegister: false,
-    tips: ''
+    tips: '',
+    options: {}
   })
 
   const showPasswordInput = () => {
@@ -48,6 +52,8 @@ export const useLogin = () => {
 
   const avatarUrl = ref('logo')
 
+  const authnButtingLoading = ref(true)
+
   return {
     AuthenticationType,
     userInfo,
@@ -57,6 +63,8 @@ export const useLogin = () => {
     loading,
     form,
     captcha,
-    avatarUrl
+    avatarUrl,
+    showAuthnActionButton,
+    authnButtingLoading
   }
 }

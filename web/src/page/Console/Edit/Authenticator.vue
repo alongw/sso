@@ -65,7 +65,7 @@ onMounted(async () => {
               title="你确定要删除这个外部验证器吗？"
               ok-text="Yes"
               cancel-text="No"
-              @confirm="deleteAuthn(record.credentialID)"
+              @confirm="deleteAuthn(record.id)"
             >
               <a-button type="link">删除</a-button>
             </a-popconfirm>
