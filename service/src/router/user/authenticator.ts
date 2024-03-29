@@ -8,6 +8,8 @@ import {
 
 import { Authenticator, User, AuthenticatorOptions } from '@/database/table'
 
+import { uint8ArrayToBase64, base64ToUint8Array } from '@/utils/covertUint8Array'
+
 import { getWebAuthnRpId, getWebAuthnRpName, getWebAuthnRpOrigin } from '@/utils/system'
 
 import { EmailCode } from '@/database/table'
@@ -133,7 +135,7 @@ router.get(
                 attestationType: 'none',
                 excludeCredentials: userInfo.authenticators.map((e) => {
                     return {
-                        id: e.credentialID,
+                        id: base64ToUint8Array(e.credentialID),
                         type: 'public-key',
                         transports: JSON.parse(e.transports)
                     }
@@ -257,9 +259,13 @@ router.post(
         try {
             await Authenticator.create({
                 owner: req.user.uid,
-                credentialID: verification.registrationInfo.credentialID,
+                credentialID: uint8ArrayToBase64(
+                    verification.registrationInfo.credentialID
+                ),
                 counter: verification.registrationInfo.counter,
-                credentialPublicKey: verification.registrationInfo.credentialPublicKey,
+                credentialPublicKey: uint8ArrayToBase64(
+                    verification.registrationInfo.credentialPublicKey
+                ),
                 credentialDeviceType: verification.registrationInfo.credentialDeviceType,
                 credentialBackedUp: verification.registrationInfo.credentialBackedUp,
                 name: req.body.name,

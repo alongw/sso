@@ -112,7 +112,7 @@ const submit = async (notUseAuthn?: boolean) => {
       return message.warning('授权失败')
     }
     // 获取登录结果
-    const { data: result } = await loginApi({
+    const { data: resultAuthn } = await loginApi({
       type: 'authenticator',
       userinput: _.trim(form.user),
       codeinput: _.trim(form.password),
@@ -120,10 +120,14 @@ const submit = async (notUseAuthn?: boolean) => {
       authn: asseResp
     })
 
-    if (res.data.status !== 200) return message.error(res.data.msg)
+    if (resultAuthn.status !== 200) {
+      authnButtingLoading.value = false
+      return message.error(resultAuthn.msg)
+    }
     message.success('登录成功')
-    window.localStorage.setItem('token', result.data.token)
-    window.localStorage.setItem('expire', result.data.expire.toString())
+    showAuthnActionButton.value = false
+    window.localStorage.setItem('token', resultAuthn.data.token)
+    window.localStorage.setItem('expire', resultAuthn.data.expire.toString())
     setTimeout(() => {
       router.push({
         path: route.query.client_id ? '/authorize' : '/console',

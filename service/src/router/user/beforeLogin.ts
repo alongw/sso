@@ -14,6 +14,8 @@ import {
 import { Request } from '../../types/request'
 import { needCaptcha, recentLogin, getAvatar } from './../../hook/useUser'
 
+import { base64ToUint8Array } from '@/utils/covertUint8Array'
+
 import { getWebAuthnRpId } from '@/utils/system'
 
 import type { UserTable, AuthenticatorTable } from '@/types/table'
@@ -178,11 +180,13 @@ router.post(
 
                 const options = await generateAuthenticationOptions({
                     rpID: await getWebAuthnRpId(),
-                    allowCredentials: userAuthenticators.map((e) => ({
-                        id: e.credentialID,
-                        type: 'public-key' as const,
-                        transports: JSON.parse(e.transports)
-                    })),
+                    allowCredentials: userAuthenticators.map((e) => {
+                        return {
+                            id: base64ToUint8Array(e.credentialID),
+                            type: 'public-key' as const,
+                            transports: JSON.parse(e.transports)
+                        }
+                    }),
                     userVerification: 'preferred',
                     timeout: 60000
                 })

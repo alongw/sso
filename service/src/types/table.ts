@@ -108,9 +108,9 @@ export interface AuthLogTable {
 export interface AuthenticatorTable {
     id: number // 身份验证器的唯一标识符
     // SQL: Encode to base64url then store as `TEXT`. Index this column
-    credentialID: Uint8Array // 凭据的唯一标识符
+    credentialID: string // 凭据的唯一标识符 Uint8Array
     // SQL: Store raw bytes as `BYTEA`/`BLOB`/etc...
-    credentialPublicKey: Uint8Array // 公钥字节，用于后续身份验证签名验证
+    credentialPublicKey: string // 公钥字节，用于后续身份验证签名验证 Uint8Array
     // SQL: Consider `BIGINT` since some authenticators return atomic timestamps as counters
     counter: number // 到目前为止，身份验证器在本网站上被使用的次数
     // SQL: `VARCHAR(32)` or similar, longest possible value is currently 12 characters

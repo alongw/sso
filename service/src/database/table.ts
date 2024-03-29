@@ -357,11 +357,11 @@ export const Authenticator = sequelize.define<Model<AuthenticatorTable>>(
             autoIncrement: true
         },
         credentialID: {
-            type: DataTypes.BLOB,
+            type: DataTypes.STRING,
             allowNull: false
         },
         credentialPublicKey: {
-            type: DataTypes.BLOB,
+            type: DataTypes.STRING,
             allowNull: false
         },
         counter: {

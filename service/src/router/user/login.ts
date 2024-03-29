@@ -33,13 +33,19 @@ router.post(
         }>,
         res
     ) => {
-        if (
-            !checkValue(req.body, req.body.userinput, req.body.codeinput, req.body.type)
-        ) {
+        if (!checkValue(req?.body?.userinput, req?.body?.type)) {
             return res.send({
                 status: 400,
                 msg: '参数错误'
             })
+        }
+        if (req.body.type !== 'authenticator') {
+            if (!checkValue(req.body.codeinput)) {
+                return res.send({
+                    status: 400,
+                    msg: '参数错误'
+                })
+            }
         }
 
         // 判断用户是否有外部验证器

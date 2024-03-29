@@ -5,7 +5,7 @@ import { verifyAuthenticationResponse } from '@simplewebauthn/server'
 
 import logger from '@/utils/log'
 import { isMail } from '@/utils/mail'
-import { getWebAuthnRpId } from '@/utils/system'
+import { getWebAuthnRpId, getWebAuthnRpOrigin } from '@/utils/system'
 
 import {
     User,
@@ -14,6 +14,10 @@ import {
     AuthenticatorOptions,
     Authenticator
 } from '@/database/table'
+
+import { base64ToUint8Array } from '@/utils/covertUint8Array'
+
+import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers'
 
 import type { UserTable, AuthenticatorTable } from '@/types/table'
 
@@ -179,10 +183,13 @@ export const useLogin = (
                     where: {
                         uid: userInfo.data.uid,
                         type: 'use',
+                        // 用户可能会多次验证，所以这里不限制 used
+                        // used: false,
                         update_time: {
                             [Op.gte]: dayjs().subtract(5, 'minute').valueOf()
                         }
-                    }
+                    },
+                    order: [['update_time', 'DESC']]
                 })
 
                 if (!result) {
@@ -205,10 +212,12 @@ export const useLogin = (
                 }
             }
 
-            const expectedChallenge = optionData.challenge
-
             const authenticator = userInfo.data.authenticators.find((e) => {
-                return e.credentialID === authn.id
+                const devCredIDUint8Array = base64ToUint8Array(e.credentialID)
+                return isoUint8Array.areEqual(
+                    devCredIDUint8Array,
+                    isoBase64URL.toBuffer(authn.rawId)
+                )
             })
 
             if (!authenticator) {
@@ -222,16 +231,21 @@ export const useLogin = (
             try {
                 verification = await verifyAuthenticationResponse({
                     response: authn,
-                    expectedChallenge,
-                    expectedOrigin: origin,
+                    expectedChallenge: optionData.challenge,
+                    expectedOrigin: await getWebAuthnRpOrigin(),
                     expectedRPID: await getWebAuthnRpId(),
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     authenticator: {
                         ...authenticator,
+                        credentialPublicKey: base64ToUint8Array(
+                            authenticator.credentialPublicKey
+                        ),
+                        credentialID: base64ToUint8Array(authenticator.credentialID),
                         transports: JSON.parse(authenticator.transports)
-                    }
+                    },
+                    requireUserVerification: false
                 })
             } catch (error) {
+                console.log(error)
                 // 写入登录记录
                 await writeLoginLog(userInfo.data.uid, 'authenticatorFailed')
                 return {
@@ -241,7 +255,6 @@ export const useLogin = (
             }
 
             if (!verification.verified) {
-                // 写入登录记录
                 await writeLoginLog(userInfo.data.uid, 'authenticatorFailed')
                 return {
                     status: 400,
