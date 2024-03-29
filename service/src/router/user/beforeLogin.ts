@@ -178,12 +178,13 @@ router.post(
 
                 const options = await generateAuthenticationOptions({
                     rpID: await getWebAuthnRpId(),
-                    allowCredentials: userAuthenticators.map((authenticator) => ({
-                        id: authenticator.credentialID,
+                    allowCredentials: userAuthenticators.map((e) => ({
+                        id: e.credentialID,
                         type: 'public-key' as const,
-                        transports: JSON.parse(authenticator.transports)
+                        transports: JSON.parse(e.transports)
                     })),
-                    userVerification: 'preferred'
+                    userVerification: 'preferred',
+                    timeout: 60000
                 })
 
                 try {

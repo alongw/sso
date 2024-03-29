@@ -8,7 +8,7 @@ import {
 
 import { Authenticator, User, AuthenticatorOptions } from '@/database/table'
 
-import { getWebAuthnRpId, getWebAuthnRpName } from '@/utils/system'
+import { getWebAuthnRpId, getWebAuthnRpName, getWebAuthnRpOrigin } from '@/utils/system'
 
 import { EmailCode } from '@/database/table'
 
@@ -129,18 +129,21 @@ router.get(
                 rpID: await getWebAuthnRpId(),
                 userID: userInfo.uid,
                 userName: userInfo.username,
+                timeout: 60000,
                 attestationType: 'none',
                 excludeCredentials: userInfo.authenticators.map((e) => {
                     return {
                         id: e.credentialID,
-                        type: 'public-key'
+                        type: 'public-key',
+                        transports: JSON.parse(e.transports)
                     }
                 }),
                 authenticatorSelection: {
                     residentKey: 'preferred',
-                    userVerification: 'preferred',
-                    authenticatorAttachment: 'platform'
-                }
+                    userVerification: 'preferred'
+                    // authenticatorAttachment: 'platform'
+                },
+                supportedAlgorithmIDs: [-7, -257]
             })
 
             try {
@@ -233,12 +236,10 @@ router.post(
             verification = await verifyRegistrationResponse({
                 response: req.body.options,
                 expectedChallenge,
-                expectedOrigin: `https://${await getWebAuthnRpId()}`,
+                expectedOrigin: await getWebAuthnRpOrigin(),
                 expectedRPID: await getWebAuthnRpId()
             })
         } catch (error) {
-            console.log(error)
-
             return res.send({
                 status: 400,
                 msg: '效验验证器失败'
@@ -262,15 +263,7 @@ router.post(
                 credentialDeviceType: verification.registrationInfo.credentialDeviceType,
                 credentialBackedUp: verification.registrationInfo.credentialBackedUp,
                 name: req.body.name,
-                transports: JSON.stringify([
-                    'ble',
-                    'cable',
-                    'hybrid',
-                    'internal',
-                    'nfc',
-                    'smart-card',
-                    'usb'
-                ])
+                transports: JSON.stringify(req.body.options.response.transports)
             })
         } catch (error) {
             logger.error('创建新外部验证器失败', error)

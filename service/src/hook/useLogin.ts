@@ -180,7 +180,7 @@ export const useLogin = (
                         uid: userInfo.data.uid,
                         type: 'use',
                         update_time: {
-                            $gt: dayjs().subtract(5, 'minute').valueOf()
+                            [Op.gte]: dayjs().subtract(5, 'minute').valueOf()
                         }
                     }
                 })
