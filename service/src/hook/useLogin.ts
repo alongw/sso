@@ -236,7 +236,8 @@ export const useLogin = (
                     requireUserVerification: false
                 })
             } catch (error) {
-                console.log(error)
+                console.log('验证器验证不通过', authenticator, authn, error)
+
                 // 写入登录记录
                 await writeLoginLog(userInfo.data.uid, 'authenticatorFailed')
                 return {
@@ -266,7 +267,7 @@ export const useLogin = (
             try {
                 await Authenticator.update(
                     {
-                        counter: authenticator.counter + 1
+                        counter: verification.authenticationInfo.newCounter
                     },
                     {
                         where: {
