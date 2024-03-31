@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { Op, Sequelize } from 'sequelize'
+import { Op } from 'sequelize'
 
 import { verifyAuthenticationResponse } from '@simplewebauthn/server'
 
@@ -7,19 +7,17 @@ import logger from '@/utils/log'
 import { isMail } from '@/utils/mail'
 import { getWebAuthnRpId, getWebAuthnRpOrigin } from '@/utils/system'
 
-import {
-    User,
-    EmailCode,
-    LoginLog,
-    AuthenticatorOptions,
-    Authenticator
-} from '@/database/table'
+import { User, LoginLog, AuthenticatorOptions, Authenticator } from '@/database/table'
+
+import { useMailCode } from '@/hook/useMailCode'
 
 import { base64ToUint8Array } from '@/utils/covertUint8Array'
 
 import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers'
 
 import type { UserTable, AuthenticatorTable } from '@/types/table'
+
+const { checkEmailCode } = useMailCode()
 
 export const getUser = async (userinput: string) => {
     // 判断是不是邮箱
@@ -91,17 +89,10 @@ export const useLogin = (
                 }
             }
 
-            const emailCode = await EmailCode.findOne({
-                where: {
-                    email: userInfo.data.email,
-                    code: codeinput,
-                    expire: {
-                        [Op.gte]: Sequelize.fn('UNIX_TIMESTAMP', Sequelize.col('expire'))
-                    }
-                }
-            })
+            // 效验验证码
+            const checkResult = await checkEmailCode(userInfo.data, codeinput, 'login')
 
-            if (!emailCode) {
+            if (!checkResult.status) {
                 // 写入失败登录记录
                 await writeLoginLog(userInfo.data.uid, 'FailedEmail')
 

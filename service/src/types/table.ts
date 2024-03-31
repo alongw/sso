@@ -33,6 +33,9 @@ export interface EmailCodeTable {
     ip: string
     expire: number
     sendTime: number
+    used: boolean
+    useTime: number
+    type: string
 }
 
 export interface GroupTable {

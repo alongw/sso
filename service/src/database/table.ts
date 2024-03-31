@@ -193,6 +193,19 @@ export const EmailCode = sequelize.define<Model<EmailCodeTable>>('EmailCode', {
     expire: {
         type: DataTypes.DATE,
         allowNull: false
+    },
+    used: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+    },
+    useTime: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    type: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 })
 

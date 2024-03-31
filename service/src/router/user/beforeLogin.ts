@@ -5,6 +5,7 @@ import checkValue from './../../utils/checkValue'
 import logger from './../../utils/log'
 import { checkTicket } from './../../utils/captcha'
 import { sendMail, getMailTemplate, isMail, hideMail } from './../../utils/mail'
+import { useMailCode } from '@/hook/useMailCode'
 import {
     User,
     EmailCode,
@@ -21,6 +22,8 @@ import { getWebAuthnRpId } from '@/utils/system'
 import type { UserTable, AuthenticatorTable } from '@/types/table'
 
 const router = Router()
+
+const { sendEmailCode } = useMailCode()
 
 router.post(
     '/getAccountStatus',
@@ -262,47 +265,19 @@ router.post(
             })
         }
 
-        const result2 = await EmailCode.findAll({
-            where: {
-                email: result.get('email')
-            }
-        })
+        // 发送验证码
+        const sendResult = await sendEmailCode(
+            result,
+            req.userIp,
+            'login',
+            'Nya - Account 登录验证码'
+        )
 
-        // 频繁发送邮件检测
-        if (result2.length > 0) {
-            // 找到最近的一条记录，如果时间间隔小于 60s 则不发送
-            const last = result2[result2.length - 1]
-            const lastTime = dayjs(last.toJSON().sendTime).valueOf()
-            const nowTime = dayjs().valueOf()
-            if (nowTime - lastTime < 60000) {
-                return res.send({
-                    status: 429,
-                    msg: `发送邮件过于频繁，请等${Math.ceil(
-                        (60000 - (nowTime - lastTime)) / 1000
-                    )}秒后再试`
-                })
-            }
-        }
-
-        // 生成验证码
-        const randomCode = Math.floor(100000 + Math.random() * 900000)
-        await EmailCode.create({
-            code: randomCode.toString(),
-            email: result.get('email').toString(),
-            expire: dayjs().add(10, 'minute').valueOf(),
-            sendTime: dayjs().valueOf(),
-            ip: req.ip
-        })
-
-        // 发送邮件
-        try {
-            await sendMail({
-                subject: 'Nya - Account 登录验证码',
-                to: result.get('email').toString(),
-                html: getMailTemplate('login').replace(/{{code}}/g, randomCode.toString())
+        if (!sendResult.status) {
+            return res.send({
+                status: 500,
+                msg: sendResult.msg
             })
-        } catch (error) {
-            logger.error(error)
         }
 
         return res.send({
