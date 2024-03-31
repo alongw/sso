@@ -112,4 +112,32 @@ defineOptions({
     }
   }
 }
+
+@media screen and (max-width: 550px) {
+  .solution {
+    h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    ul {
+      padding: 0 25px;
+      li {
+        width: 100%;
+        height: auto;
+        h4 {
+          font-size: 20px;
+          margin-top: 15px;
+        }
+        p {
+          font-size: 14px;
+          margin-top: 15px;
+        }
+        button {
+          font-size: 14px;
+          margin: 20px 0 20px 0;
+        }
+      }
+    }
+  }
+}
 </style>

@@ -135,7 +135,14 @@ defineProps<{
 
 @media screen and (max-width: 550px) {
   .desc {
+    .title {
+      // padding-top: 30px;
+      font-size: 25px;
+    }
+
     ul {
+      padding: 0;
+
       li {
         margin: 10px 5px;
         padding: 5px;
