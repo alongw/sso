@@ -13,26 +13,31 @@ const openDocs = () => {
 <template>
   <div class="banner">
     <div class="banner-item">
-      <h1>Nya Account</h1>
-      <h2>让登录更高效，接入更轻松</h2>
-      <p>
-        Nya Account 允许用户提供一个令牌，而不是用户名和密码来访问他们存放在特定服务提供者的数据
-      </p>
-      <div class="button-group">
-        <nya-button type="sub" @click="openDocs()">使用文档</nya-button>
-        <nya-button
-          type="main"
-          @click="
-            $router.push({
-              path: '/user',
-              query: {
-                path: 1,
-                from: 'home.banner.button'
-              }
-            })
-          "
-          >立即使用</nya-button
-        >
+      <div class="banner-title">
+        <h1>Nya Account</h1>
+        <h2>让登录更高效，接入更轻松</h2>
+      </div>
+      <div class="banner-content">
+        <p>
+          Nya Account 允许用户提供一个令牌，而不是用户名和密码来访问他们存放在特定服务提供者的数据
+        </p>
+        <div class="button-group">
+          <nya-button type="sub" @click="openDocs()">使用文档</nya-button>
+          <nya-button
+            type="main"
+            @click="
+              $router.push({
+                path: '/user',
+                query: {
+                  path: 1,
+                  from: 'home.banner.button'
+                }
+              })
+            "
+          >
+            立即使用
+          </nya-button>
+        </div>
       </div>
     </div>
   </div>
@@ -98,10 +103,46 @@ const openDocs = () => {
   }
 }
 
+@media screen and (max-width: 600px) {
+  .banner {
+    .banner-item {
+      margin: 0 5vw;
+    }
+    h1 {
+      font-size: 40px !important;
+    }
+    h2 {
+      font-size: 18px !important;
+    }
+    p {
+      font-size: 14px !important;
+    }
+
+    .button-group {
+      margin-top: 20px !important;
+    }
+  }
+}
+
 @media screen and (max-width: 460px) {
   .banner {
     .banner-item {
-      margin-top: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+
+      h1 {
+        text-align: center;
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      p {
+        margin-top: 15px;
+      }
+
       .button-group {
         flex-direction: column;
         button {
@@ -117,15 +158,16 @@ const openDocs = () => {
   .banner {
     .banner-item {
       margin: 0 3vw 0 3vw;
+      padding: 15px;
     }
     h1 {
-      font-size: 36px !important;
+      font-size: 40px !important;
     }
     h2 {
-      font-size: 24px !important;
+      font-size: 18px !important;
     }
     p {
-      font-size: 14px !important;
+      font-size: 12px !important;
     }
 
     .button-group {
