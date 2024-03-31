@@ -75,10 +75,12 @@ defineOptions({
 
 @media (max-width: 799px) {
   .console {
+    padding-top: 45px;
+
     .menu {
       position: fixed;
       top: 70px;
-      width: 100%;
+      min-width: 100%;
       z-index: 9;
 
       ul {
