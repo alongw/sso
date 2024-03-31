@@ -62,4 +62,16 @@ defineOptions({
     }
   }
 }
+
+@media screen and (max-width: 550px) {
+  .under {
+    height: auto;
+    ul {
+      li {
+        font-size: 14px;
+        padding: 3px 0;
+      }
+    }
+  }
+}
 </style>
