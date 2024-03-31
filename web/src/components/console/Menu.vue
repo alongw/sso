@@ -34,4 +34,3 @@ watch(
     :items="items"
   ></a-menu>
 </template>
-@/hook/console/useConsoleMenu

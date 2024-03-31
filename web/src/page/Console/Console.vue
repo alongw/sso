@@ -72,5 +72,19 @@ defineOptions({
     opacity: 0.1;
   }
 }
+
+@media (max-width: 799px) {
+  .console {
+    .menu {
+      position: fixed;
+      top: 70px;
+      width: 100%;
+      z-index: 9;
+
+      ul {
+        height: auto !important;
+      }
+    }
+  }
+}
 </style>
-@/hook/console/useConsoleMenu
