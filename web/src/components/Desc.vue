@@ -24,8 +24,10 @@ defineProps<{
         <div class="icon">
           <component class="icon-component" strokeWidth="1" :is="i.icon"></component>
         </div>
-        <h4>{{ i.title }}</h4>
-        <p>{{ i.desc }}</p>
+        <div class="contact">
+          <h4>{{ i.title }}</h4>
+          <p>{{ i.desc }}</p>
+        </div>
       </li>
     </ul>
   </div>
@@ -61,6 +63,13 @@ defineProps<{
       border-radius: 14px;
       margin: 35px;
 
+      .contact {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
       .icon {
         display: flex;
         justify-content: center;
@@ -84,6 +93,69 @@ defineProps<{
         font-size: 16px;
         font-weight: 400;
         color: #858585;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .desc {
+    ul {
+      padding: 25px;
+      li {
+        max-width: 230px;
+        height: auto;
+        width: 100%;
+        flex-direction: row;
+        margin: 20px 5px;
+
+        .icon {
+          margin-right: 15px;
+          .icon-component {
+            font-size: 40px;
+          }
+        }
+
+        .contact {
+          display: block;
+
+          h4 {
+            margin-top: 0;
+            font-size: 20px;
+          }
+
+          p {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .desc {
+    ul {
+      li {
+        margin: 10px 5px;
+        padding: 5px;
+
+        .icon {
+          margin: 3px;
+          .icon-component {
+            font-size: 30px;
+          }
+        }
+
+        .contact {
+          h4 {
+            font-size: 18px;
+          }
+
+          p {
+            font-size: 12px;
+          }
+        }
       }
     }
   }
