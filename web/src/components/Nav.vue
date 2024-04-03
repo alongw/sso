@@ -28,11 +28,11 @@ const menu = [
   },
   {
     name: '接入管理',
-    to: '/user?path=2'
+    to: '/console/application'
   },
   {
     name: '账号中心',
-    to: '/user'
+    to: '/console'
   },
   {
     name: '获取支持',

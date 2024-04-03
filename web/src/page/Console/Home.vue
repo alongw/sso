@@ -109,6 +109,17 @@ onMounted(async () => {
             </a-space>
           </a-card>
         </div>
+
+        <!-- 第六行 -->
+        <div class="card">
+          <a-card class="card-item" title="旧版控制台应用">
+            <a-space direction="vertical">
+              <p>访问旧版控制台</p>
+              <p>解决一些不兼容的场景</p>
+              <a-button @click="$router.push('/user')" type="primary" class="right">进入</a-button>
+            </a-space>
+          </a-card>
+        </div>
       </div>
     </div>
   </a-spin>
