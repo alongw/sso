@@ -1,6 +1,6 @@
 import axios, { type Response } from '@/utils/axios'
 
-import type { ApplicationList } from '@/types/application'
+import type { ApplicationList, ApplicationInfo } from '@/types/application'
 
 export const getAppList = () => {
   return axios.get<
@@ -11,19 +11,7 @@ export const getAppList = () => {
 }
 
 export const getAppInfo = (data: { appid: string }) => {
-  return axios.get<
-    Response<{
-      appid: string
-      name: string
-      description: string
-      secret: string
-      status: number
-      owner: string
-      redirect: string
-      approve: number
-      createTime: number
-    }>
-  >(`/application?appid=${data.appid}`)
+  return axios.get<Response<ApplicationInfo>>(`/application?appid=${data.appid}`)
 }
 
 export const refreshSecret = (data: { appid: string }) => {

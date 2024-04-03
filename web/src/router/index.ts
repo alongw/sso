@@ -29,6 +29,11 @@ const router = createRouter({
       component: () => import('@/page/Loginout/Loginout.vue')
     },
     {
+      path: '/redirect',
+      name: 'Redirect',
+      component: () => import('@/page/Redirect/Redirect.vue')
+    },
+    {
       path: '/authorize',
       name: 'Authorize',
       component: () => import('@/page/Authorize/Authorize.vue')

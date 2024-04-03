@@ -65,9 +65,7 @@ onMounted(async () => {
         >
 
         <template #desc="{ item }: { item: ApplicationList & MenuListType }">
-          <a-typography-paragraph :ellipsis="true">
-            {{ item.desc || '-' }}
-          </a-typography-paragraph>
+          <a-typography-paragraph :content="item.desc || '-'" :ellipsis="true" />
         </template>
       </console-list-component>
     </a-skeleton>

@@ -14,7 +14,8 @@ import {
   InternalData as InternalDataIcon,
   ApplicationTwo as ApplicationTwoIcon,
   AllApplication as AllApplicationIcon,
-  FingerprintThree as FingerprintThreeIcon
+  FingerprintThree as FingerprintThreeIcon,
+  ColorFilter as ColorFilterIcon
 } from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
@@ -121,6 +122,12 @@ export const useConsoleMenu = () => {
           key: 'ConsoleApplication',
           onClick: () => router.push('/console/application'),
           icon: () => h(AllApplicationIcon)
+        },
+        {
+          label: '应用管理',
+          key: 'ConsoleApplicationManagement',
+          onClick: () => router.push('/console/application/0'),
+          icon: () => h(ColorFilterIcon)
         }
       ]
     }

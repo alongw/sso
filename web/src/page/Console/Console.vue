@@ -79,6 +79,7 @@ defineOptions({
 
     .menu {
       position: fixed;
+      height: 46px;
       top: 70px;
       min-width: 100%;
       z-index: 9;
