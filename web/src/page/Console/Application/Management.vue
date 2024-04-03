@@ -75,6 +75,12 @@ const handleSubmitReview = () => {
 
   <a-card class="console-card">
     <a-skeleton :loading="!selectedKeys">
+      <h2>应用信息</h2>
+
+      <a-typography-paragraph>
+        该页面较为复杂，建议使用电脑进行操作。修改完成后请点击保存按钮。修改权限无需保存。若应用为未审核状态，则仅允许应用所有者本人授权应用程序，待开发完毕后，需使用提审功能提交审核，审核通过后其他人才能授权该应用程序。
+      </a-typography-paragraph>
+
       <div class="app-select">
         <a-space>
           <a-select
@@ -149,6 +155,11 @@ const handleSubmitReview = () => {
 
         <div class="permission">
           <h2>权限配置</h2>
+
+          <a-typography-paragraph>
+            不论如何，获取用户信息权限始终生效，具体权限内容请参见用户文档。
+          </a-typography-paragraph>
+
           <div class="permission-transfer">
             <a-spin :spinning="permissionLoading">
               <a-transfer
