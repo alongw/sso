@@ -6,7 +6,7 @@ import { authLogger } from './../../utils/log'
 import token from './../../utils/token'
 import { decrypt } from './../../utils/crypt'
 import CryptoJS from 'crypto-js'
-import checkValue from './../../utils/checkValue'
+import checkValue, { checkGetTokenValue } from './../../utils/checkValue'
 // import { Request } from './../../types/request'
 
 interface CodeType {
@@ -30,18 +30,18 @@ router.use('/email', async (req, res, next) =>
 )
 
 router.post('/token', async (req, res) => {
-    if (
-        !checkValue(
-            req.body?.grant_type,
-            req.body?.code,
-            req.body?.redirect_uri,
-            req.body?.client_id,
-            req.body?.client_secret
-        )
-    ) {
+    console.log(req.body)
+    const checkValueResult = checkGetTokenValue(
+        req.body?.grant_type,
+        req.body?.code,
+        req.body?.redirect_uri,
+        req.body?.client_id,
+        req.body?.client_secret
+    )
+    if (checkValueResult !== true) {
         return res.status(400).send({
             error: 'invalid_request',
-            error_description: 'missing parameters'
+            error_description: checkValueResult
         })
     }
 
