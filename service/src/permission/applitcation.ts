@@ -33,14 +33,14 @@ export const defaultAppPermission: ApplicationPermission[] = [
         defaultCheck: true,
         lock: false,
         priority: 90
+    },
+    {
+        apppid: 3,
+        name: '读取您的真实信息',
+        description: '读取您的真实信息',
+        typeRequire: 2,
+        defaultCheck: true,
+        lock: false,
+        priority: 95
     }
-    // {
-    //     apppid: 3,
-    //     name: '读取您的实名信息',
-    //     description: '读取您的实名信息',
-    //     typeRequire: 0,
-    //     defaultCheck: true,
-    //     lock: false,
-    //     priority: 20
-    // }
 ]

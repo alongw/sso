@@ -8,13 +8,14 @@ import {
   getApplicationInfo as getApplicationInfoApi
 } from '@/api/authorize'
 
-import { IdcardFilled, MailOutlined } from '@ant-design/icons-vue'
+import { IdcardFilled, MailOutlined, CheckCircleOutlined } from '@ant-design/icons-vue'
 
 export const permissionIcon: {
   [key: number]: any
 } = {
   1: IdcardFilled,
-  2: MailOutlined
+  2: MailOutlined,
+  3: CheckCircleOutlined
 }
 
 export enum Approve {

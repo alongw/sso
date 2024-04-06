@@ -29,6 +29,10 @@ router.use('/email', async (req, res, next) =>
     (await import('./email')).default(req, res, next)
 )
 
+router.use('/unique', async (req, res, next) =>
+    (await import('./unique')).default(req, res, next)
+)
+
 router.post('/token', async (req, res) => {
     console.log(req.body)
     const checkValueResult = checkGetTokenValue(
