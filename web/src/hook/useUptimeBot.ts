@@ -4,7 +4,7 @@ const axios = _axios.create()
 
 const UPTIMEBOT_API_KEY = 'ur1658906-d490305f6f6a341ae57bb81b'
 
-const MONITORID = 796705320
+const MONITORID = 796705288
 
 export const useUptimeBot = () => {
   const getAppStatus = async () => {
@@ -19,6 +19,8 @@ export const useUptimeBot = () => {
         }
       )
       const monitor = result.monitors.find((monitor: any) => monitor.id === MONITORID)
+      console.log(monitor)
+
       if (monitor.status !== 2) {
         return 'service'
       } else {
