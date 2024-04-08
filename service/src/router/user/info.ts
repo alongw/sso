@@ -110,7 +110,7 @@ router.post(
         // 发送邮件
         try {
             await sendMail({
-                subject: 'Nya - Account 登录验证码',
+                subject: 'Nya - Account 安全验证码',
                 to: email,
                 html: getMailTemplate('sensitive').replace(
                     /{{code}}/g,
