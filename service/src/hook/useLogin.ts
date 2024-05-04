@@ -104,14 +104,21 @@ export const useLogin = (
                     msg: '登录失败，请重试'
                 }
             }
+            try {
+                const writeResult = await writeLoginLog(
+                    userInfo.data.uid,
+                    USER_LOGIN_TYPE.EMAIL,
+                    true
+                )
 
-            const writeResult = await writeLoginLog(
-                userInfo.data.uid,
-                USER_LOGIN_TYPE.EMAIL,
-                true
-            )
-
-            if (!writeResult) {
+                if (!writeResult) {
+                    return {
+                        status: 500,
+                        msg: '出现了内部错误，请重试'
+                    }
+                }
+            } catch (error) {
+                logger.error('写入登录记录失败！' + error)
                 return {
                     status: 500,
                     msg: '出现了内部错误，请重试'
@@ -134,29 +141,41 @@ export const useLogin = (
             }
 
             const loginType = isMail(userinput) ? 'email' : 'username'
-            // 判断密码是否正确
-            const user = await User.findOne({
-                where: {
-                    [loginType]: userinput,
-                    password: CryptoJS.MD5(codeinput).toString()
+            try {
+                // 判断密码是否正确
+                const user = await User.findOne({
+                    where: {
+                        [loginType]: userinput,
+                        password: CryptoJS.MD5(codeinput).toString()
+                    }
+                })
+                if (!user) {
+                    // 写入失败登录记录
+                    await writeLoginLog(
+                        userInfo.data.uid,
+                        USER_LOGIN_TYPE.PASSWORD,
+                        false
+                    )
+                    return {
+                        status: 403,
+                        msg: '登录失败，请重试'
+                    }
                 }
-            })
-            if (!user) {
-                // 写入失败登录记录
-                await writeLoginLog(userInfo.data.uid, USER_LOGIN_TYPE.PASSWORD, false)
-                return {
-                    status: 403,
-                    msg: '登录失败，请重试'
+
+                const writeResult = await writeLoginLog(
+                    userInfo.data.uid,
+                    USER_LOGIN_TYPE.PASSWORD,
+                    true
+                )
+
+                if (!writeResult) {
+                    return {
+                        status: 500,
+                        msg: '出现了内部错误，请重试'
+                    }
                 }
-            }
-
-            const writeResult = await writeLoginLog(
-                userInfo.data.uid,
-                USER_LOGIN_TYPE.PASSWORD,
-                true
-            )
-
-            if (!writeResult) {
+            } catch (error) {
+                logger.error('数据库出错！' + error)
                 return {
                     status: 500,
                     msg: '出现了内部错误，请重试'
@@ -248,11 +267,19 @@ export const useLogin = (
                 })
             } catch (error) {
                 // 写入登录记录
-                await writeLoginLog(
-                    userInfo.data.uid,
-                    USER_LOGIN_TYPE.AUTHENTICATOR,
-                    false
-                )
+                try {
+                    await writeLoginLog(
+                        userInfo.data.uid,
+                        USER_LOGIN_TYPE.AUTHENTICATOR,
+                        false
+                    )
+                } catch (error) {
+                    logger.error('写入登录记录失败！' + error)
+                    return {
+                        status: 500,
+                        msg: '出错了，请稍后再试'
+                    }
+                }
                 return {
                     status: 400,
                     msg: '验证失败'
@@ -260,11 +287,19 @@ export const useLogin = (
             }
 
             if (!verification.verified) {
-                await writeLoginLog(
-                    userInfo.data.uid,
-                    USER_LOGIN_TYPE.AUTHENTICATOR,
-                    false
-                )
+                try {
+                    await writeLoginLog(
+                        userInfo.data.uid,
+                        USER_LOGIN_TYPE.AUTHENTICATOR,
+                        false
+                    )
+                } catch (error) {
+                    logger.error('写入登录记录失败！' + error)
+                    return {
+                        status: 500,
+                        msg: '出错了，请稍后再试'
+                    }
+                }
                 return {
                     status: 400,
                     msg: '验证失败'
@@ -272,12 +307,20 @@ export const useLogin = (
             }
 
             // 写入登录记录
-            const writeResult = await writeLoginLog(
-                userInfo.data.uid,
-                USER_LOGIN_TYPE.AUTHENTICATOR,
-                true
-            )
-            if (!writeResult) {
+            try {
+                const writeResult = await writeLoginLog(
+                    userInfo.data.uid,
+                    USER_LOGIN_TYPE.AUTHENTICATOR,
+                    true
+                )
+                if (!writeResult) {
+                    return {
+                        status: 500,
+                        msg: '出错了，请稍后再试'
+                    }
+                }
+            } catch (error) {
+                logger.error('写入登录记录失败！' + error)
                 return {
                     status: 500,
                     msg: '出错了，请稍后再试'

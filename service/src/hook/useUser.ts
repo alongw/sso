@@ -5,6 +5,8 @@ import validator from 'validator'
 import { isMail } from './../utils/mail'
 import { User, LoginLog } from './../database/table'
 
+import { USER_LOGIN_TYPE } from '@/types/index'
+
 const getUser = async (account: string) => {
     if (isMail(account)) {
         const res = await User.findOne({
@@ -48,7 +50,9 @@ export const recentLogin = async (account: string, fingerprint: string) => {
 
     // 筛选出成功的登录
     const log = loginLog.filter(
-        (e) => e.toJSON().type === 'email' || e.toJSON().type === 'password'
+        (e) =>
+            e.toJSON().type === USER_LOGIN_TYPE.EMAIL ||
+            e.toJSON().type === USER_LOGIN_TYPE.PASSWORD
     )
     return log.length
 }
