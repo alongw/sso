@@ -15,7 +15,10 @@ import {
   ApplicationTwo as ApplicationTwoIcon,
   AllApplication as AllApplicationIcon,
   FingerprintThree as FingerprintThreeIcon,
-  ColorFilter as ColorFilterIcon
+  ColorFilter as ColorFilterIcon,
+  Log as LogIcon,
+  Time as TimeIcon,
+  FileDateOne as FileDateOneIcon
 } from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
@@ -129,6 +132,36 @@ export const useConsoleMenu = () => {
           onClick: () => router.push('/console/application/0'),
           icon: () => h(ColorFilterIcon)
         }
+      ]
+    },
+    {
+      label: '操作日志',
+      key: '3',
+      icon: () => h(LogIcon),
+      children: [
+        {
+          label: '日志相关',
+          key: '3-0',
+          type: 'group'
+        },
+        {
+          label: '操作日志',
+          key: 'ConsoleLogs',
+          onClick: () => router.push('/console/logs'),
+          icon: () => h(FileDateOneIcon)
+        },
+        {
+          label: '登录日志',
+          key: 'ConsoleLoginLogs',
+          onClick: () => router.push('/console/logs/login'),
+          icon: () => h(TimeIcon)
+        }
+        // {
+        //   label: '操作日志',
+        //   key: 'ConsoleOperationLogs',
+        //   onClick: () => router.push('/console/logs/operation'),
+        //   icon: () => h(SwitchButtonIcon)
+        // }
       ]
     }
   ]

@@ -1,12 +1,14 @@
 import { Request as ExpressRequest } from 'express'
 // import { ParsedQs } from 'qs'
 
+import type { USER_UID_TYPE } from '@/types'
+
 interface SystemHeader {
     fingerprint: string
 }
 
 export interface User {
-    uid: string
+    uid: USER_UID_TYPE
     username: string
     email: string
     status: number

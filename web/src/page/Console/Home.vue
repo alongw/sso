@@ -101,11 +101,13 @@ onMounted(async () => {
 
         <!-- 第五行 -->
         <div class="card">
-          <a-card class="card-item" title="第三方账号管理">
+          <a-card class="card-item" title="操作记录查询">
             <a-space direction="vertical">
-              <p>管理第三方应用单点登录</p>
-              <p>第三方应用绑定管理</p>
-              <a-button type="primary" class="right">进入</a-button>
+              <p>查询账号操作记录</p>
+              <p>登录记录、邮箱变更记录、密码变更记录等</p>
+              <a-button @click="$router.push('/console/logs')" type="primary" class="right"
+                >进入</a-button
+              >
             </a-space>
           </a-card>
         </div>
