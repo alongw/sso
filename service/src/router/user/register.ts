@@ -7,6 +7,8 @@ import token from './../../utils/token'
 import { checkTicket } from './../../utils/captcha'
 import { Request } from './../../types/request'
 
+import { USER_LOGIN_TYPE } from '@/types'
+
 const router = Router()
 
 router.post(
@@ -103,9 +105,10 @@ router.post(
             ip: (req.headers['x-real-ip'] || req.ip).toString(),
             captcha: req.body.captcha?.randstr ? true : false,
             ua: req.headers['user-agent'],
-            type: 'mail',
+            type: USER_LOGIN_TYPE.EMAIL,
             time: dayjs().valueOf(),
-            fingerprint: req.headers.fingerprint
+            fingerprint: req.headers.fingerprint,
+            result: true
         })
 
         return res.send({
