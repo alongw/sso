@@ -124,6 +124,10 @@ export const LoginLog = sequelize.define<Model<LoginLogTable>>('LoginLog', {
     fingerprint: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    result: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 })
 

@@ -3,6 +3,8 @@ import type {
     CredentialDeviceType
 } from '@simplewebauthn/types'
 
+import type { USER_LOGIN_TYPE, USER_UID_TYPE } from '@/types'
+
 export interface SystemTable {
     id: number
     key: string
@@ -16,7 +18,7 @@ export interface ConfigTable {
 }
 
 export interface UserTable {
-    uid: string
+    uid: USER_UID_TYPE
     username: string
     password: string
     email: string
@@ -87,18 +89,19 @@ export interface ApplicationUserPermissionTable {
 
 export interface LoginLogTable {
     id: number
-    uid: string
+    uid: USER_UID_TYPE
     ip: string
     time: number
-    type: string
+    type: USER_LOGIN_TYPE
     captcha: boolean
     ua: string
     fingerprint: string
+    result: boolean
 }
 
 export interface AuthLogTable {
     id: number
-    uid: string
+    uid: USER_UID_TYPE
     appid: string
     ip: string
     time: number
@@ -131,7 +134,7 @@ export interface AuthenticatorTable {
 
 export interface AuthenticatorOptionsTable {
     id: number
-    uid: string
+    uid: USER_UID_TYPE
     type: 'set' | 'use'
     options: string
     update_time: number

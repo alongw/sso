@@ -17,6 +17,8 @@ import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers'
 
 import type { UserTable, AuthenticatorTable } from '@/types/table'
 
+import { USER_LOGIN_TYPE } from '@/types'
+
 const { checkEmailCode } = useMailCode()
 
 export const getUser = async (userinput: string) => {
@@ -59,7 +61,7 @@ export const useLogin = (
     ip: string,
     captcha: boolean
 ) => {
-    const writeLoginLog = async (uid: string, type: string) => {
+    const writeLoginLog = async (uid: string, type: USER_LOGIN_TYPE, result: boolean) => {
         try {
             await LoginLog.create({
                 uid,
@@ -68,7 +70,8 @@ export const useLogin = (
                 ua,
                 type,
                 time: dayjs().valueOf(),
-                fingerprint
+                fingerprint,
+                result
             })
         } catch (error) {
             logger.error('写入登录记录失败！' + error)
@@ -94,7 +97,7 @@ export const useLogin = (
 
             if (!checkResult.status) {
                 // 写入失败登录记录
-                await writeLoginLog(userInfo.data.uid, 'FailedEmail')
+                await writeLoginLog(userInfo.data.uid, USER_LOGIN_TYPE.EMAIL, false)
 
                 return {
                     status: 403,
@@ -102,7 +105,11 @@ export const useLogin = (
                 }
             }
 
-            const writeResult = await writeLoginLog(userInfo.data.uid, 'mail')
+            const writeResult = await writeLoginLog(
+                userInfo.data.uid,
+                USER_LOGIN_TYPE.EMAIL,
+                true
+            )
 
             if (!writeResult) {
                 return {
@@ -136,14 +143,18 @@ export const useLogin = (
             })
             if (!user) {
                 // 写入失败登录记录
-                await writeLoginLog(userInfo.data.uid, 'FailedPassword')
+                await writeLoginLog(userInfo.data.uid, USER_LOGIN_TYPE.PASSWORD, false)
                 return {
                     status: 403,
                     msg: '登录失败，请重试'
                 }
             }
 
-            const writeResult = await writeLoginLog(userInfo.data.uid, 'password')
+            const writeResult = await writeLoginLog(
+                userInfo.data.uid,
+                USER_LOGIN_TYPE.PASSWORD,
+                true
+            )
 
             if (!writeResult) {
                 return {
@@ -237,7 +248,11 @@ export const useLogin = (
                 })
             } catch (error) {
                 // 写入登录记录
-                await writeLoginLog(userInfo.data.uid, 'authenticatorFailed')
+                await writeLoginLog(
+                    userInfo.data.uid,
+                    USER_LOGIN_TYPE.AUTHENTICATOR,
+                    false
+                )
                 return {
                     status: 400,
                     msg: '验证失败'
@@ -245,7 +260,11 @@ export const useLogin = (
             }
 
             if (!verification.verified) {
-                await writeLoginLog(userInfo.data.uid, 'authenticatorFailed')
+                await writeLoginLog(
+                    userInfo.data.uid,
+                    USER_LOGIN_TYPE.AUTHENTICATOR,
+                    false
+                )
                 return {
                     status: 400,
                     msg: '验证失败'
@@ -253,7 +272,11 @@ export const useLogin = (
             }
 
             // 写入登录记录
-            const writeResult = await writeLoginLog(userInfo.data.uid, 'authenticator')
+            const writeResult = await writeLoginLog(
+                userInfo.data.uid,
+                USER_LOGIN_TYPE.AUTHENTICATOR,
+                true
+            )
             if (!writeResult) {
                 return {
                     status: 500,
