@@ -7,7 +7,7 @@ import { Request } from '@/types/request'
 const router = Router()
 
 // 获取用户登录日志
-router.get(
+router.post(
     '/login',
     async (
         req: Request<{
