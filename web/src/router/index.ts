@@ -114,6 +114,19 @@ const router = createRouter({
           name: 'ConsoleApplicationManagement',
           component: () => import('@/page/Console/Application/Management.vue')
         },
+
+        // 日志查询相关
+        {
+          path: '/console/logs',
+          name: 'ConsoleLogs',
+          component: () => import('@/page/Console/OperateLogs/Logs.vue')
+        },
+        {
+          path: '/console/logs/login',
+          name: 'ConsoleLogsLogin',
+          component: () => import('@/page/Console/OperateLogs/Login.vue')
+        },
+
         // {
         //   path: '/console/edit/email',
         //   name: 'ConsoleEditEmail',

@@ -1,6 +1,6 @@
 import { useRouter } from 'vue-router'
 
-import { Shield, Mail, Key, FingerprintThree } from '@icon-park/vue-next'
+import { Shield, Mail, Key, FingerprintThree, Log } from '@icon-park/vue-next'
 
 import type { List } from '@/types/console'
 
@@ -42,6 +42,15 @@ export const useSecrecyInfo = () => {
       action: () =>
         router.push({
           name: ''
+        })
+    },
+    {
+      title: '日志',
+      desc: '查看您的账户操作日志',
+      icon: Log,
+      action: () =>
+        router.push({
+          name: 'ConsoleLogs'
         })
     }
   ]
