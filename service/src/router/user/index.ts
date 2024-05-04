@@ -22,6 +22,10 @@ router.use('/authenticator', async (req, res, next) =>
     (await import('./authenticator')).default(req, res, next)
 )
 
+router.use('/logs', async (req, res, next) =>
+    (await import('./logs')).default(req, res, next)
+)
+
 router.use('/', async (req, res, next) =>
     (await import('./beforeLogin')).default(req, res, next)
 )
