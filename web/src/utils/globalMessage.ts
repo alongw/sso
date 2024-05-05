@@ -6,7 +6,7 @@ requestEvent.on('Unauthorized', () => {
   message.warning('无效的登录会话，请重新登录')
 })
 
-requestEvent.on('NetworkError', (statusResult: string) => {
+requestEvent.on('NetworkError', (statusResult: string | boolean) => {
   if (!statusResult) {
     Modal.error({
       title: '连接已丢失',
