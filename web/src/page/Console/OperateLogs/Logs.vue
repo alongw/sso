@@ -4,7 +4,7 @@ import ConsoleListComponent from '@/components/console/List.vue'
 
 import router from '@/router'
 
-import { Time as TimeIcon } from '@icon-park/vue-next'
+import { Time as TimeIcon, Seal as SealIcon } from '@icon-park/vue-next'
 
 import type { List } from '@/types/console'
 
@@ -20,6 +20,15 @@ const listData: List[] = [
     action: () =>
       router.push({
         name: 'ConsoleLogsLogin'
+      })
+  },
+  {
+    title: '授权日志',
+    desc: '查询您对其他应用的授权日志',
+    icon: SealIcon,
+    action: () =>
+      router.push({
+        name: 'ConsoleLogsAuth'
       })
   }
 ]
