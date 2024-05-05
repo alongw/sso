@@ -26,4 +26,10 @@ Spin.setDefaultIndicator({
   indicator: h(LoadingOutlined, { class: 'anticon anticon-loading anticon-spin ant-spin-dot' })
 })
 
+// Event
+import('@/event/request')
+
+// Global Function
+import('@/utils/globalMessage')
+
 app.mount('#app')

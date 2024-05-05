@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import requestEvent from '@/event/request'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -154,3 +156,13 @@ const router = createRouter({
 })
 
 export default router
+
+//  401
+requestEvent.on('Unauthorized', () => {
+  // 清除已过期的 token
+  localStorage.removeItem('token')
+  // 跳转登录页
+  router.push({
+    path: '/login'
+  })
+})
