@@ -44,7 +44,10 @@ const columns = [
     title: '登录 IP',
     dataIndex: 'login_ip',
     key: 'login_ip',
-    align: 'center'
+    align: 'center',
+    customRender: ({ text }: { text: string }) => {
+      return text.includes(',') ? text.split(',')[0] : text
+    }
   },
   {
     title: '登录类型',
