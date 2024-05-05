@@ -18,7 +18,8 @@ import {
   ColorFilter as ColorFilterIcon,
   Log as LogIcon,
   Time as TimeIcon,
-  FileDateOne as FileDateOneIcon
+  FileDateOne as FileDateOneIcon,
+  Seal as SealIcon
 } from '@icon-park/vue-next'
 import { HomeOutlined } from '@ant-design/icons-vue'
 
@@ -152,9 +153,15 @@ export const useConsoleMenu = () => {
         },
         {
           label: '登录日志',
-          key: 'ConsoleLoginLogs',
+          key: 'ConsoleLogsLogin',
           onClick: () => router.push('/console/logs/login'),
           icon: () => h(TimeIcon)
+        },
+        {
+          label: '授权日志',
+          key: 'ConsoleLogsAuth',
+          onClick: () => router.push('/console/logs/auth'),
+          icon: () => h(SealIcon)
         }
         // {
         //   label: '操作日志',

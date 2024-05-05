@@ -114,7 +114,7 @@ router.post(
                     email: req.body.email,
                     expire: dayjs().add(10, 'minute').valueOf(),
                     sendTime: dayjs().valueOf(),
-                    ip: req.ip
+                    ip: req.userIp
                 })
 
                 // 发送邮件

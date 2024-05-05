@@ -1,4 +1,4 @@
-import { LoginLog } from '@/database/table'
+import { LoginLog, AuthLog } from '@/database/table'
 
 import logger from '@/utils/log'
 
@@ -58,6 +58,53 @@ export const useLoginLogs = (uid: USER_UID_TYPE) => {
             return {
                 status: false,
                 msg: '获取登录记录失败',
+                data: []
+            }
+        }
+    }
+
+    return {
+        getLogs
+    }
+}
+
+export const useAuthLogs = (uid: USER_UID_TYPE) => {
+    const getLogs = async (max_number: number) => {
+        // 最大 30 条记录
+        if (max_number > 30 || max_number < 0) max_number = 30
+
+        // 获取授权记录
+        try {
+            const result = await AuthLog.findAll({
+                where: {
+                    uid
+                },
+                order: [['time', 'DESC']],
+                limit: max_number
+            })
+
+            const logs = result.map((e) => e.toJSON())
+
+            return {
+                status: true,
+                msg: '获取成功',
+                data: logs.map((e) => {
+                    return {
+                        auth_id: e.id,
+                        auth_appid: e.appid,
+                        auth_ip: e.ip,
+                        auth_time: e.time,
+                        auth_expire: e.exp,
+                        auth_ua: e.ua,
+                        auth_use: e.use
+                    }
+                })
+            }
+        } catch (error) {
+            logger.error('获取授权记录失败' + error)
+            return {
+                status: false,
+                msg: '获取授权记录失败',
                 data: []
             }
         }

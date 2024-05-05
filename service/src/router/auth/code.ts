@@ -88,7 +88,7 @@ router.post(
             const db = await AuthLog.create({
                 uid: req.user.uid,
                 appid: req.body.appid,
-                ip: (req.headers['x-real-ip'] || req.ip).toString(),
+                ip: (req.userIp || req.headers['x-real-ip'] || req.ip).toString(),
                 time: dayjs().valueOf(),
                 exp: dayjs().add(5, 'minute').valueOf(),
                 ua: req.headers['user-agent'],
