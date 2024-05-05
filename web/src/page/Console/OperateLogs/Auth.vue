@@ -38,7 +38,10 @@ const columns = [
     title: '授权时用户 IP',
     dataIndex: 'auth_ip',
     key: 'auth_ip',
-    align: 'center'
+    align: 'center',
+    customRender: ({ text }: { text: string }) => {
+      return text.includes(',') ? text.split(',')[0] : text
+    }
   },
   {
     title: '授权应用 ID',
