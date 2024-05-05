@@ -40,7 +40,7 @@ axios.interceptors.response.use(
     }
 
     if (e.data?.status === 418) {
-      requestEvent.emit('Unauthorized', e.data?.type, e.data?.msg)
+      requestEvent.emit('Message', e.data?.type, e.data?.msg)
     }
 
     return e

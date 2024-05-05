@@ -1,13 +1,4 @@
-const eventList = [
-  'Unauthorized',
-  'Forbidden',
-  'NotFound',
-  'BadRequest',
-  'InternalServerError',
-  'NetworkError',
-  'UnknownError',
-  'Message'
-] as const
+const eventList = ['Unauthorized', 'NetworkError', 'UnknownError', 'Message'] as const
 
 export type EventList = (typeof eventList)[number]
 
