@@ -126,6 +126,11 @@ const router = createRouter({
           name: 'ConsoleLogsLogin',
           component: () => import('@/page/Console/OperateLogs/Login.vue')
         },
+        {
+          path: '/console/logs/auth',
+          name: 'ConsoleLogsAuth',
+          component: () => import('@/page/Console/OperateLogs/Auth.vue')
+        },
 
         // {
         //   path: '/console/edit/email',

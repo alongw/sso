@@ -15,3 +15,20 @@ export const getLoginLogs = (data: { max_number?: number }) => {
     >
   >('/user/logs/login', data)
 }
+
+export const getAuthLogs = (data: { max_number?: number }) => {
+  return axios.post<
+    Response<
+      {
+        auth_id: number
+        auth_appid: string
+        auth_ip: string
+        auth_time: number
+        auth_exp: number
+        auth_ua: string
+        auth_use: boolean
+        auth_expire: number
+      }[]
+    >
+  >('/user/logs/auth', data)
+}

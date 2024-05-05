@@ -32,7 +32,7 @@ router.post(
 
 // 获取用户授权日志
 router.post(
-    '/logs',
+    '/auth',
     async (
         req: Request<{
             max_number?: number
