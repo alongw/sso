@@ -102,7 +102,7 @@ router.post(
         // 写入登录记录
         await LoginLog.create({
             uid: user.get('uid').toString(),
-            ip: (req.headers['x-real-ip'] || req.ip).toString(),
+            ip: (req.userIp || req.headers['x-real-ip'] || req.ip).toString(),
             captcha: req.body.captcha?.randstr ? true : false,
             ua: req.headers['user-agent'],
             type: USER_LOGIN_TYPE.EMAIL,

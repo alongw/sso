@@ -79,7 +79,7 @@ router.post(
             req.body.codeinput,
             req.headers['user-agent'],
             req.headers.fingerprint,
-            (req.headers['x-real-ip'] || req.ip).toString(),
+            (req.userIp || req.headers['x-real-ip'] || req.ip).toString(),
             req.body.captcha?.randstr ? true : false
         )
 
