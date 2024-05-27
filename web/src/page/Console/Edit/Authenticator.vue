@@ -86,7 +86,7 @@ onMounted(async () => {
         <a-input v-model:value="createName" :maxlength="16" autofocus />
         <p>验证器名称不得超过16个字符</p>
       </a-form-item>
-      <a-typography-paragraph> 由于涉及敏感参照，本次操作需要验证码 </a-typography-paragraph>
+      <a-typography-paragraph> 由于涉及敏感操作，本次操作需要验证码 </a-typography-paragraph>
       <a-form-item label="邮件验证码">
         <a-space>
           <a-input v-model:value="createMailCode" />

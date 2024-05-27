@@ -40,7 +40,7 @@ export const useLoginLogs = (uid: USER_UID_TYPE) => {
                 data: logs.map((e) => {
                     return {
                         login_id: e.id,
-                        login_ip: e.ip,
+                        login_ip: e.ip.includes(',') ? e.ip.split(',')[0] : e.ip,
                         login_time: e.time,
                         login_type: e.type,
                         login_result: e.result,
@@ -92,7 +92,7 @@ export const useAuthLogs = (uid: USER_UID_TYPE) => {
                     return {
                         auth_id: e.id,
                         auth_appid: e.appid,
-                        auth_ip: e.ip,
+                        auth_ip: e.ip.includes(',') ? e.ip.split(',')[0] : e.ip,
                         auth_time: e.time,
                         auth_expire: e.exp,
                         auth_ua: e.ua,

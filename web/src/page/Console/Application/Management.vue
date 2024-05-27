@@ -87,7 +87,7 @@ const handleSubmitReview = () => {
             ref="select"
             v-model:value="selectedKeys"
             :options="selectedOptions"
-            style="width: 100%"
+            style="min-width: 200px"
             @change="handleSelectChange"
           />
           <a-button
