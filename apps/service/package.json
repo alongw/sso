@@ -1,7 +1,11 @@
 {
     "name": "@nya-account/service",
     "main": "./src/app.ts",
+    "scripts": {
+        "dev": "nodemon --exec tsx --no-warnings --experimental-specifier-resolution=node ./src/app.ts"
+    },
     "dependencies": {
+        "@nya-account/common": "workspace:^",
         "@nya-account/db": "workspace:^"
     }
 }
