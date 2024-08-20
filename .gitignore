@@ -1,4 +1,8 @@
 node_modules
+config.yaml
+
+# Logs
+logs
 
 # tempfile
 /temp
