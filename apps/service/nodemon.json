@@ -1,0 +1,5 @@
+{
+    "ext": "ts",
+    "watch": ["src"],
+    "exec": "tsx -r tsconfig-paths/register --no-warnings --experimental-specifier-resolution=node --loader ts-node/esm src/app.ts"
+}

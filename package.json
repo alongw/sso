@@ -12,8 +12,20 @@
     },
     "license": "AGPL-3.0",
     "type": "module",
+    "scripts": {
+        "lint": "eslint . --config ./eslint.config.mjs",
+        "format": "prettier --config .prettierrc --write ."
+    },
     "devDependencies": {
+        "@eslint/eslintrc": "^3.1.0",
+        "@eslint/js": "^9.9.0",
         "@types/node": "^22.4.1",
+        "@typescript-eslint/eslint-plugin": "^8.2.0",
+        "@typescript-eslint/parser": "^8.2.0",
+        "eslint": "^9.9.0",
+        "globals": "^15.9.0",
+        "nodemon": "^3.1.4",
+        "prettier": "^3.3.3",
         "ts-node": "^10.9.2",
         "tsx": "^4.17.0",
         "typescript": "^5.5.4"
