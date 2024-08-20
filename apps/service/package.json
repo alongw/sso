@@ -1,4 +1,7 @@
 {
     "name": "@nya-account/service",
-    "main": "./src/app.ts"
+    "main": "./src/app.ts",
+    "dependencies": {
+        "@nya-account/db": "workspace:^"
+    }
 }

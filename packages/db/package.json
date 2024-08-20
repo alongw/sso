@@ -1,0 +1,4 @@
+{
+    "name": "@nya-account/db",
+    "main": "./src/index.ts"
+}

@@ -45,7 +45,13 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
 
-  apps/service: {}
+  apps/service:
+    dependencies:
+      '@nya-account/db':
+        specifier: workspace:^
+        version: link:../../packages/db
+
+  packages/db: {}
 
 packages:
 
