@@ -1,4 +1,4 @@
-import Config from './modules/config'
+import config from './modules/config'
 import logger from './modules/logger'
 
-export { Config, logger }
+export { config, logger }

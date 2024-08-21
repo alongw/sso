@@ -19,6 +19,7 @@
     "devDependencies": {
         "@eslint/eslintrc": "^3.1.0",
         "@eslint/js": "^9.9.0",
+        "@types/figlet": "^1.5.8",
         "@types/fs-extra": "^11.0.4",
         "@types/node": "^22.4.1",
         "@typescript-eslint/eslint-plugin": "^8.2.0",
@@ -32,8 +33,11 @@
         "typescript": "^5.5.4"
     },
     "dependencies": {
+        "@nya-account/common": "workspace:^",
+        "figlet": "^1.7.0",
         "fs-extra": "^11.2.0",
         "log4js": "^6.9.1",
+        "sequelize": "^6.37.3",
         "yaml": "^2.5.0"
     }
 }

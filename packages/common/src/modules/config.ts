@@ -1,27 +1,26 @@
-class Config<T> {
-    #config: T
-    constructor() {
-        // 检查是否被 new 调用，不是的话就报错
-        if (!(this instanceof Config)) {
-            throw new Error('请使用 new 关键字实例化 Config')
-        }
-    }
+import fse from 'fs-extra'
+import yaml from 'yaml'
+import logger from './logger'
 
-    // 设置配置文件
-    set(config: T) {
-        this.#config = config
-    }
-
-    // 获取配置文件
-    get<K extends keyof T>(key: K): T[K]
-    get(key?: undefined): T
-    get<K extends keyof T>(key?: K): T[K] | T {
-        if (!key) return this.#config
-        if (!this.#config[key]) {
-            throw new Error(`配置文件中不存在 ${key.toString()} 字段`)
-        }
-        return this.#config[key]
+const defaultConfig = {
+    db: {
+        sync: false,
+        host: 'localhost',
+        port: 3306,
+        user: 'root',
+        password: 'root',
+        database: 'auth'
     }
 }
 
-export default Config
+if (!fse.existsSync('./config.yaml')) {
+    fse.writeFileSync('./config.yaml', yaml.stringify(defaultConfig))
+    logger.warn('未找到配置文件，已自动创建')
+    process.exit(0)
+}
+
+const config = yaml.parse(
+    fse.readFileSync('./config.yaml', 'utf8')
+) as typeof defaultConfig
+
+export default config
