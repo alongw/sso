@@ -33,6 +33,9 @@ importers:
       '@eslint/js':
         specifier: ^9.9.0
         version: 9.9.0
+      '@simplewebauthn/types':
+        specifier: ^10.0.0
+        version: 10.0.0
       '@types/figlet':
         specifier: ^1.5.8
         version: 1.5.8
@@ -408,6 +411,10 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
+    dev: true
+
+  /@simplewebauthn/types@10.0.0:
+    resolution: {integrity: sha512-SFXke7xkgPRowY2E+8djKbdEznTVnD5R6GO7GPTthpHrokLvNKw8C3lFZypTxLI7KkCfGPfhtqB3d7OVGGa9jQ==}
     dev: true
 
   /@tsconfig/node10@1.0.11:

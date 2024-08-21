@@ -19,6 +19,7 @@
     "devDependencies": {
         "@eslint/eslintrc": "^3.1.0",
         "@eslint/js": "^9.9.0",
+        "@simplewebauthn/types": "^10.0.0",
         "@types/figlet": "^1.5.8",
         "@types/fs-extra": "^11.0.4",
         "@types/node": "^22.4.1",
