@@ -122,10 +122,17 @@ export const useMailCode = () => {
                 }
             }
 
-            await emailCode.update({
-                used: true,
-                useTime: dayjs().valueOf()
-            })
+            await emailCode.update(
+                {
+                    used: true,
+                    useTime: dayjs().valueOf()
+                },
+                {
+                    where: {
+                        used: false
+                    }
+                }
+            )
 
             return {
                 status: true,
