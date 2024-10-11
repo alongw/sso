@@ -13,6 +13,6 @@ const sequelize = new Sequelize({
     logging: false
 })
 
-export * from './modules/bind'
-
 export default sequelize
+
+export * from './modules/bind'

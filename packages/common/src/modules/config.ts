@@ -10,6 +10,14 @@ const defaultConfig = {
         user: 'root',
         password: 'root',
         database: 'auth'
+    },
+    config: {
+        app: {
+            service: {
+                port: 10086,
+                baseUrl: '/api'
+            }
+        }
     }
 }
 

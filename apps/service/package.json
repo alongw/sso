@@ -1,6 +1,7 @@
 {
     "name": "@nya-account/service",
     "main": "./src/app.ts",
+    "type": "module",
     "scripts": {
         "dev": "nodemon --exec tsx --no-warnings --experimental-specifier-resolution=node ./src/app.ts"
     },
